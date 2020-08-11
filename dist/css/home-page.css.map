@@ -1,1 +1,1 @@
-{"version":3,"sources":[],"names":[],"mappings":"","file":"css/home-page.css","sourcesContent":[],"sourceRoot":""}
+{"version":3,"sources":["webpack:///./src/styles/pages/home-page.scss"],"names":[],"mappings":"AAAA;AACA;AACA,C","file":"css/home-page.css","sourcesContent":["#title {\n  color: pink;\n}"],"sourceRoot":""}
