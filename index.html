@@ -1,7 +1,18 @@
 <html>
   <head>
     <title>Assignment</title>
-    <link rel="stylesheet" href="dist/bootstrap/bootstrap.min.css" />
+    <link
+      rel="stylesheet"
+      href="dist/vendor/bootstrap/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="dist/vendor/fontawesome/css/fontawesome.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="dist/vendor/fontawesome/css/all.min.css"
+    />
     <link rel="stylesheet" href="dist/css/home-page.css" />
   </head>
   <body>
@@ -27,7 +38,7 @@
           <ul class="navbar-nav mr-auto">
             <li class="nav-item dropdown">
               <a
-                class="nav-link dropdown-toggle"
+                class="nav-link"
                 href="#"
                 id="navbarDropdown"
                 role="button"
@@ -35,7 +46,9 @@
                 aria-haspopup="true"
                 aria-expanded="false"
               >
+                <i class="fa fa-plus"></i>
                 New
+                <i class="fas fa-chevron-down"></i>
               </a>
               <div
                 class="dropdown-menu"
@@ -46,7 +59,7 @@
             </li>
             <li class="nav-item dropdown">
               <a
-                class="nav-link dropdown-toggle"
+                class="nav-link"
                 href="#"
                 id="navbarDropdown"
                 role="button"
@@ -54,7 +67,9 @@
                 aria-haspopup="true"
                 aria-expanded="false"
               >
+                <i class="fas fa-arrow-up"></i>
                 Upload
+                <i class="fas fa-chevron-down"></i>
               </a>
               <div
                 class="dropdown-menu"
@@ -62,13 +77,19 @@
               ></div>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Sync</a>
+              <a class="nav-link" href="#">
+                <i class="fas fa-sync"></i>
+                Sync
+              </a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="#">Export to Excel</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Flow</a>
+              <a class="nav-link" href="#">
+                <i class="fas fa-network-wired"></i>
+                Flow
+              </a>
             </li>
           </ul>
         </div>
@@ -83,39 +104,45 @@
       <table class="table">
         <thead>
           <tr>
-            <th scope="col">Name</th>
-            <th scope="col">Modified</th>
-            <th scope="col">Modified By</th>
-            <th scope="col">+ Add column</th>
+            <th style="width: 10%;" scope="col">icon</th>
+            <th style="width: 30%;" scope="col">Name</th>
+            <th style="width: 15%;" scope="col">Modified</th>
+            <th style="width: 15%;" scope="col">Modified By</th>
+            <th style="width: 20%;" scope="col">+ Add column</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <th>CAS</th>
+            <td scope="row">icon excel</td>
+            <td>CAS</td>
             <td>April 30</td>
             <td>Megan Bowen</td>
             <td></td>
           </tr>
           <tr>
-            <th>CoasterAndBargeLoading.xlsx</th>
+            <td scope="row">icon excel</td>
+            <td>CoasterAndBargeLoading.xlsx</td>
             <td>A few seconds ago</td>
             <td>Administrator MOD</td>
             <td></td>
           </tr>
           <tr>
-            <th>RevenueByService.xlsx</th>
+            <td scope="row">icon excel</td>
+            <td>RevenueByService.xlsx</td>
             <td>A few seconds ago</td>
             <td>Administrator MOD</td>
             <td></td>
           </tr>
           <tr>
-            <th>RevenueByService2016.xlsx</th>
+            <td scope="row">icon excel</td>
+            <td>RevenueByService2016.xlsx</td>
             <td>A few seconds ago</td>
             <td>Administrator MOD</td>
             <td></td>
           </tr>
           <tr>
-            <th>RevenueByService2017.xlsx</th>
+            <td scope="row">icon excel</td>
+            <td>RevenueByService2017.xlsx</td>
             <td>A few seconds ago</td>
             <td>Administrator MOD</td>
             <td></td>
