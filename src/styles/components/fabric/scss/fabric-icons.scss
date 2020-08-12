@@ -1,0 +1,39 @@
+/*
+  Your use of the content in the files referenced here is subject to the terms of the license at https://aka.ms/fabric-assets-license
+*/
+@font-face {
+  font-family: 'FabricMDL2Icons';
+  src: url('../fonts/fabric-icons.woff') format('woff');
+}
+
+.ms-Icon {
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  display: inline-block;
+  font-family: 'FabricMDL2Icons';
+  font-style: normal;
+  font-weight: normal;
+  speak: none;
+}
+
+// Mixins
+@mixin ms-Icon--Flow { content: "\EF90"; }
+@mixin ms-Icon--ExcelDocument { content: "\EF73"; }
+@mixin ms-Icon--SyncToPC { content: "\EE6E"; }
+@mixin ms-Icon--Upload { content: "\E898"; }
+@mixin ms-Icon--OpenFile { content: "\E8E5"; }
+@mixin ms-Icon--ExcelLogoInverse16 { content: "\F396"; }
+@mixin ms-Icon--FabricFolder { content: "\F0A9"; }
+@mixin ms-Icon--Add { content: "\E710"; }
+
+
+// Classes
+.ms-Icon--Flow:before { @include ms-Icon--Flow }
+.ms-Icon--ExcelDocument:before { @include ms-Icon--ExcelDocument }
+.ms-Icon--SyncToPC:before { @include ms-Icon--SyncToPC }
+.ms-Icon--Upload:before { @include ms-Icon--Upload }
+.ms-Icon--OpenFile:before { @include ms-Icon--OpenFile }
+.ms-Icon--ExcelLogoInverse16:before { @include ms-Icon--ExcelLogoInverse16 }
+.ms-Icon--FabricFolder:before { @include ms-Icon--FabricFolder }
+.ms-Icon--Add:before { @include ms-Icon--Add }
+
