@@ -1,12 +1,17 @@
 <html>
   <head>
     <title>Assignment</title>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
     <link rel="stylesheet" href="dist/css/home-page.css" />
   </head>
   <body>
-    <div class="container">
+    <div class="container-fluid">
       <!-- Navbar -->
       <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#"></a>
         <button
           class="navbar-toggler"
           type="button"
@@ -50,10 +55,16 @@
                 Export to Excel
               </a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item" role="button">
               <a class="nav-link" href="#">
                 <i class="fas fa-network-wired"></i>
                 Flow
+                <i class="fas fa-chevron-down"></i>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">
+                ...
               </a>
             </li>
           </ul>
@@ -61,10 +72,9 @@
       </nav>
 
       <!-- Heading -->
-      <div class="container">
-        <p></p>
-        <h2>Documents</h2>
-      </div>
+      <p></p>
+      <h1>Documents</h1>
+
       <!-- Table -->
       <table class="table">
         <thead>
