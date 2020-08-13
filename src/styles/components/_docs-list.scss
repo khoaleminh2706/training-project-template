@@ -1,0 +1,55 @@
+// Document list
+@media (max-width: 768px) {
+  table {
+    display: block;
+
+    thead {
+      display: none;
+    }
+
+    tbody {
+      display: table;
+      width: 100%;
+
+      tr {
+        td {
+          &:last-child {
+            display: none;
+          }
+        }
+      }
+    }
+
+    tr {
+      display: table-row-group;
+      border-bottom: 20px solid transparent;
+
+      td {
+        display: table-row;
+
+        &:first-child {
+          background-color: gray;
+          text-align: right;
+
+          &:before {
+            text-align: left;
+          }
+        }
+
+        &:before,
+        > span {
+          display: table-cell;
+          padding: 7px 13px;
+          border: 1px solid gray;
+        }
+
+        &:before {
+          content: attr(data-label);
+          font-weight: 600;
+          font-style: italic;
+          border-right: 1px solid transparent;
+        }
+      }
+    }
+  }
+}

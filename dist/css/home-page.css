@@ -9063,4 +9063,46 @@ input[type=button].btn-block {
   width: 100%;
 }
 
+@media (max-width: 768px) {
+  table {
+    display: block;
+  }
+  table thead {
+    display: none;
+  }
+  table tbody {
+    display: table;
+    width: 100%;
+  }
+  table tbody tr td:last-child {
+    display: none;
+  }
+  table tr {
+    display: table-row-group;
+    border-bottom: 20px solid transparent;
+  }
+  table tr td {
+    display: table-row;
+  }
+  table tr td:first-child {
+    background-color: gray;
+    text-align: right;
+  }
+  table tr td:first-child:before {
+    text-align: left;
+  }
+  table tr td:before,
+table tr td > span {
+    display: table-cell;
+    padding: 7px 13px;
+    border: 1px solid gray;
+  }
+  table tr td:before {
+    content: attr(data-label);
+    font-weight: 600;
+    font-style: italic;
+    border-right: 1px solid transparent;
+  }
+}
+
 /*# sourceMappingURL=home-page.css.map*/
