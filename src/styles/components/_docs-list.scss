@@ -1,6 +1,10 @@
 // Document list
-th {
-  font-weight: 400;
+table {
+  border-bottom: 1px solid $color-grey-darker;
+
+  th {
+    font-weight: 400;
+  }
 }
 
 @include media-breakpoint-down(md) {
@@ -20,7 +24,7 @@ th {
         display: table-row;
 
         &:first-child {
-          background-color: $color-grey-darker;
+          background-color: $color-grey;
           text-align: right;
 
           &:before {
@@ -32,21 +36,22 @@ th {
         > span {
           display: table-cell;
           padding: 7px 13px;
-          border: 1px solid gray;
+          border: 1px solid $color-grey-darker;
+          border-left: none;
         }
 
         &:before {
           content: attr(data-label);
           font-weight: 600;
           font-style: italic;
-          border-right: 1px solid transparent;
+          border-right: none;
+          border-left: 1px solid $color-grey-darker;
         }
 
         &:last-child {
           &:before {
             content: '';
-            border-left: transparent;
-            border-bottom: 1 solid;
+            border-left: none;
           }
         }
       }

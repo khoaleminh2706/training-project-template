@@ -9063,7 +9063,10 @@ input[type=button].btn-block {
   width: 100%;
 }
 
-th {
+table {
+  border-bottom: 1px solid #d3d3d3;
+}
+table th {
   font-weight: 400;
 }
 
@@ -9082,7 +9085,7 @@ th {
     display: table-row;
   }
   table tr td:first-child {
-    background-color: #d3d3d3;
+    background-color: #f7f7f7;
     text-align: right;
   }
   table tr td:first-child:before {
@@ -9092,18 +9095,19 @@ th {
 table tr td > span {
     display: table-cell;
     padding: 7px 13px;
-    border: 1px solid gray;
+    border: 1px solid #d3d3d3;
+    border-left: none;
   }
   table tr td:before {
     content: attr(data-label);
     font-weight: 600;
     font-style: italic;
-    border-right: 1px solid transparent;
+    border-right: none;
+    border-left: 1px solid #d3d3d3;
   }
   table tr td:last-child:before {
     content: "";
-    border-left: transparent;
-    border-bottom: 1 solid;
+    border-left: none;
   }
 }
 i.icon-excel {
