@@ -9075,12 +9075,8 @@ th {
     display: table;
     width: 100%;
   }
-  table tbody tr td:last-child {
-    display: none;
-  }
   table tr {
     display: table-row-group;
-    border-bottom: 20px solid transparent;
   }
   table tr td {
     display: table-row;
@@ -9103,6 +9099,11 @@ table tr td > span {
     font-weight: 600;
     font-style: italic;
     border-right: 1px solid transparent;
+  }
+  table tr td:last-child:before {
+    content: "";
+    border-left: transparent;
+    border-bottom: 1 solid;
   }
 }
 i.icon-excel {

@@ -11,19 +11,10 @@ th {
     tbody {
       display: table;
       width: 100%;
-
-      tr {
-        td {
-          &:last-child {
-            display: none;
-          }
-        }
-      }
     }
 
     tr {
       display: table-row-group;
-      border-bottom: 20px solid transparent;
 
       td {
         display: table-row;
@@ -49,6 +40,14 @@ th {
           font-weight: 600;
           font-style: italic;
           border-right: 1px solid transparent;
+        }
+
+        &:last-child {
+          &:before {
+            content: '';
+            border-left: transparent;
+            border-bottom: 1 solid;
+          }
         }
       }
     }
