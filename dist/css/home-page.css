@@ -7772,6 +7772,10 @@ readers do not read off random characters that represent icons */
   box-sizing: border-box;
 }
 
+h1 {
+  font-weight: 400;
+}
+
 .navbar {
   background-color: #f7f7f7;
 }
