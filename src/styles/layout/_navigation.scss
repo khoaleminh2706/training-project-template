@@ -1,6 +1,14 @@
 // Navigation styles
+.navbar {
+  background-color: $color-grey;
+}
+
 .navbar-nav {
   .icon-pink {
-    color: pink;
+    color: $navbar-icon-color;
+  }
+
+  .icon-excel {
+    color: $excel-icon-color;
   }
 }
