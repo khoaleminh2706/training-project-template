@@ -7,3 +7,9 @@
 @import '~bootstrap/scss/buttons';
 
 @import '../components/docs-list';
+
+i {
+  &.icon-excel {
+    color: $color-excel-icon;
+  }
+}

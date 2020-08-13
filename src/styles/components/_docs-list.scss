@@ -1,12 +1,13 @@
 // Document list
-@media (max-width: 768px) {
-  table {
-    display: block;
+th {
+  font-weight: 400;
+}
 
+@include media-breakpoint-down(md) {
+  table {
     thead {
       display: none;
     }
-
     tbody {
       display: table;
       width: 100%;
@@ -28,7 +29,7 @@
         display: table-row;
 
         &:first-child {
-          background-color: gray;
+          background-color: $color-grey-darker;
           text-align: right;
 
           &:before {

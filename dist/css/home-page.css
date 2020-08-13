@@ -7772,12 +7772,12 @@ readers do not read off random characters that represent icons */
   box-sizing: border-box;
 }
 
-body {
-  font-family: "Segoe UI";
+.navbar {
+  background-color: #f7f7f7;
 }
 
 .navbar-nav .icon-pink {
-  color: pink;
+  color: #d22c8f;
 }
 
 .nav {
@@ -9063,10 +9063,11 @@ input[type=button].btn-block {
   width: 100%;
 }
 
-@media (max-width: 768px) {
-  table {
-    display: block;
-  }
+th {
+  font-weight: 400;
+}
+
+@media (max-width: 991.98px) {
   table thead {
     display: none;
   }
@@ -9085,7 +9086,7 @@ input[type=button].btn-block {
     display: table-row;
   }
   table tr td:first-child {
-    background-color: gray;
+    background-color: #d3d3d3;
     text-align: right;
   }
   table tr td:first-child:before {
@@ -9103,6 +9104,9 @@ table tr td > span {
     font-style: italic;
     border-right: 1px solid transparent;
   }
+}
+i.icon-excel {
+  color: #217346;
 }
 
 /*# sourceMappingURL=home-page.css.map*/
