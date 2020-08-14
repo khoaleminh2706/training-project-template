@@ -1,57 +1,59 @@
 // Document list
-table {
-  border-bottom: 1px solid $color-grey-darker;
-
-  th {
-    font-weight: 400;
-  }
-}
-
-@include media-breakpoint-down(md) {
+#home-page {
   table {
-    thead {
-      display: none;
+    border-bottom: 1px solid $color-grey-darker;
+
+    th {
+      font-weight: 400;
     }
-    tbody {
-      display: table;
-      width: 100%;
-    }
+  }
 
-    tr {
-      display: table-row-group;
+  @include media-breakpoint-down(md) {
+    table {
+      // thead {
+      //   display: none;
+      // }
+      tbody {
+        display: table;
+        width: 100%;
+      }
 
-      td {
-        display: table-row;
+      tr {
+        display: table-row-group;
 
-        &:first-child {
-          background-color: $color-grey;
-          text-align: right;
+        td {
+          display: table-row;
 
-          &:before {
-            text-align: left;
+          &:first-child {
+            background-color: $color-grey;
+            text-align: right;
+
+            &:before {
+              text-align: left;
+            }
           }
-        }
 
-        &:before,
-        > span {
-          display: table-cell;
-          padding: 7px 13px;
-          border: 1px solid $color-grey-darker;
-          border-left: none;
-        }
-
-        &:before {
-          content: attr(data-label);
-          font-weight: 600;
-          font-style: italic;
-          border-right: none;
-          border-left: 1px solid $color-grey-darker;
-        }
-
-        &:last-child {
-          &:before {
-            content: '';
+          &:before,
+          > span {
+            display: table-cell;
+            padding: 7px 13px;
+            border: 1px solid $color-grey-darker;
             border-left: none;
+          }
+
+          &:before {
+            content: attr(data-label);
+            font-weight: 600;
+            font-style: italic;
+            border-right: none;
+            border-left: 1px solid $color-grey-darker;
+          }
+
+          &:last-child {
+            &:before {
+              content: '';
+              border-left: none;
+            }
           }
         }
       }
