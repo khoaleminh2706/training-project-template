@@ -2,6 +2,8 @@
 @import '~bootstrap/scss/functions';
 @import '~bootstrap/scss/variables';
 @import '~bootstrap/scss/mixins';
+@import '~bootstrap/scss/utilities';
+
 @import '~bootstrap/scss/root';
 @import '~bootstrap/scss/reboot';
 @import '~bootstrap/scss/type';
@@ -14,7 +16,7 @@
 @import '~@fortawesome/fontawesome-free/scss/regular';
 
 // Office Fabric UI Icons
-@import '../components/fabric-icons';
+@import '../vendor/fabric-icons';
 
 // Import global styles
 @import '../utilities/variables';
