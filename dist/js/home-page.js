@@ -95,7 +95,7 @@
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-const renderGrid = () => {// TODO: implement code to Render grid
+var renderGrid = function () {// TODO: implement code to Render grid
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (renderGrid);
@@ -115,7 +115,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_grid__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../components/_grid */ "./src/scripts/components/_grid.ts");
 
 
-Object(_utilities_helper__WEBPACK_IMPORTED_MODULE_0__["default"])(() => {
+Object(_utilities_helper__WEBPACK_IMPORTED_MODULE_0__["default"])(function () {
   Object(_components_grid__WEBPACK_IMPORTED_MODULE_1__["default"])();
 });
 
@@ -130,7 +130,7 @@ Object(_utilities_helper__WEBPACK_IMPORTED_MODULE_0__["default"])(() => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-const ready = fn => {
+var ready = function (fn) {
   if (document.readyState !== 'loading') {
     fn();
   } else {
