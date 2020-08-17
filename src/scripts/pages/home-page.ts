@@ -5,8 +5,14 @@ import 'bootstrap/js/dist/modal';
 
 import ready from '../utilities/_helper';
 import FileService from '../service/_fileService';
+import tableRow from '../components/_tableRow';
 
 ready(() => {
   const service = new FileService();
-  console.log(service.getData());
+  let point = document.querySelector('#doc-list-body');
+
+  if (point !== null)
+    point.innerHTML += tableRow(
+      service.getData() as Array<IBaseModel>,
+    );
 });
