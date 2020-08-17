@@ -4,7 +4,8 @@ import 'bootstrap/js/dist/collapse';
 import 'bootstrap/js/dist/modal';
 
 import ready from '../utilities/_helper';
+import { getData } from '../service/_fileService';
 
 ready(() => {
-  console.log('Hello');
+  console.log(getData());
 });
