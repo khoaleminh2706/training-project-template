@@ -1,4 +1,4 @@
-import serverData from '../constants/server';
+import serverData from '../constants/_serverData';
 import mapObjs from '../utilities/_mapObj';
 import LocalData from '../utilities/_LocalData';
 

@@ -1,4 +1,4 @@
-export const serverData = [
+const serverData = [
   {
     id: '1',
     name: 'CAS',
