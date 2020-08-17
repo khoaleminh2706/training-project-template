@@ -91,13 +91,21 @@
 
       <button
         type="button"
-        class="btn btn-primary"
-        data-toggle="modal"
-        data-target="#exampleModal"
-        id="btn-tao-moi"
+        class="btn btn-primary btn-new"
+        id="btn-file-moi"
       >
-        Tạo mới
+        <i class="fas fa-file"></i> File mới
       </button>
+      <button
+        type="button"
+        class="btn btn-primary btn-new"
+        data-toggle="modal"
+        data-target="#file-modal"
+        id="btn-folder-moi"
+      >
+        <i class="fas fa-folder"></i> Folder mới
+      </button>
+
       <!-- Documents list -->
       <table class="table">
         <thead>
@@ -122,11 +130,16 @@
       <!-- Documents list -->
     </div>
     <!-- container -->
+    <div
+      class="modal-backdrop fade show"
+      id="backdrop"
+      style="display: none;"
+    ></div>
 
     <!-- Modal -->
     <div
       class="modal fade"
-      id="exampleModal"
+      id="file-modal"
       tabindex="-1"
       role="dialog"
       aria-labelledby="exampleModalLabel"
