@@ -12426,6 +12426,100 @@ return jQuery;
 
 /***/ }),
 
+/***/ "./src/scripts/components/_tableRow.ts":
+/*!*********************************************!*\
+  !*** ./src/scripts/components/_tableRow.ts ***!
+  \*********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+const tableRow = data => {
+  let html = '';
+
+  if ((data === null || data === void 0 ? void 0 : data.length) !== 0) {
+    data.map((file, index) => {
+      html += `<tr>
+            <td data-label="File Type" scope="row">
+            <span><i class="fas ${file === undefined ? 'fa-file-excel icon-excel' : 'fa-folder'}"></i></span>
+            </td>
+            <td data-label="Name"><span>${file.name}</span></td>
+            <td data-label="Modified"><span>${file.modifiedAt}</span></td>
+            <td data-label="Modified By"><span>${file.modifiedBy}</span></td>
+            <td></td>
+        </tr>`;
+    });
+    return html;
+  }
+
+  return 'ahihi';
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (tableRow);
+
+/***/ }),
+
+/***/ "./src/scripts/constants/_serverData.ts":
+/*!**********************************************!*\
+  !*** ./src/scripts/constants/_serverData.ts ***!
+  \**********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+const serverData = [{
+  id: '1',
+  name: 'CAS',
+  type: 'folder',
+  createdAt: new Date(),
+  createdBy: 'main',
+  modifiedAt: new Date(),
+  modifiedBy: 'Megan Bowen',
+  files: [],
+  folder: []
+}, {
+  id: '2',
+  name: 'CoasterAndBargeLoading.xlsx',
+  type: 'file',
+  extension: 'xlsx',
+  createdAt: new Date(),
+  createdBy: 'main',
+  modifiedAt: new Date(),
+  modifiedBy: 'Administrator MOD'
+}, {
+  id: '3',
+  name: 'RevenueByService.xlsx',
+  type: 'file',
+  extension: 'xlsx',
+  createdAt: new Date(),
+  createdBy: 'main',
+  modifiedAt: new Date(),
+  modifiedBy: 'Administrator MOD'
+}, {
+  id: '4',
+  name: 'RevenueByService2016.xlsx',
+  type: 'file',
+  extension: 'xlsx',
+  createdAt: new Date(),
+  createdBy: 'main',
+  modifiedAt: new Date(),
+  modifiedBy: 'Administrator MOD'
+}, {
+  id: '5',
+  name: 'RevenueByService2017.xlsx',
+  type: 'file',
+  extension: 'xlsx',
+  createdAt: new Date(),
+  createdBy: 'main',
+  modifiedAt: new Date(),
+  modifiedBy: 'Administrator MOD'
+}];
+/* harmony default export */ __webpack_exports__["default"] = (serverData);
+
+/***/ }),
+
 /***/ "./src/scripts/pages/home-page.ts":
 /*!****************************************!*\
   !*** ./src/scripts/pages/home-page.ts ***!
@@ -12444,14 +12538,120 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var bootstrap_js_dist_modal__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! bootstrap/js/dist/modal */ "./node_modules/bootstrap/js/dist/modal.js");
 /* harmony import */ var bootstrap_js_dist_modal__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(bootstrap_js_dist_modal__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var _utilities_helper__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../utilities/_helper */ "./src/scripts/utilities/_helper.ts");
+/* harmony import */ var _service_fileService__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../service/_fileService */ "./src/scripts/service/_fileService.ts");
+/* harmony import */ var _components_tableRow__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../components/_tableRow */ "./src/scripts/components/_tableRow.ts");
 
 
 
 
 
+
+
+let modal = document.getElementById('file-modal');
 Object(_utilities_helper__WEBPACK_IMPORTED_MODULE_4__["default"])(() => {
-  console.log('Hello');
+  var _a, _b;
+
+  (_a = document.getElementById('btn-file-moi')) === null || _a === void 0 ? void 0 : _a.addEventListener('click', () => openModal('file'));
+  (_b = document.getElementById('btn-folder-moi')) === null || _b === void 0 ? void 0 : _b.addEventListener('click', () => openModal('folder'));
+  const service = new _service_fileService__WEBPACK_IMPORTED_MODULE_5__["default"]();
+  let point = document.getElementById('doc-list-body');
+  if (point !== null) point.innerHTML += Object(_components_tableRow__WEBPACK_IMPORTED_MODULE_6__["default"])(service.getData());
 });
+
+function openModal(task) {
+  if (modal !== null) {
+    modal.style.display = 'block';
+  }
+}
+
+/***/ }),
+
+/***/ "./src/scripts/service/_fileService.ts":
+/*!*********************************************!*\
+  !*** ./src/scripts/service/_fileService.ts ***!
+  \*********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _constants_serverData__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../constants/_serverData */ "./src/scripts/constants/_serverData.ts");
+/* harmony import */ var _utilities_mapObj__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../utilities/_mapObj */ "./src/scripts/utilities/_mapObj.ts");
+/* harmony import */ var _utilities_LocalData__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../utilities/_LocalData */ "./src/scripts/utilities/_LocalData.ts");
+
+
+
+
+class FileService {
+  constructor() {
+    this.getData = () => {
+      let data = _utilities_LocalData__WEBPACK_IMPORTED_MODULE_2__["default"].get('items');
+
+      if (data.length === 0) {
+        data = this.getDataFromServer();
+      } // merge data to file type
+
+
+      const result = [];
+      data.forEach(obj => {
+        let entry;
+
+        switch (obj.type) {
+          case 'file':
+            entry = Object(_utilities_mapObj__WEBPACK_IMPORTED_MODULE_1__["default"])(obj);
+            break;
+
+          case 'folder':
+            entry = Object(_utilities_mapObj__WEBPACK_IMPORTED_MODULE_1__["default"])(obj);
+        }
+
+        result.push(entry);
+      });
+      return result;
+    };
+
+    this.getDataFromServer = () => {
+      // save to local
+      _utilities_LocalData__WEBPACK_IMPORTED_MODULE_2__["default"].save('items', _constants_serverData__WEBPACK_IMPORTED_MODULE_0__["default"]);
+      return _constants_serverData__WEBPACK_IMPORTED_MODULE_0__["default"];
+    };
+  }
+
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (FileService);
+
+/***/ }),
+
+/***/ "./src/scripts/utilities/_LocalData.ts":
+/*!*********************************************!*\
+  !*** ./src/scripts/utilities/_LocalData.ts ***!
+  \*********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+class LocalData {
+  static get(name) {
+    let data = localStorage.getItem(name);
+    if (!data) return [];else return JSON.parse(data);
+  }
+
+  static save(name, data) {
+    try {
+      localStorage.setItem(name, JSON.stringify(data));
+    } catch (err) {
+      console.log(err);
+      return false;
+    }
+
+    return true;
+  }
+
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (LocalData);
 
 /***/ }),
 
@@ -12473,6 +12673,27 @@ const ready = fn => {
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (ready);
+
+/***/ }),
+
+/***/ "./src/scripts/utilities/_mapObj.ts":
+/*!******************************************!*\
+  !*** ./src/scripts/utilities/_mapObj.ts ***!
+  \******************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+function mapObjs(instance) {
+  let result = Object.keys(instance).reduce((acc, key) => {
+    acc[key] = instance[key];
+    return acc;
+  }, {});
+  return result;
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (mapObjs);
 
 /***/ }),
 
