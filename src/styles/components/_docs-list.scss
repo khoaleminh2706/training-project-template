@@ -10,9 +10,9 @@
 
   @include media-breakpoint-down(md) {
     table {
-      // thead {
-      //   display: none;
-      // }
+      thead {
+        display: none;
+      }
       tbody {
         display: table;
         width: 100%;
