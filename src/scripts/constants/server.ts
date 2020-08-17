@@ -1,4 +1,4 @@
-export const data = [
+export const serverData = [
   {
     id: '1',
     name: 'CAS',
@@ -51,3 +51,5 @@ export const data = [
     modifiedBy: 'Administrator MOD',
   },
 ];
+
+export default serverData;

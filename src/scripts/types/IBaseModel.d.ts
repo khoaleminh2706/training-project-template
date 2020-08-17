@@ -1,10 +1,9 @@
-import { HomePage } from '../service/_fileService';
-
 export {};
 declare global {
   interface IBaseModel {
     id: string;
     name: string;
+    type: string;
     createdAt: Date;
     createBy: string;
     modifiedAt: Date;
