@@ -6,11 +6,25 @@
 @import '~bootstrap/scss/tables';
 @import '~bootstrap/scss/buttons';
 @import '~bootstrap/scss/transitions';
+@import '~bootstrap/scss/custom-forms';
+@import '~bootstrap/scss/modal';
 
 @import '../components/docs-list';
 
-i {
-  &.icon-excel {
-    color: $color-excel-icon;
+#home-page {
+  i {
+    &.icon-excel {
+      color: $color-excel-icon;
+    }
+  }
+
+  #doc-list {
+    & > h1 {
+      font-weight: 300;
+    }
+
+    #btn-tao-moi {
+      margin: 10px 0;
+    }
   }
 }
