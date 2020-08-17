@@ -11611,8 +11611,11 @@ readers do not read off random characters that represent icons */
 .navbar-nav .icon-pink {
   color: #d22c8f;
 }
+.navbar-nav .nav-item:last-child .nav-link i {
+  line-height: 24px;
+}
 .navbar-nav .nav-link i {
-  font-size: 16px;
+  display: inline-block;
   vertical-align: middle;
 }
 
