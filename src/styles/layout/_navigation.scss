@@ -7,4 +7,19 @@
   .icon-pink {
     color: $color-navbar-icon;
   }
+
+  .nav-item:last-child {
+    .nav-link {
+      i {
+        line-height: 24px;
+      }
+    }
+  }
+
+  .nav-link {
+    i {
+      display: inline-block;
+      vertical-align: middle;
+    }
+  }
 }
