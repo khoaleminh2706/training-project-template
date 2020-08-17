@@ -6,7 +6,6 @@
 @import '~bootstrap/scss/tables';
 @import '~bootstrap/scss/buttons';
 @import '~bootstrap/scss/transitions';
-@import '~bootstrap/scss/custom-forms';
 @import '~bootstrap/scss/modal';
 
 @import '../components/docs-list';
@@ -23,7 +22,7 @@
       font-weight: 300;
     }
 
-    #btn-tao-moi {
+    .btn-new {
       margin: 10px 0;
     }
   }
