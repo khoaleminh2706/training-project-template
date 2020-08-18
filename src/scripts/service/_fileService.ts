@@ -26,23 +26,65 @@ class FileService {
     });
   };
 
-  public getDataFromServer = (): Array<any> => {
+  private getDataFromServer = (): Array<any> => {
     // save to local
     LocalData.save('items', serverData);
     return serverData;
   };
 
-  public createNewFile = (newFile: IFileCreateInput): boolean => {
-    this.p_data.push({
-      id: Date.now().toString(),
-      name: newFile.name,
-      type: newFile.type,
-      extension: newFile.extension,
-      createdAt: new Date(),
-      createdBy: 'Khoa',
-      modifiedAt: new Date(),
-      modifiedBy: 'Khoa',
-    } as IFile);
+  public createNewFile = (
+    newFile: IFileCreateInput,
+  ): ServiceResult => {
+    // check duplicate file name
+    if (this.hasAlreadyExisted(newFile.name)) {
+      return {
+        success: false,
+        errorMessage: 'File đã tồn tại',
+      };
+    }
+
+    try {
+      switch (newFile.type) {
+        case 'file':
+          this.p_data.push({
+            id: Date.now().toString(),
+            name: newFile.name,
+            type: newFile.type,
+            extension: newFile.extension,
+            createdAt: new Date(),
+            createdBy: 'Khoa',
+            modifiedAt: new Date(),
+            modifiedBy: 'Khoa',
+          } as IFile);
+          break;
+        case 'folder':
+          this.p_data.push({
+            id: Date.now().toString(),
+            name: newFile.name,
+            type: newFile.type,
+            createdAt: new Date(),
+            createdBy: 'Khoa',
+            modifiedAt: new Date(),
+            modifiedBy: 'Khoa',
+            subFiles: [],
+          } as IFolder);
+          break;
+      }
+
+      // save new data to localStorage
+      LocalData.save('items', this.p_data);
+    } catch (err) {
+      console.error('Error', err);
+      return { success: false, errorMessage: err };
+    }
+
+    return { success: true };
+  };
+
+  private hasAlreadyExisted = (fileName: string): boolean => {
+    if (this.p_data.find(x => x.name === fileName) === undefined) {
+      return false;
+    }
     return true;
   };
 
@@ -50,5 +92,7 @@ class FileService {
     return this.p_data;
   }
 }
+
+type ServiceResult = { success: boolean; errorMessage?: string };
 
 export default FileService;

@@ -8,7 +8,7 @@ const tableRow = (
   }
   let html = '';
   if (data?.length !== 0) {
-    data.map((file, index) => {
+    data.map(file => {
       html += `<tr>
             <td data-label="File Type" scope="row">
             <span><i class="fas ${

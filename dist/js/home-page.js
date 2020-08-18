@@ -12445,7 +12445,10 @@ function renderForm() {
             placeholder="Tên file"
             name="file-name"
         />
-        </div>
+      </div>
+      <div class="container">
+        <ul id="error-messages"></ul>
+      </div>
     </form>
     `;
   return html;
@@ -12473,7 +12476,7 @@ const tableRow = (data, container) => {
   let html = '';
 
   if ((data === null || data === void 0 ? void 0 : data.length) !== 0) {
-    data.map((file, index) => {
+    data.map(file => {
       html += `<tr>
             <td data-label="File Type" scope="row">
             <span><i class="fas ${file.extension !== undefined ? 'fa-file-excel icon-excel' : 'fa-folder'}"></i></span>
@@ -12588,6 +12591,23 @@ __webpack_require__.r(__webpack_exports__);
 const point = document.querySelector('#doc-list tbody');
 let service;
 Object(_utilities_helper__WEBPACK_IMPORTED_MODULE_5__["default"])(() => {
+  // prevent enter and backspace
+  jquery__WEBPACK_IMPORTED_MODULE_0___default()(function () {
+    const keyStop = {
+      8: ':not(input:text, textarea, input:file, input:password)',
+      13: 'input:text, input:password',
+      end: null
+    };
+    jquery__WEBPACK_IMPORTED_MODULE_0___default()(document).bind('keydown', function (event) {
+      const selector = keyStop[event.which];
+
+      if (selector !== undefined && jquery__WEBPACK_IMPORTED_MODULE_0___default()(event.target).is(selector)) {
+        event.preventDefault(); // stop event
+      }
+
+      return true;
+    });
+  });
   service = new _service_fileService__WEBPACK_IMPORTED_MODULE_6__["default"]();
   service.getData();
   Object(_components_tableRow__WEBPACK_IMPORTED_MODULE_7__["default"])(service.Data(), point);
@@ -12604,34 +12624,63 @@ function handleModalShow(event) {
 
   const btn = jquery__WEBPACK_IMPORTED_MODULE_0___default()(btnElement);
   const task = btn.data('task');
-  const fileType = btn.data('file');
+  const type = btn.data('file');
   const modal = jquery__WEBPACK_IMPORTED_MODULE_0___default()(event.target);
-  modal.find('.modal-title').text(`${task} ${fileType}`); // render form body
+  modal.find('.modal-title').text(`${task} ${type}`); // render form body
 
   modal.find('.modal-body').html(Object(_components_modalForm__WEBPACK_IMPORTED_MODULE_8__["default"])());
   modal.find('.modal-footer').html(`<button type="submit"
   class="btn btn-primary" id="btnSubmitForm">${task}</button>`);
+  const errorList = modal.find('#error-messages');
   jquery__WEBPACK_IMPORTED_MODULE_0___default()('#btnSubmitForm').on('click', event => {
-    const name = modal.find('input#file-name').val();
+    var _a;
 
-    if (name === undefined) {
-      console.error('File required');
+    const name = (_a = modal.find('input#file-name').val()) === null || _a === void 0 ? void 0 : _a.toString();
+
+    if (name === undefined || name === '') {
+      errorList.append('<li class="text-danger">Vui lòng điền tên file.</li>');
       return;
+    } // get file extension
+
+
+    let extension;
+
+    if (type === 'file') {
+      extension = name.split('.').pop();
+
+      if (!extension) {
+        // handle error
+        errorList.append('<li class="text-danger">Tên file phải có extension.</li>');
+        return;
+      }
     }
 
-    handleSubmit(event, {
-      name: name.toString(),
-      type: fileType,
-      extension: fileType === 'file' ? 'xlsx' : undefined
+    const result = handleSubmit(event, {
+      name,
+      type,
+      extension
     });
-    modal.modal('hide');
+
+    if (result) {
+      errorList.append(`<li class="text-danger">${result}</li>`);
+      return;
+    } // hide modal
+
+
+    modal.modal('hide'); // rerender doc list
+
     Object(_components_tableRow__WEBPACK_IMPORTED_MODULE_7__["default"])(service.Data(), point);
   });
 }
 
 function handleSubmit(event, newFile) {
   event.preventDefault();
-  service.createNewFile(newFile);
+  const {
+    success,
+    errorMessage
+  } = service.createNewFile(newFile);
+  if (!success && errorMessage) return errorMessage;
+  return undefined;
 }
 
 /***/ }),
@@ -12685,16 +12734,63 @@ class FileService {
     };
 
     this.createNewFile = newFile => {
-      this.p_data.push({
-        id: Date.now().toString(),
-        name: newFile.name,
-        type: newFile.type,
-        extension: newFile.extension,
-        createdAt: new Date(),
-        createdBy: 'Khoa',
-        modifiedAt: new Date(),
-        modifiedBy: 'Khoa'
-      });
+      // check duplicate file name
+      if (this.hasAlreadyExisted(newFile.name)) {
+        return {
+          success: false,
+          errorMessage: 'File đã tồn tại'
+        };
+      }
+
+      try {
+        switch (newFile.type) {
+          case 'file':
+            this.p_data.push({
+              id: Date.now().toString(),
+              name: newFile.name,
+              type: newFile.type,
+              extension: newFile.extension,
+              createdAt: new Date(),
+              createdBy: 'Khoa',
+              modifiedAt: new Date(),
+              modifiedBy: 'Khoa'
+            });
+            break;
+
+          case 'folder':
+            this.p_data.push({
+              id: Date.now().toString(),
+              name: newFile.name,
+              type: newFile.type,
+              createdAt: new Date(),
+              createdBy: 'Khoa',
+              modifiedAt: new Date(),
+              modifiedBy: 'Khoa',
+              subFiles: []
+            });
+            break;
+        } // save new data to localStorage
+
+
+        _utilities_LocalData__WEBPACK_IMPORTED_MODULE_1__["default"].save('items', this.p_data);
+      } catch (err) {
+        console.error('Error', err);
+        return {
+          success: false,
+          errorMessage: err
+        };
+      }
+
+      return {
+        success: true
+      };
+    };
+
+    this.hasAlreadyExisted = fileName => {
+      if (this.p_data.find(x => x.name === fileName) === undefined) {
+        return false;
+      }
+
       return true;
     };
   }

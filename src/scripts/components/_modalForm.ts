@@ -8,7 +8,10 @@ function renderForm(): string {
             placeholder="Tên file"
             name="file-name"
         />
-        </div>
+      </div>
+      <div class="container">
+        <ul id="error-messages"></ul>
+      </div>
     </form>
     `;
   return html;
