@@ -1,3 +1,4 @@
+import * as $ from 'jquery';
 import 'bootstrap/js/dist/util';
 import 'bootstrap/js/dist/button';
 import 'bootstrap/js/dist/collapse';
@@ -7,9 +8,12 @@ import ready from '../utilities/_helper';
 import FileService from '../service/_fileService';
 import tableRow from '../components/_tableRow';
 
-let modal = document.getElementById('file-modal');
+const modal = document.getElementById('file-modal');
+const point = document.getElementById('doc-list-body');
 
 ready(() => {
+  const service = new FileService();
+
   document
     .getElementById('btn-file-moi')
     ?.addEventListener('click', () => openModal('file'));
@@ -17,13 +21,7 @@ ready(() => {
     .getElementById('btn-folder-moi')
     ?.addEventListener('click', () => openModal('folder'));
 
-  const service = new FileService();
-  let point = document.getElementById('doc-list-body');
-
-  if (point !== null)
-    point.innerHTML += tableRow(
-      service.getData() as Array<BaseModel>,
-    );
+  if (point !== null) tableRow(service.getData(), point);
 });
 
 function openModal(task: string) {

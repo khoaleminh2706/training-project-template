@@ -1,6 +1,6 @@
 export {};
 declare global {
-  type BaseModel = {
+  interface IBaseModel {
     id: string;
     name: string;
     type: string;
@@ -8,5 +8,5 @@ declare global {
     createBy: string;
     modifiedAt: Date;
     modifiedBy: string;
-  };
+  }
 }

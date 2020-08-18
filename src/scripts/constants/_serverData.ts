@@ -7,8 +7,7 @@ const serverData = [
     createdBy: 'main',
     modifiedAt: new Date(),
     modifiedBy: 'Megan Bowen',
-    files: [],
-    folder: [],
+    subFiles: [],
   },
   {
     id: '2',

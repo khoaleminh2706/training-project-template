@@ -1,11 +1,14 @@
-const tableRow = (data: Array<BaseModel>): string => {
+const tableRow = (
+  data: Array<IBaseModel>,
+  container: HTMLElement,
+) => {
   let html = '';
   if (data?.length !== 0) {
     data.map((file, index) => {
       html += `<tr>
             <td data-label="File Type" scope="row">
             <span><i class="fas ${
-              <File>file === undefined
+              (file as IFile).extension !== undefined
                 ? 'fa-file-excel icon-excel'
                 : 'fa-folder'
             }"></i></span>
@@ -20,8 +23,9 @@ const tableRow = (data: Array<BaseModel>): string => {
             <td></td>
         </tr>`;
     });
-    return html;
+    container.innerHTML = html;
+  } else {
+    container.innerHTML = 'Không có dữ liệu nào';
   }
-  return 'ahihi';
 };
 export default tableRow;
