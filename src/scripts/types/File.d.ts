@@ -1,7 +1,7 @@
 export {};
 
 declare global {
-  interface IFile extends IBaseModel {
+  type FileType = BaseModel & {
     extension: string;
-  }
+  };
 }

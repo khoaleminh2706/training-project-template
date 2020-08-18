@@ -22,7 +22,7 @@ ready(() => {
 
   if (point !== null)
     point.innerHTML += tableRow(
-      service.getData() as Array<IBaseModel>,
+      service.getData() as Array<BaseModel>,
     );
 });
 

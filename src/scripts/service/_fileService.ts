@@ -3,25 +3,32 @@ import mapObjs from '../utilities/_mapObj';
 import LocalData from '../utilities/_LocalData';
 
 class FileService {
-  public getData = (): Array<IBaseModel | undefined> => {
-    let data = LocalData.get<IBaseModel>('items');
+  private p_data: Array<BaseModel> = [];
 
-    if (data.length === 0) {
-      data = this.getDataFromServer();
+  public getData = (): Array<BaseModel | undefined> => {
+    this.p_data = LocalData.get<BaseModel>('items');
+
+    if (this.p_data.length === 0) {
+      this.p_data = this.getDataFromServer();
     }
+
     // merge data to file type
-    const result: Array<IBaseModel | undefined> = [];
-    data.forEach(obj => {
-      let entry: IBaseModel | undefined;
-      switch (obj.type) {
-        case 'file':
-          entry = mapObjs<IFile>(obj);
-          break;
-        case 'folder':
-          entry = mapObjs<IFile>(obj);
+    const result: Array<BaseModel> = [];
+
+    this.p_data.forEach(obj => {
+      if (!!obj && obj?.type) {
+        let entry: BaseModel | undefined;
+        switch (obj.type) {
+          case 'file':
+            entry = mapObjs<FileType>(obj);
+            break;
+          case 'folder':
+            entry = mapObjs<FolderType>(obj);
+        }
+        result.push(entry as BaseModel);
       }
-      result.push(entry);
     });
+
     return result;
   };
 

@@ -1,11 +1,11 @@
-const tableRow = (data: Array<IBaseModel>): string => {
+const tableRow = (data: Array<BaseModel>): string => {
   let html = '';
   if (data?.length !== 0) {
     data.map((file, index) => {
       html += `<tr>
             <td data-label="File Type" scope="row">
             <span><i class="fas ${
-              <IFile>file === undefined
+              <File>file === undefined
                 ? 'fa-file-excel icon-excel'
                 : 'fa-folder'
             }"></i></span>
