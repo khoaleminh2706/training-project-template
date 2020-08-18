@@ -4,17 +4,15 @@ import LocalData from '../utilities/_LocalData';
 class FileService {
   private p_data: Array<IBaseModel> = [];
 
-  public getData = (): Array<IBaseModel> => {
-    this.p_data = LocalData.get<IBaseModel>('items');
+  public getData = () => {
+    let jsonData = LocalData.get<IBaseModel>('items');
 
-    if (this.p_data.length === 0) {
-      this.p_data = this.getDataFromServer();
+    if (jsonData.length === 0) {
+      jsonData = this.getDataFromServer();
     }
 
     // merge data to file type
-    const result: Array<IBaseModel> = [];
-
-    this.p_data.forEach(obj => {
+    jsonData.forEach(obj => {
       if (!obj !== undefined && obj?.type) {
         switch (obj.type) {
           case 'file':
@@ -23,11 +21,9 @@ class FileService {
           case 'folder':
             obj = <IFolder>obj;
         }
-        result.push(obj);
+        this.p_data.push(obj);
       }
     });
-
-    return result;
   };
 
   public getDataFromServer = (): Array<any> => {
@@ -35,6 +31,24 @@ class FileService {
     LocalData.save('items', serverData);
     return serverData;
   };
+
+  public createNewFile = (newFile: IFileCreateInput): boolean => {
+    this.p_data.push({
+      id: Date.now().toString(),
+      name: newFile.name,
+      type: newFile.type,
+      extension: newFile.extension,
+      createdAt: new Date(),
+      createdBy: 'Khoa',
+      modifiedAt: new Date(),
+      modifiedBy: 'Khoa',
+    } as IFile);
+    return true;
+  };
+
+  public Data() {
+    return this.p_data;
+  }
 }
 
 export default FileService;

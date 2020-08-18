@@ -1,7 +1,11 @@
 const tableRow = (
   data: Array<IBaseModel>,
-  container: HTMLElement,
+  container: HTMLElement | null,
 ) => {
+  if (!container) {
+    console.error('Cannot find conatiner');
+    return;
+  }
   let html = '';
   if (data?.length !== 0) {
     data.map((file, index) => {

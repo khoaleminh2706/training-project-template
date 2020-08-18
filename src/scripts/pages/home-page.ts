@@ -3,33 +3,63 @@ import 'bootstrap/js/dist/util';
 import 'bootstrap/js/dist/button';
 import 'bootstrap/js/dist/collapse';
 import 'bootstrap/js/dist/modal';
+import { ModalEventHandler } from 'bootstrap';
 
 import ready from '../utilities/_helper';
 import FileService from '../service/_fileService';
 import tableRow from '../components/_tableRow';
 import renderForm from '../components/_modalForm';
 
-const point = document.getElementById('doc-list-body');
+const point = document.querySelector<HTMLElement>('#doc-list tbody');
+let service: FileService;
 
 ready(() => {
-  const service = new FileService();
-  if (point !== null) tableRow(service.getData(), point);
+  service = new FileService();
+  service.getData();
+  tableRow(service.Data(), point);
 
-  $('#file-modal').on('show.bs.modal', function(event) {
-    const btn = event.relatedTarget;
-    if (!btn) {
-      console.error('Không tìm thấy button');
+  $('#file-modal').on('show.bs.modal', event =>
+    handleModalShow(event),
+  );
+});
+
+function handleModalShow(event: ModalEventHandler<HTMLElement>) {
+  const btnElement = event.relatedTarget;
+  if (!btnElement) {
+    console.error('Không tìm thấy button');
+    return;
+  }
+  const btn = $(btnElement);
+  const task = btn.data('task');
+  const fileType = btn.data('file');
+
+  const modal = $(event.target);
+  modal.find('.modal-title').text(`${task} ${fileType}`);
+  // render form body
+  modal.find('.modal-body').html(renderForm());
+  modal.find('.modal-footer').html(`<button type="submit"
+  class="btn btn-primary" id="btnSubmitForm">${task}</button>`);
+
+  $('#btnSubmitForm').on('click', event => {
+    const name = modal.find('input#file-name').val();
+    if (name === undefined) {
+      console.error('File required');
       return;
     }
-    const btnJquery = $(btn);
-    const task = btnJquery.data('task');
-    const fileType = btnJquery.data('file');
-
-    const modal = $(this);
-    modal.find('.modal-title').text(`${task} ${fileType}`);
-    // render form body
-    modal.find('.modal-body').html(renderForm());
-    modal.find('.modal-footer').html(`<button type="submit"
-    class="btn btn-primary" id="btnSubmitForm">${task}</button>`);
+    handleSubmit(event, {
+      name: name.toString(),
+      type: fileType,
+      extension: fileType === 'file' ? 'xlsx' : undefined,
+    });
+    modal.modal('hide');
+    tableRow(service.Data(), point);
   });
-});
+}
+
+function handleSubmit(
+  event: JQuery.ClickEvent,
+  newFile: IFileCreateInput,
+) {
+  event.preventDefault();
+  service.createNewFile(newFile);
+}

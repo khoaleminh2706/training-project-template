@@ -12443,6 +12443,7 @@ function renderForm() {
             class="form-control" 
             id="file-name"
             placeholder="Tên file"
+            name="file-name"
         />
         </div>
     </form>
@@ -12464,6 +12465,11 @@ function renderForm() {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 const tableRow = (data, container) => {
+  if (!container) {
+    console.error('Cannot find conatiner');
+    return;
+  }
+
   let html = '';
 
   if ((data === null || data === void 0 ? void 0 : data.length) !== 0) {
@@ -12579,29 +12585,54 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const point = document.getElementById('doc-list-body');
+const point = document.querySelector('#doc-list tbody');
+let service;
 Object(_utilities_helper__WEBPACK_IMPORTED_MODULE_5__["default"])(() => {
-  const service = new _service_fileService__WEBPACK_IMPORTED_MODULE_6__["default"]();
-  if (point !== null) Object(_components_tableRow__WEBPACK_IMPORTED_MODULE_7__["default"])(service.getData(), point);
-  jquery__WEBPACK_IMPORTED_MODULE_0___default()('#file-modal').on('show.bs.modal', function (event) {
-    const btn = event.relatedTarget;
+  service = new _service_fileService__WEBPACK_IMPORTED_MODULE_6__["default"]();
+  service.getData();
+  Object(_components_tableRow__WEBPACK_IMPORTED_MODULE_7__["default"])(service.Data(), point);
+  jquery__WEBPACK_IMPORTED_MODULE_0___default()('#file-modal').on('show.bs.modal', event => handleModalShow(event));
+});
 
-    if (!btn) {
-      console.error('Không tìm thấy button');
+function handleModalShow(event) {
+  const btnElement = event.relatedTarget;
+
+  if (!btnElement) {
+    console.error('Không tìm thấy button');
+    return;
+  }
+
+  const btn = jquery__WEBPACK_IMPORTED_MODULE_0___default()(btnElement);
+  const task = btn.data('task');
+  const fileType = btn.data('file');
+  const modal = jquery__WEBPACK_IMPORTED_MODULE_0___default()(event.target);
+  modal.find('.modal-title').text(`${task} ${fileType}`); // render form body
+
+  modal.find('.modal-body').html(Object(_components_modalForm__WEBPACK_IMPORTED_MODULE_8__["default"])());
+  modal.find('.modal-footer').html(`<button type="submit"
+  class="btn btn-primary" id="btnSubmitForm">${task}</button>`);
+  jquery__WEBPACK_IMPORTED_MODULE_0___default()('#btnSubmitForm').on('click', event => {
+    const name = modal.find('input#file-name').val();
+
+    if (name === undefined) {
+      console.error('File required');
       return;
     }
 
-    const btnJquery = jquery__WEBPACK_IMPORTED_MODULE_0___default()(btn);
-    const task = btnJquery.data('task');
-    const fileType = btnJquery.data('file');
-    const modal = jquery__WEBPACK_IMPORTED_MODULE_0___default()(this);
-    modal.find('.modal-title').text(`${task} ${fileType}`); // render form body
-
-    modal.find('.modal-body').html(Object(_components_modalForm__WEBPACK_IMPORTED_MODULE_8__["default"])());
-    modal.find('.modal-footer').html(`<button type="submit"
-    class="btn btn-primary" id="btnSubmitForm">${task}</button>`);
+    handleSubmit(event, {
+      name: name.toString(),
+      type: fileType,
+      extension: fileType === 'file' ? 'xlsx' : undefined
+    });
+    modal.modal('hide');
+    Object(_components_tableRow__WEBPACK_IMPORTED_MODULE_7__["default"])(service.Data(), point);
   });
-});
+}
+
+function handleSubmit(event, newFile) {
+  event.preventDefault();
+  service.createNewFile(newFile);
+}
 
 /***/ }),
 
@@ -12624,15 +12655,14 @@ class FileService {
     this.p_data = [];
 
     this.getData = () => {
-      this.p_data = _utilities_LocalData__WEBPACK_IMPORTED_MODULE_1__["default"].get('items');
+      let jsonData = _utilities_LocalData__WEBPACK_IMPORTED_MODULE_1__["default"].get('items');
 
-      if (this.p_data.length === 0) {
-        this.p_data = this.getDataFromServer();
+      if (jsonData.length === 0) {
+        jsonData = this.getDataFromServer();
       } // merge data to file type
 
 
-      const result = [];
-      this.p_data.forEach(obj => {
+      jsonData.forEach(obj => {
         if (!obj !== undefined && (obj === null || obj === void 0 ? void 0 : obj.type)) {
           switch (obj.type) {
             case 'file':
@@ -12643,10 +12673,9 @@ class FileService {
               obj = obj;
           }
 
-          result.push(obj);
+          this.p_data.push(obj);
         }
       });
-      return result;
     };
 
     this.getDataFromServer = () => {
@@ -12654,6 +12683,24 @@ class FileService {
       _utilities_LocalData__WEBPACK_IMPORTED_MODULE_1__["default"].save('items', _constants_serverData__WEBPACK_IMPORTED_MODULE_0__["default"]);
       return _constants_serverData__WEBPACK_IMPORTED_MODULE_0__["default"];
     };
+
+    this.createNewFile = newFile => {
+      this.p_data.push({
+        id: Date.now().toString(),
+        name: newFile.name,
+        type: newFile.type,
+        extension: newFile.extension,
+        createdAt: new Date(),
+        createdBy: 'Khoa',
+        modifiedAt: new Date(),
+        modifiedBy: 'Khoa'
+      });
+      return true;
+    };
+  }
+
+  Data() {
+    return this.p_data;
   }
 
 }

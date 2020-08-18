@@ -5,7 +5,7 @@ declare global {
     name: string;
     type: string;
     createdAt: Date;
-    createBy: string;
+    createdBy: string;
     modifiedAt: Date;
     modifiedBy: string;
   }

@@ -6,6 +6,7 @@ function renderForm(): string {
             class="form-control" 
             id="file-name"
             placeholder="Tên file"
+            name="file-name"
         />
         </div>
     </form>
