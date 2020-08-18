@@ -11,6 +11,7 @@ import tableRow from '../components/_tableRow';
 import renderForm from '../components/_modalForm';
 
 const point = document.querySelector<HTMLElement>('#doc-list tbody');
+const contextMenu = document.getElementById('context-menu');
 let service: FileService;
 
 ready(() => {
@@ -36,10 +37,45 @@ ready(() => {
   service.getData();
   tableRow(service.Data(), point);
 
+  // Modal to handle create and edit
   $('#file-modal').on('show.bs.modal', event =>
     handleModalShow(event),
   );
+
+  // custom context menu
+  const docs = document.querySelectorAll<HTMLElement>(
+    '#doc-list tbody tr',
+  );
+
+  if (docs) {
+    docs.forEach(doc => {
+      contextMenuListener(doc);
+    });
+  }
+
+  window.addEventListener('click', function() {
+    showContextMenu(false);
+  });
 });
+
+function contextMenuListener(el: HTMLElement) {
+  el.addEventListener('contextmenu', function(e) {
+    e.preventDefault();
+
+    if (contextMenu) {
+      showContextMenu();
+      contextMenu.style.top = e.y.toString();
+      contextMenu.style.left = e.x.toString();
+    }
+
+    return false;
+  });
+}
+
+function showContextMenu(show: boolean = true) {
+  if (contextMenu)
+    contextMenu.style.display = show ? 'block' : 'none';
+}
 
 function handleModalShow(event: ModalEventHandler<HTMLElement>) {
   const btnElement = event.relatedTarget;

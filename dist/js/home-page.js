@@ -12589,6 +12589,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 const point = document.querySelector('#doc-list tbody');
+const contextMenu = document.getElementById('context-menu');
 let service;
 Object(_utilities_helper__WEBPACK_IMPORTED_MODULE_5__["default"])(() => {
   // prevent enter and backspace
@@ -12610,9 +12611,40 @@ Object(_utilities_helper__WEBPACK_IMPORTED_MODULE_5__["default"])(() => {
   });
   service = new _service_fileService__WEBPACK_IMPORTED_MODULE_6__["default"]();
   service.getData();
-  Object(_components_tableRow__WEBPACK_IMPORTED_MODULE_7__["default"])(service.Data(), point);
-  jquery__WEBPACK_IMPORTED_MODULE_0___default()('#file-modal').on('show.bs.modal', event => handleModalShow(event));
+  Object(_components_tableRow__WEBPACK_IMPORTED_MODULE_7__["default"])(service.Data(), point); // Modal to handle create and edit
+
+  jquery__WEBPACK_IMPORTED_MODULE_0___default()('#file-modal').on('show.bs.modal', event => handleModalShow(event)); // custom context menu
+
+  const docs = document.querySelectorAll('#doc-list tbody tr');
+
+  if (docs) {
+    docs.forEach(doc => {
+      contextMenuListener(doc);
+    });
+  }
+
+  window.addEventListener('click', function () {
+    showContextMenu(false);
+  });
 });
+
+function contextMenuListener(el) {
+  el.addEventListener('contextmenu', function (e) {
+    e.preventDefault();
+
+    if (contextMenu) {
+      showContextMenu();
+      contextMenu.style.top = e.y.toString();
+      contextMenu.style.left = e.x.toString();
+    }
+
+    return false;
+  });
+}
+
+function showContextMenu(show = true) {
+  if (contextMenu) contextMenu.style.display = show ? 'block' : 'none';
+}
 
 function handleModalShow(event) {
   const btnElement = event.relatedTarget;
