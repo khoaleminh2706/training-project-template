@@ -1,7 +1,7 @@
 function get<T>(name: string): Array<T> {
-  let data = localStorage.getItem(name);
+  const data = localStorage.getItem(name);
   if (!data) return [];
-  else return JSON.parse(data);
+  return JSON.parse(data);
 }
 
 function save(name: string, data: any): boolean {

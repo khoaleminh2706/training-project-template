@@ -12426,6 +12426,34 @@ return jQuery;
 
 /***/ }),
 
+/***/ "./src/scripts/components/_modalForm.ts":
+/*!**********************************************!*\
+  !*** ./src/scripts/components/_modalForm.ts ***!
+  \**********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+function renderForm() {
+  const html = `
+    <form>
+      <div class="form-group">
+        <input type="text" 
+            class="form-control" 
+            id="file-name"
+            placeholder="Tên file"
+        />
+        </div>
+    </form>
+    `;
+  return html;
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (renderForm);
+
+/***/ }),
+
 /***/ "./src/scripts/components/_tableRow.ts":
 /*!*********************************************!*\
   !*** ./src/scripts/components/_tableRow.ts ***!
@@ -12435,14 +12463,14 @@ return jQuery;
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-const tableRow = data => {
+const tableRow = (data, container) => {
   let html = '';
 
   if ((data === null || data === void 0 ? void 0 : data.length) !== 0) {
     data.map((file, index) => {
       html += `<tr>
             <td data-label="File Type" scope="row">
-            <span><i class="fas ${file === undefined ? 'fa-file-excel icon-excel' : 'fa-folder'}"></i></span>
+            <span><i class="fas ${file.extension !== undefined ? 'fa-file-excel icon-excel' : 'fa-folder'}"></i></span>
             </td>
             <td data-label="Name"><span>${file.name}</span></td>
             <td data-label="Modified"><span>${file.modifiedAt}</span></td>
@@ -12450,10 +12478,10 @@ const tableRow = data => {
             <td></td>
         </tr>`;
     });
-    return html;
+    container.innerHTML = html;
+  } else {
+    container.innerHTML = 'Không có dữ liệu nào';
   }
-
-  return 'ahihi';
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (tableRow);
@@ -12477,8 +12505,7 @@ const serverData = [{
   createdBy: 'main',
   modifiedAt: new Date(),
   modifiedBy: 'Megan Bowen',
-  files: [],
-  folder: []
+  subFiles: []
 }, {
   id: '2',
   name: 'CoasterAndBargeLoading.xlsx',
@@ -12529,17 +12556,20 @@ const serverData = [{
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var bootstrap_js_dist_util__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! bootstrap/js/dist/util */ "./node_modules/bootstrap/js/dist/util.js");
-/* harmony import */ var bootstrap_js_dist_util__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(bootstrap_js_dist_util__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var bootstrap_js_dist_button__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! bootstrap/js/dist/button */ "./node_modules/bootstrap/js/dist/button.js");
-/* harmony import */ var bootstrap_js_dist_button__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(bootstrap_js_dist_button__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var bootstrap_js_dist_collapse__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! bootstrap/js/dist/collapse */ "./node_modules/bootstrap/js/dist/collapse.js");
-/* harmony import */ var bootstrap_js_dist_collapse__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(bootstrap_js_dist_collapse__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var bootstrap_js_dist_modal__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! bootstrap/js/dist/modal */ "./node_modules/bootstrap/js/dist/modal.js");
-/* harmony import */ var bootstrap_js_dist_modal__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(bootstrap_js_dist_modal__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _utilities_helper__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../utilities/_helper */ "./src/scripts/utilities/_helper.ts");
-/* harmony import */ var _service_fileService__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../service/_fileService */ "./src/scripts/service/_fileService.ts");
-/* harmony import */ var _components_tableRow__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../components/_tableRow */ "./src/scripts/components/_tableRow.ts");
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var bootstrap_js_dist_util__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! bootstrap/js/dist/util */ "./node_modules/bootstrap/js/dist/util.js");
+/* harmony import */ var bootstrap_js_dist_util__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(bootstrap_js_dist_util__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var bootstrap_js_dist_button__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! bootstrap/js/dist/button */ "./node_modules/bootstrap/js/dist/button.js");
+/* harmony import */ var bootstrap_js_dist_button__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(bootstrap_js_dist_button__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var bootstrap_js_dist_collapse__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! bootstrap/js/dist/collapse */ "./node_modules/bootstrap/js/dist/collapse.js");
+/* harmony import */ var bootstrap_js_dist_collapse__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(bootstrap_js_dist_collapse__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var bootstrap_js_dist_modal__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! bootstrap/js/dist/modal */ "./node_modules/bootstrap/js/dist/modal.js");
+/* harmony import */ var bootstrap_js_dist_modal__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(bootstrap_js_dist_modal__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _utilities_helper__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../utilities/_helper */ "./src/scripts/utilities/_helper.ts");
+/* harmony import */ var _service_fileService__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../service/_fileService */ "./src/scripts/service/_fileService.ts");
+/* harmony import */ var _components_tableRow__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../components/_tableRow */ "./src/scripts/components/_tableRow.ts");
+/* harmony import */ var _components_modalForm__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../components/_modalForm */ "./src/scripts/components/_modalForm.ts");
 
 
 
@@ -12547,22 +12577,31 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-let modal = document.getElementById('file-modal');
-Object(_utilities_helper__WEBPACK_IMPORTED_MODULE_4__["default"])(() => {
-  var _a, _b;
 
-  (_a = document.getElementById('btn-file-moi')) === null || _a === void 0 ? void 0 : _a.addEventListener('click', () => openModal('file'));
-  (_b = document.getElementById('btn-folder-moi')) === null || _b === void 0 ? void 0 : _b.addEventListener('click', () => openModal('folder'));
-  const service = new _service_fileService__WEBPACK_IMPORTED_MODULE_5__["default"]();
-  let point = document.getElementById('doc-list-body');
-  if (point !== null) point.innerHTML += Object(_components_tableRow__WEBPACK_IMPORTED_MODULE_6__["default"])(service.getData());
+
+const point = document.getElementById('doc-list-body');
+Object(_utilities_helper__WEBPACK_IMPORTED_MODULE_5__["default"])(() => {
+  const service = new _service_fileService__WEBPACK_IMPORTED_MODULE_6__["default"]();
+  if (point !== null) Object(_components_tableRow__WEBPACK_IMPORTED_MODULE_7__["default"])(service.getData(), point);
+  jquery__WEBPACK_IMPORTED_MODULE_0___default()('#file-modal').on('show.bs.modal', function (event) {
+    const btn = event.relatedTarget;
+
+    if (!btn) {
+      console.error('Không tìm thấy button');
+      return;
+    }
+
+    const btnJquery = jquery__WEBPACK_IMPORTED_MODULE_0___default()(btn);
+    const task = btnJquery.data('task');
+    const fileType = btnJquery.data('file');
+    const modal = jquery__WEBPACK_IMPORTED_MODULE_0___default()(this);
+    modal.find('.modal-title').text(`${task} ${fileType}`); // render form body
+
+    modal.find('.modal-body').html(Object(_components_modalForm__WEBPACK_IMPORTED_MODULE_8__["default"])());
+    modal.find('.modal-footer').html(`<button type="submit"
+    class="btn btn-primary" id="btnSubmitForm">${task}</button>`);
+  });
 });
-
-function openModal(task) {
-  if (modal !== null) {
-    modal.style.display = 'block';
-  }
-}
 
 /***/ }),
 
@@ -12576,43 +12615,43 @@ function openModal(task) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _constants_serverData__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../constants/_serverData */ "./src/scripts/constants/_serverData.ts");
-/* harmony import */ var _utilities_mapObj__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../utilities/_mapObj */ "./src/scripts/utilities/_mapObj.ts");
-/* harmony import */ var _utilities_LocalData__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../utilities/_LocalData */ "./src/scripts/utilities/_LocalData.ts");
-
+/* harmony import */ var _utilities_LocalData__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../utilities/_LocalData */ "./src/scripts/utilities/_LocalData.ts");
 
 
 
 class FileService {
   constructor() {
-    this.getData = () => {
-      let data = _utilities_LocalData__WEBPACK_IMPORTED_MODULE_2__["default"].get('items');
+    this.p_data = [];
 
-      if (data.length === 0) {
-        data = this.getDataFromServer();
+    this.getData = () => {
+      this.p_data = _utilities_LocalData__WEBPACK_IMPORTED_MODULE_1__["default"].get('items');
+
+      if (this.p_data.length === 0) {
+        this.p_data = this.getDataFromServer();
       } // merge data to file type
 
 
       const result = [];
-      data.forEach(obj => {
-        let entry;
+      this.p_data.forEach(obj => {
+        if (!obj !== undefined && (obj === null || obj === void 0 ? void 0 : obj.type)) {
+          switch (obj.type) {
+            case 'file':
+              obj = obj;
+              break;
 
-        switch (obj.type) {
-          case 'file':
-            entry = Object(_utilities_mapObj__WEBPACK_IMPORTED_MODULE_1__["default"])(obj);
-            break;
+            case 'folder':
+              obj = obj;
+          }
 
-          case 'folder':
-            entry = Object(_utilities_mapObj__WEBPACK_IMPORTED_MODULE_1__["default"])(obj);
+          result.push(obj);
         }
-
-        result.push(entry);
       });
       return result;
     };
 
     this.getDataFromServer = () => {
       // save to local
-      _utilities_LocalData__WEBPACK_IMPORTED_MODULE_2__["default"].save('items', _constants_serverData__WEBPACK_IMPORTED_MODULE_0__["default"]);
+      _utilities_LocalData__WEBPACK_IMPORTED_MODULE_1__["default"].save('items', _constants_serverData__WEBPACK_IMPORTED_MODULE_0__["default"]);
       return _constants_serverData__WEBPACK_IMPORTED_MODULE_0__["default"];
     };
   }
@@ -12632,26 +12671,27 @@ class FileService {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-class LocalData {
-  static get(name) {
-    let data = localStorage.getItem(name);
-    if (!data) return [];else return JSON.parse(data);
-  }
-
-  static save(name, data) {
-    try {
-      localStorage.setItem(name, JSON.stringify(data));
-    } catch (err) {
-      console.log(err);
-      return false;
-    }
-
-    return true;
-  }
-
+function get(name) {
+  const data = localStorage.getItem(name);
+  if (!data) return [];
+  return JSON.parse(data);
 }
 
-/* harmony default export */ __webpack_exports__["default"] = (LocalData);
+function save(name, data) {
+  try {
+    localStorage.setItem(name, JSON.stringify(data));
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+
+  return true;
+}
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  get,
+  save
+});
 
 /***/ }),
 
@@ -12673,27 +12713,6 @@ const ready = fn => {
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (ready);
-
-/***/ }),
-
-/***/ "./src/scripts/utilities/_mapObj.ts":
-/*!******************************************!*\
-  !*** ./src/scripts/utilities/_mapObj.ts ***!
-  \******************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-function mapObjs(instance) {
-  let result = Object.keys(instance).reduce((acc, key) => {
-    acc[key] = instance[key];
-    return acc;
-  }, {});
-  return result;
-}
-
-/* harmony default export */ __webpack_exports__["default"] = (mapObjs);
 
 /***/ }),
 

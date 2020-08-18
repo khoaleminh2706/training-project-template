@@ -92,7 +92,10 @@
       <button
         type="button"
         class="btn btn-primary btn-new"
-        id="btn-file-moi"
+        data-toggle="modal"
+        data-target="#file-modal"
+        data-task="create"
+        data-file="file"
       >
         <i class="fas fa-file"></i> File mới
       </button>
@@ -101,7 +104,8 @@
         class="btn btn-primary btn-new"
         data-toggle="modal"
         data-target="#file-modal"
-        id="btn-folder-moi"
+        data-task="create"
+        data-file="folder"
       >
         <i class="fas fa-folder"></i> Folder mới
       </button>
@@ -130,11 +134,6 @@
       <!-- Documents list -->
     </div>
     <!-- container -->
-    <div
-      class="modal-backdrop fade show"
-      id="backdrop"
-      style="display: none;"
-    ></div>
 
     <!-- Modal -->
     <div
@@ -160,21 +159,8 @@
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
-          <div class="modal-body">
-            ...
-          </div>
-          <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-dismiss="modal"
-            >
-              Close
-            </button>
-            <button type="button" class="btn btn-primary">
-              Save changes
-            </button>
-          </div>
+          <div class="modal-body"></div>
+          <div class="modal-footer"></div>
         </div>
       </div>
     </div>
