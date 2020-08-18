@@ -9,7 +9,7 @@ const tableRow = (
   let html = '';
   if (data?.length !== 0) {
     data.map(file => {
-      html += `<tr>
+      html += `<tr data-id="${file.id}">
             <td data-label="File Type" scope="row">
             <span><i class="fas ${
               (file as IFile).extension !== undefined

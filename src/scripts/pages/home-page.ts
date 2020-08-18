@@ -13,6 +13,7 @@ import renderForm from '../components/_modalForm';
 const point = document.querySelector<HTMLElement>('#doc-list tbody');
 const contextMenu = document.getElementById('context-menu');
 let service: FileService;
+let currentId = 0;
 
 ready(() => {
   // prevent enter and backspace
@@ -66,6 +67,12 @@ function contextMenuListener(el: HTMLElement) {
       showContextMenu();
       contextMenu.style.top = e.y.toString();
       contextMenu.style.left = e.x.toString();
+
+      currentId = this.getAttribute('data-id')
+        ? Number(this.getAttribute('data-id'))
+        : 0;
+    } else {
+      console.error('Cannot find container.');
     }
 
     return false;

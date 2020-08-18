@@ -12477,7 +12477,7 @@ const tableRow = (data, container) => {
 
   if ((data === null || data === void 0 ? void 0 : data.length) !== 0) {
     data.map(file => {
-      html += `<tr>
+      html += `<tr data-id="${file.id}">
             <td data-label="File Type" scope="row">
             <span><i class="fas ${file.extension !== undefined ? 'fa-file-excel icon-excel' : 'fa-folder'}"></i></span>
             </td>
@@ -12591,6 +12591,7 @@ __webpack_require__.r(__webpack_exports__);
 const point = document.querySelector('#doc-list tbody');
 const contextMenu = document.getElementById('context-menu');
 let service;
+let currentId = 0;
 Object(_utilities_helper__WEBPACK_IMPORTED_MODULE_5__["default"])(() => {
   // prevent enter and backspace
   jquery__WEBPACK_IMPORTED_MODULE_0___default()(function () {
@@ -12636,6 +12637,9 @@ function contextMenuListener(el) {
       showContextMenu();
       contextMenu.style.top = e.y.toString();
       contextMenu.style.left = e.x.toString();
+      currentId = this.getAttribute('data-id') ? Number(this.getAttribute('data-id')) : 0;
+    } else {
+      console.error('Cannot find container.');
     }
 
     return false;
