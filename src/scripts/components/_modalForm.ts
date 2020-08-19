@@ -1,4 +1,4 @@
-function renderForm(): string {
+function renderForm(item?: IBaseModel): string {
   const html = `
     <form>
       <div class="form-group">
@@ -7,6 +7,7 @@ function renderForm(): string {
             id="file-name"
             placeholder="Tên file"
             name="file-name"
+            value="${item ? item.name : ''}"
         />
       </div>
       <div class="container">

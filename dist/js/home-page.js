@@ -12435,7 +12435,7 @@ return jQuery;
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-function renderForm() {
+function renderForm(item) {
   const html = `
     <form>
       <div class="form-group">
@@ -12444,6 +12444,7 @@ function renderForm() {
             id="file-name"
             placeholder="Tên file"
             name="file-name"
+            value="${item ? item.name : ''}"
         />
       </div>
       <div class="container">
@@ -12590,8 +12591,8 @@ __webpack_require__.r(__webpack_exports__);
 
 const point = document.querySelector('#doc-list tbody');
 const contextMenu = document.getElementById('context-menu');
-let service;
-let currentId = 0;
+let currentId = undefined;
+let fileService;
 Object(_utilities_helper__WEBPACK_IMPORTED_MODULE_5__["default"])(() => {
   // prevent enter and backspace
   jquery__WEBPACK_IMPORTED_MODULE_0___default()(function () {
@@ -12610,45 +12611,24 @@ Object(_utilities_helper__WEBPACK_IMPORTED_MODULE_5__["default"])(() => {
       return true;
     });
   });
-  service = new _service_fileService__WEBPACK_IMPORTED_MODULE_6__["default"]();
-  service.getData();
-  Object(_components_tableRow__WEBPACK_IMPORTED_MODULE_7__["default"])(service.Data(), point); // Modal to handle create and edit
+  fileService = new _service_fileService__WEBPACK_IMPORTED_MODULE_6__["default"]();
+  fileService.getData();
+  Object(_components_tableRow__WEBPACK_IMPORTED_MODULE_7__["default"])(fileService.Data(), point);
+  addContextMenu(); // Modal to handle create and edit
 
-  jquery__WEBPACK_IMPORTED_MODULE_0___default()('#file-modal').on('show.bs.modal', event => handleModalShow(event)); // custom context menu
-
-  const docs = document.querySelectorAll('#doc-list tbody tr');
-
-  if (docs) {
-    docs.forEach(doc => {
-      contextMenuListener(doc);
-    });
-  }
-
+  jquery__WEBPACK_IMPORTED_MODULE_0___default()('#file-modal').on('show.bs.modal', event => handleModalShow(event));
   window.addEventListener('click', function () {
     showContextMenu(false);
   });
 });
 
-function contextMenuListener(el) {
-  el.addEventListener('contextmenu', function (e) {
-    e.preventDefault();
-
-    if (contextMenu) {
-      showContextMenu();
-      contextMenu.style.top = e.y.toString();
-      contextMenu.style.left = e.x.toString();
-      currentId = this.getAttribute('data-id') ? Number(this.getAttribute('data-id')) : 0;
-    } else {
-      console.error('Cannot find container.');
-    }
-
-    return false;
-  });
-}
-
 function showContextMenu(show = true) {
   if (contextMenu) contextMenu.style.display = show ? 'block' : 'none';
 }
+/**
+ * Hàm phụ trách về modal
+ */
+
 
 function handleModalShow(event) {
   const btnElement = event.relatedTarget;
@@ -12661,62 +12641,138 @@ function handleModalShow(event) {
   const btn = jquery__WEBPACK_IMPORTED_MODULE_0___default()(btnElement);
   const task = btn.data('task');
   const type = btn.data('file');
-  const modal = jquery__WEBPACK_IMPORTED_MODULE_0___default()(event.target);
-  modal.find('.modal-title').text(`${task} ${type}`); // render form body
+  let item = undefined;
 
-  modal.find('.modal-body').html(Object(_components_modalForm__WEBPACK_IMPORTED_MODULE_8__["default"])());
+  if (currentId) {
+    let result = fileService.getDoc(currentId);
+    if (result.success && result.data) item = result.data;
+  }
+
+  const modal = jquery__WEBPACK_IMPORTED_MODULE_0___default()(event.target);
+  modal.find('.modal-title').text(`${task} ${type} ${currentId ? currentId : ''}`); // render form body
+
+  if (task !== 'delete') modal.find('.modal-body').html(Object(_components_modalForm__WEBPACK_IMPORTED_MODULE_8__["default"])(item));else modal.find('.modal-body').html(`<p>Are you sure you want to delete item Id=${currentId}</p>`);
   modal.find('.modal-footer').html(`<button type="submit"
   class="btn btn-primary" id="btnSubmitForm">${task}</button>`);
   const errorList = modal.find('#error-messages');
   jquery__WEBPACK_IMPORTED_MODULE_0___default()('#btnSubmitForm').on('click', event => {
     var _a;
 
-    const name = (_a = modal.find('input#file-name').val()) === null || _a === void 0 ? void 0 : _a.toString();
+    event.preventDefault();
 
-    if (name === undefined || name === '') {
-      errorList.append('<li class="text-danger">Vui lòng điền tên file.</li>');
-      return;
-    } // get file extension
+    if (task === 'create' && task === 'edit') {
+      // Data vilidation
+      const name = (_a = modal.find('input#file-name').val()) === null || _a === void 0 ? void 0 : _a.toString();
 
-
-    let extension;
-
-    if (type === 'file') {
-      extension = name.split('.').pop();
-
-      if (!extension) {
-        // handle error
-        errorList.append('<li class="text-danger">Tên file phải có extension.</li>');
+      if (name === undefined || name === '') {
+        errorList.append('<li class="text-danger">Vui lòng điền tên file.</li>');
         return;
+      } // get file extension
+
+
+      let extension;
+
+      if (type === 'file') {
+        extension = name.split('.').pop();
+
+        if (!extension) {
+          // handle error
+          errorList.append('<li class="text-danger">Tên file phải có extension.</li>');
+          return;
+        }
       }
-    }
 
-    const result = handleSubmit(event, {
-      name,
-      type,
-      extension
-    });
+      if (task === 'create') {
+        const result = handleCreate({
+          name,
+          type,
+          extension
+        });
 
-    if (result) {
-      errorList.append(`<li class="text-danger">${result}</li>`);
-      return;
+        if (result) {
+          errorList.append(`<li class="text-danger">${result}</li>`);
+          return;
+        }
+      } else if (task === 'edit' && currentId) {
+        handleEdit(currentId, name);
+      }
+    } else if (task === 'delete' && currentId) {
+      handleDelete(currentId);
     } // hide modal
 
 
     modal.modal('hide'); // rerender doc list
 
-    Object(_components_tableRow__WEBPACK_IMPORTED_MODULE_7__["default"])(service.Data(), point);
+    Object(_components_tableRow__WEBPACK_IMPORTED_MODULE_7__["default"])(fileService.Data(), point);
+    addContextMenu();
   });
 }
 
-function handleSubmit(event, newFile) {
-  event.preventDefault();
+function addContextMenu() {
+  if (contextMenu) {
+    const docs = document.querySelectorAll('#doc-list tbody tr');
+
+    if (docs) {
+      docs.forEach(doc => {
+        contextMenuListener(doc, contextMenu);
+      });
+    }
+  }
+}
+
+function contextMenuListener(el, contextMenu) {
+  el.addEventListener('contextmenu', function (e) {
+    var _a;
+
+    e.preventDefault();
+    contextMenu.style.display = 'block';
+    contextMenu.style.top = e.y.toString();
+    contextMenu.style.left = e.x.toString();
+    currentId = (_a = this.getAttribute('data-id')) !== null && _a !== void 0 ? _a : undefined;
+
+    if (currentId) {
+      // display id on context menu
+      const contextMenuHeader = contextMenu.querySelector('.dropdown-header');
+      if (contextMenuHeader) contextMenuHeader.innerText = `File Id = ${currentId}`;
+      let subFolderbtn = contextMenu.querySelector('button[data-file="subfolder"]');
+      let subFilebtn = contextMenu.querySelector('button[data-file="subfile"]');
+
+      if (fileService.isFolder(currentId) && subFilebtn && subFolderbtn) {
+        subFilebtn.classList.remove('hidden');
+        subFolderbtn.classList.remove('hidden');
+      }
+    } else {
+      console.error('Không tìm thấy id của đối tượng');
+      return;
+    }
+
+    return false;
+  });
+}
+
+function handleCreate(newFile) {
   const {
     success,
     errorMessage
-  } = service.createNewFile(newFile);
-  if (!success && errorMessage) return errorMessage;
-  return undefined;
+  } = fileService.createNewFile(newFile);
+  if (!success || errorMessage) return errorMessage;else return undefined;
+}
+
+function handleEdit(id, fileName) {
+  const {
+    success,
+    errorMessage
+  } = fileService.editFileName(id, fileName);
+  if (!success || errorMessage) return errorMessage;else return undefined;
+}
+
+function handleDelete(id) {
+  console.log('run');
+  const {
+    success,
+    errorMessage
+  } = fileService.removeItem(id);
+  if (!success || errorMessage) return errorMessage;else return undefined;
 }
 
 /***/ }),
@@ -12831,8 +12887,53 @@ class FileService {
     };
   }
 
+  getDoc(id) {
+    let doc = this.p_data.find(x => x.id === id);
+    if (doc) return {
+      success: true,
+      data: doc
+    };else return {
+      success: false
+    };
+  }
+
+  editFileName(id, name) {
+    this.p_data = this.p_data.map(item => {
+      if (item.id === id) {
+        return Object.assign(Object.assign({}, item), {
+          name
+        });
+      }
+
+      return item;
+    }); // TODO: file vs folder?
+    // TODO: output error if any
+    // save new data to localStorage
+
+    _utilities_LocalData__WEBPACK_IMPORTED_MODULE_1__["default"].save('items', this.p_data);
+    return {
+      success: true
+    };
+  }
+
+  removeItem(id) {
+    this.p_data = this.p_data.filter(x => x.id !== id); // TODO: check errors if any
+    // save new data to localStorage
+
+    _utilities_LocalData__WEBPACK_IMPORTED_MODULE_1__["default"].save('items', this.p_data);
+    return {
+      success: true
+    };
+  }
+
   Data() {
     return this.p_data;
+  }
+
+  isFolder(id) {
+    let item = this.p_data.find(x => x.id === id);
+    if (item && item.type === 'folder') return true;
+    return false;
   }
 
 }

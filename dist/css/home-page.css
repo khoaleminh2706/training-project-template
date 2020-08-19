@@ -13852,5 +13852,8 @@ textarea.form-control {
 #home-page #doc-list .btn-new {
   margin: 10px 0;
 }
+#home-page .hidden {
+  display: none;
+}
 
 /*# sourceMappingURL=home-page.css.map*/

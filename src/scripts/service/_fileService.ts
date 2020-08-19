@@ -81,6 +81,40 @@ class FileService {
     return { success: true };
   };
 
+  public getDoc(id: string): ServiceResult {
+    let doc = this.p_data.find(x => x.id === id);
+    if (doc) return { success: true, data: doc };
+    else return { success: false };
+  }
+
+  public editFileName(id: string, name: string): ServiceResult {
+    this.p_data = this.p_data.map(item => {
+      if (item.id === id) {
+        return {
+          ...item,
+          name,
+        };
+      }
+      return item;
+    });
+    // TODO: file vs folder?
+    // TODO: output error if any
+
+    // save new data to localStorage
+    LocalData.save('items', this.p_data);
+    return { success: true };
+  }
+
+  public removeItem(id: string): ServiceResult {
+    this.p_data = this.p_data.filter(x => x.id !== id);
+
+    // TODO: check errors if any
+    // save new data to localStorage
+    LocalData.save('items', this.p_data);
+
+    return { success: true };
+  }
+
   private hasAlreadyExisted = (fileName: string): boolean => {
     if (this.p_data.find(x => x.name === fileName) === undefined) {
       return false;
@@ -91,8 +125,18 @@ class FileService {
   public Data() {
     return this.p_data;
   }
+
+  public isFolder(id: string) {
+    let item = this.p_data.find(x => x.id === id);
+    if (item && item.type === 'folder') return true;
+    return false;
+  }
 }
 
-type ServiceResult = { success: boolean; errorMessage?: string };
+type ServiceResult = {
+  success: boolean;
+  errorMessage?: string;
+  data?: IBaseModel;
+};
 
 export default FileService;

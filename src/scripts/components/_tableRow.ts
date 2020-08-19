@@ -32,4 +32,5 @@ const tableRow = (
     container.innerHTML = 'Không có dữ liệu nào';
   }
 };
+
 export default tableRow;
