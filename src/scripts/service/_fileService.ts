@@ -37,12 +37,12 @@ class FileService {
     parentId?: string,
   ): ServiceResult => {
     // check duplicate file name
-    // if (this.hasAlreadyExisted(newFile.name, parentId)) {
-    //   return {
-    //     success: false,
-    //     errorMessage: 'File đã tồn tại',
-    //   };
-    // }
+    if (this.hasAlreadyExisted(newFile.name, parentId)) {
+      return {
+        success: false,
+        errorMessage: 'File đã tồn tại',
+      };
+    }
 
     try {
       let fileToAdd: IBaseModel = {

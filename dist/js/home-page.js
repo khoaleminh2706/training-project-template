@@ -12845,12 +12845,13 @@ class FileService {
 
     this.createNewFile = (newFile, parentId) => {
       // check duplicate file name
-      // if (this.hasAlreadyExisted(newFile.name, parentId)) {
-      //   return {
-      //     success: false,
-      //     errorMessage: 'File đã tồn tại',
-      //   };
-      // }
+      if (this.hasAlreadyExisted(newFile.name, parentId)) {
+        return {
+          success: false,
+          errorMessage: 'File đã tồn tại'
+        };
+      }
+
       try {
         let fileToAdd = {
           id: Date.now().toString(),
@@ -12888,12 +12889,11 @@ class FileService {
               });
             } else {
               this.p_data.map(item => {
-                if (item.id === parentId) {
-                  return Object.assign(Object.assign({}, item), {
-                    subFile: [fileToAdd]
-                  });
-                }
+                if (item.id === parentId) {}
 
+                return Object.assign(Object.assign({}, item), {
+                  subFile: [fileToAdd]
+                });
                 return item;
               });
             }
