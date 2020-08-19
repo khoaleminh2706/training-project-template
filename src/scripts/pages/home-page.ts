@@ -12,7 +12,6 @@ import renderForm from '../components/_modalForm';
 
 const point = document.querySelector<HTMLElement>('#doc-list tbody');
 const contextMenu = document.getElementById('context-menu');
-let currentId: string | undefined = undefined;
 let fileService: FileService;
 
 ready(() => {
@@ -66,9 +65,11 @@ function handleModalShow(event: ModalEventHandler<HTMLElement>) {
   const btn = $(btnElement);
   const task = btn.data('task');
   const type = btn.data('file');
+  const currentId = `${btn.data('id')}`;
 
   let item: IBaseModel | undefined = undefined;
   if (currentId) {
+    // TODO: Fix this
     let result = fileService.getDoc(currentId);
     if (result.success && result.data) item = result.data;
   }
@@ -76,7 +77,7 @@ function handleModalShow(event: ModalEventHandler<HTMLElement>) {
   const modal = $(event.target);
   modal
     .find('.modal-title')
-    .text(`${task} ${type} ${currentId ? currentId : ''}`);
+    .text(`${task} ${type} ${currentId === '' ? currentId : ''}`);
 
   // render form body
   if (task !== 'delete')
@@ -93,8 +94,9 @@ function handleModalShow(event: ModalEventHandler<HTMLElement>) {
 
   $('#btnSubmitForm').on('click', event => {
     event.preventDefault();
-    if (task === 'create' && task === 'edit') {
-      // Data vilidation
+
+    if (task === 'create' || task === 'edit') {
+      // Data validation
       const name = modal
         .find('input#file-name')
         .val()
@@ -111,23 +113,39 @@ function handleModalShow(event: ModalEventHandler<HTMLElement>) {
       let extension: string | undefined;
 
       if (type === 'file') {
-        extension = name.split('.').pop();
-        if (!extension) {
-          // handle error
-          errorList.append(
-            '<li class="text-danger">Tên file phải có extension.</li>',
-          );
-          return;
+        if (name.lastIndexOf('.') !== -1) {
+          extension = name
+            .toString()
+            .substr(name.lastIndexOf('.') + 1);
+          if (!extension) {
+            // handle error
+            errorList.append(
+              '<li class="text-danger">Tên file phải có extension.</li>',
+            );
+            return;
+          }
+        } else {
+          if (!extension) {
+            // handle error
+            errorList.append(
+              '<li class="text-danger">Tên file phải có extension.</li>',
+            );
+            return;
+          }
         }
       }
 
       if (task === 'create') {
-        const result = handleCreate({
-          name,
-          type,
-          extension,
-        });
+        const result = handleCreate(
+          {
+            name,
+            type,
+            extension,
+          },
+          currentId,
+        );
         if (result) {
+          console.log(result);
           errorList.append(`<li class="text-danger">${result}</li>`);
           return;
         }
@@ -172,7 +190,7 @@ function contextMenuListener(
     contextMenu.style.top = e.y.toString();
     contextMenu.style.left = e.x.toString();
 
-    currentId = this.getAttribute('data-id') ?? undefined;
+    let currentId = this.getAttribute('data-id') ?? undefined;
 
     if (currentId) {
       // display id on context menu
@@ -189,6 +207,17 @@ function contextMenuListener(
       let subFilebtn = contextMenu.querySelector(
         'button[data-file="subfile"]',
       ) as HTMLElement;
+      let btnEdit = contextMenu.querySelector(
+        'button[data-task="edit"]',
+      ) as HTMLElement;
+      let btnDelete = contextMenu.querySelector(
+        'button[data-task="delete"]',
+      ) as HTMLElement;
+
+      if (btnEdit && btnDelete) {
+        btnEdit.setAttribute('data-id', currentId);
+        btnDelete.setAttribute('data-id', currentId);
+      }
 
       if (
         fileService.isFolder(currentId) &&
@@ -196,7 +225,9 @@ function contextMenuListener(
         subFolderbtn
       ) {
         subFilebtn.classList.remove('hidden');
+        subFilebtn.setAttribute('data-id', currentId);
         subFolderbtn.classList.remove('hidden');
+        subFolderbtn.setAttribute('data-id', currentId);
       }
     } else {
       console.error('Không tìm thấy id của đối tượng');
@@ -207,9 +238,13 @@ function contextMenuListener(
   });
 }
 
-function handleCreate(newFile: IFileCreateInput): string | undefined {
+function handleCreate(
+  newFile: IFileCreateInput,
+  parentId?: string,
+): string | undefined {
   const { success, errorMessage } = fileService.createNewFile(
     newFile,
+    parentId,
   );
   if (!success || errorMessage) return errorMessage;
   else return undefined;
@@ -228,7 +263,6 @@ function handleEdit(
 }
 
 function handleDelete(id: string): string | undefined {
-  console.log('run');
   const { success, errorMessage } = fileService.removeItem(id);
   if (!success || errorMessage) return errorMessage;
   else return undefined;

@@ -12591,7 +12591,6 @@ __webpack_require__.r(__webpack_exports__);
 
 const point = document.querySelector('#doc-list tbody');
 const contextMenu = document.getElementById('context-menu');
-let currentId = undefined;
 let fileService;
 Object(_utilities_helper__WEBPACK_IMPORTED_MODULE_5__["default"])(() => {
   // prevent enter and backspace
@@ -12641,15 +12640,17 @@ function handleModalShow(event) {
   const btn = jquery__WEBPACK_IMPORTED_MODULE_0___default()(btnElement);
   const task = btn.data('task');
   const type = btn.data('file');
+  const currentId = `${btn.data('id')}`;
   let item = undefined;
 
   if (currentId) {
+    // TODO: Fix this
     let result = fileService.getDoc(currentId);
     if (result.success && result.data) item = result.data;
   }
 
   const modal = jquery__WEBPACK_IMPORTED_MODULE_0___default()(event.target);
-  modal.find('.modal-title').text(`${task} ${type} ${currentId ? currentId : ''}`); // render form body
+  modal.find('.modal-title').text(`${task} ${type} ${currentId === '' ? currentId : ''}`); // render form body
 
   if (task !== 'delete') modal.find('.modal-body').html(Object(_components_modalForm__WEBPACK_IMPORTED_MODULE_8__["default"])(item));else modal.find('.modal-body').html(`<p>Are you sure you want to delete item Id=${currentId}</p>`);
   modal.find('.modal-footer').html(`<button type="submit"
@@ -12660,8 +12661,8 @@ function handleModalShow(event) {
 
     event.preventDefault();
 
-    if (task === 'create' && task === 'edit') {
-      // Data vilidation
+    if (task === 'create' || task === 'edit') {
+      // Data validation
       const name = (_a = modal.find('input#file-name').val()) === null || _a === void 0 ? void 0 : _a.toString();
 
       if (name === undefined || name === '') {
@@ -12673,12 +12674,20 @@ function handleModalShow(event) {
       let extension;
 
       if (type === 'file') {
-        extension = name.split('.').pop();
+        if (name.lastIndexOf('.') !== -1) {
+          extension = name.toString().substr(name.lastIndexOf('.') + 1);
 
-        if (!extension) {
-          // handle error
-          errorList.append('<li class="text-danger">Tên file phải có extension.</li>');
-          return;
+          if (!extension) {
+            // handle error
+            errorList.append('<li class="text-danger">Tên file phải có extension.</li>');
+            return;
+          }
+        } else {
+          if (!extension) {
+            // handle error
+            errorList.append('<li class="text-danger">Tên file phải có extension.</li>');
+            return;
+          }
         }
       }
 
@@ -12687,9 +12696,10 @@ function handleModalShow(event) {
           name,
           type,
           extension
-        });
+        }, currentId);
 
         if (result) {
+          console.log(result);
           errorList.append(`<li class="text-danger">${result}</li>`);
           return;
         }
@@ -12728,7 +12738,7 @@ function contextMenuListener(el, contextMenu) {
     contextMenu.style.display = 'block';
     contextMenu.style.top = e.y.toString();
     contextMenu.style.left = e.x.toString();
-    currentId = (_a = this.getAttribute('data-id')) !== null && _a !== void 0 ? _a : undefined;
+    let currentId = (_a = this.getAttribute('data-id')) !== null && _a !== void 0 ? _a : undefined;
 
     if (currentId) {
       // display id on context menu
@@ -12736,10 +12746,19 @@ function contextMenuListener(el, contextMenu) {
       if (contextMenuHeader) contextMenuHeader.innerText = `File Id = ${currentId}`;
       let subFolderbtn = contextMenu.querySelector('button[data-file="subfolder"]');
       let subFilebtn = contextMenu.querySelector('button[data-file="subfile"]');
+      let btnEdit = contextMenu.querySelector('button[data-task="edit"]');
+      let btnDelete = contextMenu.querySelector('button[data-task="delete"]');
+
+      if (btnEdit && btnDelete) {
+        btnEdit.setAttribute('data-id', currentId);
+        btnDelete.setAttribute('data-id', currentId);
+      }
 
       if (fileService.isFolder(currentId) && subFilebtn && subFolderbtn) {
         subFilebtn.classList.remove('hidden');
+        subFilebtn.setAttribute('data-id', currentId);
         subFolderbtn.classList.remove('hidden');
+        subFolderbtn.setAttribute('data-id', currentId);
       }
     } else {
       console.error('Không tìm thấy id của đối tượng');
@@ -12750,11 +12769,11 @@ function contextMenuListener(el, contextMenu) {
   });
 }
 
-function handleCreate(newFile) {
+function handleCreate(newFile, parentId) {
   const {
     success,
     errorMessage
-  } = fileService.createNewFile(newFile);
+  } = fileService.createNewFile(newFile, parentId);
   if (!success || errorMessage) return errorMessage;else return undefined;
 }
 
@@ -12767,7 +12786,6 @@ function handleEdit(id, fileName) {
 }
 
 function handleDelete(id) {
-  console.log('run');
   const {
     success,
     errorMessage
@@ -12825,41 +12843,63 @@ class FileService {
       return _constants_serverData__WEBPACK_IMPORTED_MODULE_0__["default"];
     };
 
-    this.createNewFile = newFile => {
+    this.createNewFile = (newFile, parentId) => {
       // check duplicate file name
-      if (this.hasAlreadyExisted(newFile.name)) {
-        return {
-          success: false,
-          errorMessage: 'File đã tồn tại'
-        };
-      }
-
+      // if (this.hasAlreadyExisted(newFile.name, parentId)) {
+      //   return {
+      //     success: false,
+      //     errorMessage: 'File đã tồn tại',
+      //   };
+      // }
       try {
+        let fileToAdd = {
+          id: Date.now().toString(),
+          name: newFile.name,
+          type: newFile.type,
+          createdAt: new Date(),
+          createdBy: 'Khoa',
+          modifiedAt: new Date(),
+          modifiedBy: 'Khoa'
+        };
+
         switch (newFile.type) {
           case 'file':
-            this.p_data.push({
-              id: Date.now().toString(),
-              name: newFile.name,
-              type: newFile.type,
-              extension: newFile.extension,
-              createdAt: new Date(),
-              createdBy: 'Khoa',
-              modifiedAt: new Date(),
-              modifiedBy: 'Khoa'
-            });
+            this.p_data.push(Object.assign(Object.assign({}, fileToAdd), {
+              extension: newFile.extension
+            }));
             break;
 
           case 'folder':
-            this.p_data.push({
-              id: Date.now().toString(),
-              name: newFile.name,
-              type: newFile.type,
-              createdAt: new Date(),
-              createdBy: 'Khoa',
-              modifiedAt: new Date(),
-              modifiedBy: 'Khoa',
+            this.p_data.push(Object.assign(Object.assign({}, fileToAdd), {
               subFiles: []
-            });
+            }));
+            break;
+
+          case 'subfile':
+            let doc = this.p_data.find(x => x.id === parentId);
+            if (!doc) throw Error('Không tìm thấy parent doc.');else if (doc.subFiles) {
+              doc.subFiles.push(fileToAdd);
+              this.p_data.map(item => {
+                if (item.id === parentId) {
+                  return doc;
+                }
+
+                return item;
+              });
+            } else {
+              this.p_data.map(item => {
+                if (item.id === parentId) {
+                  return Object.assign(Object.assign({}, item), {
+                    subFile: [fileToAdd]
+                  });
+                }
+
+                return item;
+              });
+            }
+            break;
+
+          case 'subfolder':
             break;
         } // save new data to localStorage
 
@@ -12878,12 +12918,23 @@ class FileService {
       };
     };
 
-    this.hasAlreadyExisted = fileName => {
-      if (this.p_data.find(x => x.name === fileName) === undefined) {
-        return false;
+    this.hasAlreadyExisted = (fileName, parentId) => {
+      var _a; // check subfile
+
+
+      if (parentId) {
+        let doc = this.p_data.find(x => x.id === parentId && x.type === 'folder');
+        if (doc) if ((_a = doc.subFiles) === null || _a === void 0 ? void 0 : _a.find(x => x.name === fileName)) {
+          return true;
+        }
+      } // check file
+
+
+      if (!this.p_data.find(x => x.name === fileName)) {
+        return true;
       }
 
-      return true;
+      return false;
     };
   }
 

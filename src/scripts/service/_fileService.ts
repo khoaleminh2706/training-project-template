@@ -34,40 +34,66 @@ class FileService {
 
   public createNewFile = (
     newFile: IFileCreateInput,
+    parentId?: string,
   ): ServiceResult => {
     // check duplicate file name
-    if (this.hasAlreadyExisted(newFile.name)) {
-      return {
-        success: false,
-        errorMessage: 'File đã tồn tại',
-      };
-    }
+    // if (this.hasAlreadyExisted(newFile.name, parentId)) {
+    //   return {
+    //     success: false,
+    //     errorMessage: 'File đã tồn tại',
+    //   };
+    // }
 
     try {
+      let fileToAdd: IBaseModel = {
+        id: Date.now().toString(),
+        name: newFile.name,
+        type: newFile.type,
+        createdAt: new Date(),
+        createdBy: 'Khoa',
+        modifiedAt: new Date(),
+        modifiedBy: 'Khoa',
+      };
       switch (newFile.type) {
         case 'file':
           this.p_data.push({
-            id: Date.now().toString(),
-            name: newFile.name,
-            type: newFile.type,
+            ...fileToAdd,
             extension: newFile.extension,
-            createdAt: new Date(),
-            createdBy: 'Khoa',
-            modifiedAt: new Date(),
-            modifiedBy: 'Khoa',
           } as IFile);
           break;
         case 'folder':
           this.p_data.push({
-            id: Date.now().toString(),
-            name: newFile.name,
-            type: newFile.type,
-            createdAt: new Date(),
-            createdBy: 'Khoa',
-            modifiedAt: new Date(),
-            modifiedBy: 'Khoa',
+            ...fileToAdd,
             subFiles: [],
           } as IFolder);
+          break;
+        case 'subfile':
+          let doc = this.p_data.find(
+            x => x.id === parentId,
+          ) as IFolder;
+          if (!doc) throw Error('Không tìm thấy parent doc.');
+          else if (doc.subFiles) {
+            doc.subFiles.push(fileToAdd as IFile);
+
+            this.p_data.map(item => {
+              if (item.id === parentId) {
+                return doc;
+              }
+              return item;
+            });
+          } else {
+            this.p_data.map(item => {
+              if (item.id === parentId) {
+                return {
+                  ...item,
+                  subFile: [fileToAdd as IFile],
+                };
+              }
+              return item;
+            });
+          }
+          break;
+        case 'subfolder':
           break;
       }
 
@@ -115,11 +141,29 @@ class FileService {
     return { success: true };
   }
 
-  private hasAlreadyExisted = (fileName: string): boolean => {
-    if (this.p_data.find(x => x.name === fileName) === undefined) {
-      return false;
+  private hasAlreadyExisted = (
+    fileName: string,
+    parentId?: string,
+  ): boolean => {
+    // check subfile
+    if (parentId) {
+      let doc = this.p_data.find(
+        x => x.id === parentId && x.type === 'folder',
+      );
+      if (doc)
+        if (
+          (doc as IFolder).subFiles?.find(x => x.name === fileName)
+        ) {
+          return true;
+        }
     }
-    return true;
+
+    // check file
+    if (!this.p_data.find(x => x.name === fileName)) {
+      return true;
+    }
+
+    return false;
   };
 
   public Data() {
