@@ -4,8 +4,8 @@
   "description": "Precio Fishbone Training",
   "main": "app.tsx",
   "scripts": {
-    "start": "webpack-dev-server --config webpack.config.js",
-    "build:dev": "webpack --config webpack.config.js"
+    "start": "webpack-dev-server --mode development --config webpack.config.js",
+    "build:dev": "webpack --mode production --config webpack.config.js "
   },
   "author": {
     "name": "PrecioFishbone"
@@ -55,6 +55,7 @@
     "lodash": "^4.17.15",
     "lodash-webpack-plugin": "^0.11.5",
     "mini-css-extract-plugin": "^0.9.0",
+    "mini-html-webpack-plugin": "^3.0.7",
     "node-sass": "^4.13.0",
     "nyan-progress-webpack-plugin": "^1.2.0",
     "optimize-css-assets-webpack-plugin": "^5.0.3",

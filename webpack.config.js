@@ -6,6 +6,8 @@ const sass = require('sass');
 // const LiveReloadPlugin = require('webpack-livereload-plugin');
 const NyanProgressPlugin = require('nyan-progress-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { MiniHtmlWebpackPlugin } = require('mini-html-webpack-plugin');
+const { parseHTML } = require('jquery');
 
 const getEntries = function() {
   return glob
@@ -29,7 +31,6 @@ const getEntries = function() {
 
 const commonConfig = {
   entry: getEntries(),
-  mode: 'development',
   watch: true,
   devtool: 'source-map',
   stats: {
@@ -50,13 +51,17 @@ const commonConfig = {
     filename: 'js/[name].js',
     chunkFilename: '[name].bundle.js?ver=[chunkhash]',
     path: path.join(__dirname, '/dist/'),
-    publicPath: '/build/',
+    //    publicPath: '/build/',
   },
-
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
   },
-
+  devServer: {
+    contentBase: path.join(__dirname, 'dist'),
+    port: 3000,
+    inline: true,
+    hot: true,
+  },
   module: {
     rules: [
       {
@@ -141,6 +146,15 @@ const commonConfig = {
     new MiniCssExtractPlugin({
       filename: 'css/[name].css',
       chunkFilename: '[id].css',
+    }),
+    // new MiniHtmlWebpackPlugin({
+    //   context: {
+    //     title: 'Minification demo',
+    //   },
+    // }),
+    new HtmlWebpackPlugin({
+      template: path.join(__dirname, 'index.html'),
+      inject: 'body',
     }),
     // new LiveReloadPlugin({
     //   protocol: 'http',
