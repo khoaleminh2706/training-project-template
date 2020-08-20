@@ -4,8 +4,8 @@
   "description": "Precio Fishbone Training",
   "main": "app.tsx",
   "scripts": {
-    "start": "webpack-dev-server webpack.config.js",
-    "build:dev": "webpack --config webpack.config.js"
+    "start": "webpack-dev-server --mode development --open --config webpack.config.js",
+    "build:dev": "webpack --mode production --config webpack.config.js "
   },
   "author": {
     "name": "PrecioFishbone"
@@ -21,6 +21,7 @@
     "@babel/eslint-plugin": "^7.11.3",
     "@babel/plugin-proposal-object-rest-spread": "^7.7.7",
     "@babel/plugin-transform-object-assign": "^7.7.4",
+    "@babel/plugin-transform-runtime": "^7.11.0",
     "@babel/polyfill": "^7.7.0",
     "@babel/preset-env": "^7.7.7",
     "@babel/preset-typescript": "^7.10.4",
@@ -55,6 +56,7 @@
     "lodash": "^4.17.15",
     "lodash-webpack-plugin": "^0.11.5",
     "mini-css-extract-plugin": "^0.9.0",
+    "mini-html-webpack-plugin": "^3.0.7",
     "node-sass": "^4.13.0",
     "nyan-progress-webpack-plugin": "^1.2.0",
     "optimize-css-assets-webpack-plugin": "^5.0.3",

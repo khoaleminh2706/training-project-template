@@ -3,10 +3,7 @@ const FixStyleOnlyEntriesPlugin = require('webpack-fix-style-only-entries');
 const path = require('path');
 const glob = require('glob');
 const sass = require('sass');
-// const LiveReloadPlugin = require('webpack-livereload-plugin');
-const NyanProgressPlugin = require('nyan-progress-webpack-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const webpack = require('webpack');
+const LiveReloadPlugin = require('webpack-livereload-plugin');
 
 const getEntries = function() {
   return glob
@@ -30,7 +27,6 @@ const getEntries = function() {
 
 const commonConfig = {
   entry: getEntries(),
-  mode: 'development',
   watch: true,
   devtool: 'source-map',
   stats: {
@@ -51,24 +47,10 @@ const commonConfig = {
     filename: 'js/[name].js',
     chunkFilename: '[name].bundle.js?ver=[chunkhash]',
     path: path.join(__dirname, '/dist/'),
-    publicPath: '/build/',
+    //    publicPath: '/build/',
   },
-
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
-  },
-  devServer: {
-    contentBase: './',
-    historyApiFallback: true,
-    hot: true,
-    port: 8000,
-    noInfo: false,
-    publicPath: './',
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods':
-        'POST, GET, PUT, DELETE, OPTIONS',
-    },
   },
   module: {
     rules: [
@@ -155,11 +137,9 @@ const commonConfig = {
       filename: 'css/[name].css',
       chunkFilename: '[id].css',
     }),
-    new webpack.HotModuleReplacementPlugin(),
-    new HtmlWebpackPlugin(),
-    // new LiveReloadPlugin({
-    //   protocol: 'http',
-    // }),
+    new LiveReloadPlugin({
+      protocol: 'http',
+    }),
     new NyanProgressPlugin(),
   ],
 };
