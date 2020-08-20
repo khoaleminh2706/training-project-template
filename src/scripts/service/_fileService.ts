@@ -73,11 +73,11 @@ class FileService {
         reject({ success: false, errorMessgae: err });
       }
 
-      reject({ success: true });
+      resolve({ success: true });
     });
 
   public getDoc(id: string): ServiceResult {
-    const doc = this.data.find(x => x.id === id);
+    const doc = this.data.find(x => x.id == id);
     if (doc) return { success: true, data: doc };
     return { success: false };
   }
