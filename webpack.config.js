@@ -3,11 +3,7 @@ const FixStyleOnlyEntriesPlugin = require('webpack-fix-style-only-entries');
 const path = require('path');
 const glob = require('glob');
 const sass = require('sass');
-// const LiveReloadPlugin = require('webpack-livereload-plugin');
-const NyanProgressPlugin = require('nyan-progress-webpack-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const { MiniHtmlWebpackPlugin } = require('mini-html-webpack-plugin');
-const { parseHTML } = require('jquery');
+const LiveReloadPlugin = require('webpack-livereload-plugin');
 
 const getEntries = function() {
   return glob
@@ -55,12 +51,6 @@ const commonConfig = {
   },
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
-  },
-  devServer: {
-    contentBase: path.join(__dirname, 'dist'),
-    port: 3000,
-    inline: true,
-    hot: true,
   },
   module: {
     rules: [
@@ -147,18 +137,9 @@ const commonConfig = {
       filename: 'css/[name].css',
       chunkFilename: '[id].css',
     }),
-    // new MiniHtmlWebpackPlugin({
-    //   context: {
-    //     title: 'Minification demo',
-    //   },
-    // }),
-    new HtmlWebpackPlugin({
-      template: path.join(__dirname, 'index.html'),
-      inject: 'body',
+    new LiveReloadPlugin({
+      protocol: 'http',
     }),
-    // new LiveReloadPlugin({
-    //   protocol: 'http',
-    // }),
     new NyanProgressPlugin(),
   ],
 };
