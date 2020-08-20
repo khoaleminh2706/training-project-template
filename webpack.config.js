@@ -6,6 +6,7 @@ const sass = require('sass');
 // const LiveReloadPlugin = require('webpack-livereload-plugin');
 const NyanProgressPlugin = require('nyan-progress-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const webpack = require('webpack');
 
 const getEntries = function() {
   return glob
@@ -56,7 +57,19 @@ const commonConfig = {
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
   },
-
+  devServer: {
+    contentBase: './',
+    historyApiFallback: true,
+    hot: true,
+    port: 8000,
+    noInfo: false,
+    publicPath: './',
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods':
+        'POST, GET, PUT, DELETE, OPTIONS',
+    },
+  },
   module: {
     rules: [
       {
@@ -142,6 +155,8 @@ const commonConfig = {
       filename: 'css/[name].css',
       chunkFilename: '[id].css',
     }),
+    new webpack.HotModuleReplacementPlugin(),
+    new HtmlWebpackPlugin(),
     // new LiveReloadPlugin({
     //   protocol: 'http',
     // }),
