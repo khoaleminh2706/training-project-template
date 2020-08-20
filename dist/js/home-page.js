@@ -77,7 +77,7 @@
 /******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
 /******/
 /******/ 	// __webpack_public_path__
-/******/ 	__webpack_require__.p = "";
+/******/ 	__webpack_require__.p = "/build/";
 /******/
 /******/
 /******/ 	// Load entry module and return exports
@@ -12557,6 +12557,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _service_fileService__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../service/_fileService */ "./src/scripts/service/_fileService.ts");
 /* harmony import */ var _components_tableRow__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../components/_tableRow */ "./src/scripts/components/_tableRow.ts");
 /* harmony import */ var _components_modalForm__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../components/_modalForm */ "./src/scripts/components/_modalForm.ts");
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
 
 
 
@@ -12570,7 +12574,8 @@ var point = document.querySelector('#doc-list tbody');
 var contextMenu = document.getElementById('context-menu');
 var fileService;
 Object(_utilities_helper__WEBPACK_IMPORTED_MODULE_5__["default"])(function () {
-  // prevent enter and backspace
+  console.log('Error: noe lreaod'); // prevent enter and backspace
+
   jquery__WEBPACK_IMPORTED_MODULE_0___default()(function () {
     var keyStop = {
       8: ':not(input:text, textarea, input:file, input:password)',
@@ -12620,7 +12625,7 @@ function handleModalShow(event) {
   var btn = jquery__WEBPACK_IMPORTED_MODULE_0___default()(btnElement);
   var task = btn.data('task');
   var type = btn.data('file');
-  var currentId = "".concat(btn.data('id'));
+  var currentId = btn.data('id');
   var item;
 
   if (currentId) {
@@ -12669,16 +12674,16 @@ function handleModalShow(event) {
       }
 
       if (task === 'create') {
-        var _result = handleCreate({
+        handleCreate({
           name: name,
           type: type,
           extension: extension
-        }, currentId);
-
-        if (_result) {
-          errorList.append("<li class=\"text-danger\">".concat(_result, "</li>"));
-          return;
-        }
+        }, currentId).then(function (result) {
+          if (result) {// Do something
+          }
+        }).catch(function (error) {
+          errorList.append("<li class=\"text-danger\">".concat(error, "</li>"));
+        });
       } else if (task === 'edit' && currentId) {
         handleEdit(currentId, name);
       }
@@ -12745,14 +12750,44 @@ function contextMenuListener(el, contextMenu) {
   });
 }
 
-function handleCreate(newFile, parentId) {
-  var _fileService$createNe = fileService.createNewFile(newFile, parentId),
-      success = _fileService$createNe.success,
-      errorMessage = _fileService$createNe.errorMessage;
+var handleCreate = /*#__PURE__*/function () {
+  var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(newFile, parentId) {
+    var _yield$fileService$cr, success, errorMessage;
 
-  if (!success || errorMessage) return errorMessage;
-  return undefined;
-}
+    return regeneratorRuntime.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            _context.next = 2;
+            return fileService.createNewFile(newFile, parentId);
+
+          case 2:
+            _yield$fileService$cr = _context.sent;
+            success = _yield$fileService$cr.success;
+            errorMessage = _yield$fileService$cr.errorMessage;
+
+            if (!(!success || errorMessage)) {
+              _context.next = 7;
+              break;
+            }
+
+            return _context.abrupt("return", errorMessage);
+
+          case 7:
+            return _context.abrupt("return", undefined);
+
+          case 8:
+          case "end":
+            return _context.stop();
+        }
+      }
+    }, _callee);
+  }));
+
+  return function handleCreate(_x, _x2) {
+    return _ref.apply(this, arguments);
+  };
+}();
 
 function handleEdit(id, fileName) {
   var _fileService$editFile = fileService.editFileName(id, fileName),
@@ -12817,19 +12852,8 @@ var FileService = /*#__PURE__*/function () {
 
 
       jsonData.forEach(function (obj) {
-        var _obj;
-
-        if (!obj !== undefined && ((_obj = obj) === null || _obj === void 0 ? void 0 : _obj.type)) {
-          switch (obj.type) {
-            case 'file':
-              obj = obj;
-              break;
-
-            case 'folder':
-              obj = obj;
-          }
-
-          _this.data.push(obj);
+        if (!obj !== undefined && (obj === null || obj === void 0 ? void 0 : obj.type)) {
+          if (obj.type === 'file') _this.data.push(obj);else if (obj.type === 'folder') _this.data.push(obj);
         }
       });
     };
@@ -12841,85 +12865,61 @@ var FileService = /*#__PURE__*/function () {
     };
 
     this.createNewFile = function (newFile, parentId) {
-      // check duplicate file name
-      if (_this.hasAlreadyExisted(newFile.name, parentId)) {
-        return {
-          success: false,
-          errorMessage: 'File đã tồn tại'
-        };
-      }
+      return new Promise(function (resolve, reject) {
+        // check duplicate file name
+        // if (this.hasAlreadyExisted(newFile.name, parentId)) {
+        //   reject({
+        //     success: false,
+        //     errorMessage: 'File đã tồn tại',
+        //   });
+        // }
+        try {
+          var fileToAdd = {
+            id: Date.now().toString(),
+            name: newFile.name,
+            type: newFile.type,
+            createdAt: new Date(),
+            createdBy: 'Khoa',
+            modifiedAt: new Date(),
+            modifiedBy: 'Khoa'
+          };
 
-      try {
-        var fileToAdd = {
-          id: Date.now().toString(),
-          name: newFile.name,
-          type: newFile.type,
-          createdAt: new Date(),
-          createdBy: 'Khoa',
-          modifiedAt: new Date(),
-          modifiedBy: 'Khoa'
-        };
+          switch (newFile.type) {
+            case 'file':
+              _this.data.push(_objectSpread(_objectSpread({}, fileToAdd), {}, {
+                extension: newFile.extension
+              }));
 
-        switch (newFile.type) {
-          case 'file':
-            _this.data.push(_objectSpread(_objectSpread({}, fileToAdd), {}, {
-              extension: newFile.extension
-            }));
+              break;
 
-            break;
+            case 'folder':
+              _this.data.push(_objectSpread(_objectSpread({}, fileToAdd), {}, {
+                subFiles: []
+              }));
 
-          case 'folder':
-            _this.data.push(_objectSpread(_objectSpread({}, fileToAdd), {}, {
-              subFiles: []
-            }));
+              break;
 
-            break;
-
-          case 'subfile':
-            var doc = _this.data.find(function (x) {
-              return x.id === parentId;
-            });
-
-            if (!doc) throw Error('Không tìm thấy parent doc.');else if (doc.subFiles) {
-              doc.subFiles.push(fileToAdd);
-
-              _this.data.map(function (item) {
-                if (item.id === parentId) {
-                  return doc;
-                }
-
-                return item;
+            default:
+              reject({
+                success: false,
+                errorMessgae: 'Failed'
               });
-            } else {
-              _this.data.map(function (item) {
-                if (item.id === parentId) {
-                  return _objectSpread(_objectSpread({}, item), {}, {
-                    subFile: [fileToAdd]
-                  });
-                }
-
-                return item;
-              });
-            }
-            break;
-
-          case 'subfolder':
-            break;
-        } // save new data to localStorage
+              break;
+          } // save new data to localStorage
 
 
-        _utilities_LocalData__WEBPACK_IMPORTED_MODULE_1__["default"].save('items', _this.data);
-      } catch (err) {
-        console.error('Error', err);
-        return {
-          success: false,
-          errorMessage: err
-        };
-      }
+          _utilities_LocalData__WEBPACK_IMPORTED_MODULE_1__["default"].save('items', _this.data);
+        } catch (err) {
+          reject({
+            success: false,
+            errorMessgae: err
+          });
+        }
 
-      return {
-        success: true
-      };
+        reject({
+          success: true
+        });
+      });
     };
 
     this.hasAlreadyExisted = function (fileName, parentId) {
