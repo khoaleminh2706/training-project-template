@@ -46,12 +46,6 @@ const commonConfig = {
     reasons: false,
     warnings: true,
   },
-  devServer: {
-    port: 3000,
-    historyApiFallback: {
-      index: 'index.html',
-    },
-  },
   output: {
     filename: 'js/[name].js',
     chunkFilename: '[name].bundle.js?ver=[chunkhash]',
@@ -147,9 +141,6 @@ const commonConfig = {
     new MiniCssExtractPlugin({
       filename: 'css/[name].css',
       chunkFilename: '[id].css',
-    }),
-    new HtmlWebpackPlugin({
-      template: path.resolve(__dirname, 'index.html'),
     }),
     // new LiveReloadPlugin({
     //   protocol: 'http',

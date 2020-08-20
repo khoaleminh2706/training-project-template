@@ -4,7 +4,8 @@
   "description": "Precio Fishbone Training",
   "main": "app.tsx",
   "scripts": {
-    "start": "webpack-dev-server --inline --hot --config webpack.config.js"
+    "start": "webpack-dev-server --config webpack.config.js",
+    "build:dev": "webpack --config webpack.config.js"
   },
   "author": {
     "name": "PrecioFishbone"
