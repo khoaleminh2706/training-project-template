@@ -15,6 +15,7 @@ const contextMenu = document.getElementById('context-menu');
 let fileService: FileService;
 
 ready(() => {
+  console.log('Error: noe lreaod');
   // prevent enter and backspace
   $(function() {
     const keyStop: any = {
@@ -65,7 +66,7 @@ function handleModalShow(event: ModalEventHandler<HTMLElement>) {
   const btn = $(btnElement);
   const task = btn.data('task');
   const type = btn.data('file');
-  const currentId = `${btn.data('id')}`;
+  const currentId = btn.data('id');
 
   let item: IBaseModel | undefined;
   if (currentId) {
@@ -134,18 +135,22 @@ function handleModalShow(event: ModalEventHandler<HTMLElement>) {
       }
 
       if (task === 'create') {
-        const result = handleCreate(
+        handleCreate(
           {
             name,
             type,
             extension,
           },
           currentId,
-        );
-        if (result) {
-          errorList.append(`<li class="text-danger">${result}</li>`);
-          return;
-        }
+        )
+          .then(result => {
+            if (result) {
+              // Do something
+            }
+          })
+          .catch(error => {
+            errorList.append(`<li class="text-danger">${error}</li>`);
+          });
       } else if (task === 'edit' && currentId) {
         handleEdit(currentId, name);
       }
@@ -235,17 +240,17 @@ function contextMenuListener(
   });
 }
 
-function handleCreate(
+const handleCreate = async (
   newFile: IFileCreateInput,
   parentId?: string,
-): string | undefined {
-  const { success, errorMessage } = fileService.createNewFile(
+) => {
+  const { success, errorMessage } = await fileService.createNewFile(
     newFile,
     parentId,
   );
   if (!success || errorMessage) return errorMessage;
   return undefined;
-}
+};
 
 function handleEdit(
   id: string,

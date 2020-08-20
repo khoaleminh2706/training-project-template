@@ -3,8 +3,9 @@ const FixStyleOnlyEntriesPlugin = require('webpack-fix-style-only-entries');
 const path = require('path');
 const glob = require('glob');
 const sass = require('sass');
-const LiveReloadPlugin = require('webpack-livereload-plugin');
+// const LiveReloadPlugin = require('webpack-livereload-plugin');
 const NyanProgressPlugin = require('nyan-progress-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const getEntries = function() {
   return glob
@@ -45,10 +46,17 @@ const commonConfig = {
     reasons: false,
     warnings: true,
   },
+  devServer: {
+    port: 3000,
+    historyApiFallback: {
+      index: 'index.html',
+    },
+  },
   output: {
     filename: 'js/[name].js',
     chunkFilename: '[name].bundle.js?ver=[chunkhash]',
     path: path.join(__dirname, '/dist/'),
+    publicPath: '/build/',
   },
 
   resolve: {
@@ -64,6 +72,7 @@ const commonConfig = {
         loader: 'eslint-loader',
         options: {
           fix: true,
+          emitWarning: true,
         },
       },
       {
@@ -139,9 +148,12 @@ const commonConfig = {
       filename: 'css/[name].css',
       chunkFilename: '[id].css',
     }),
-    new LiveReloadPlugin({
-      protocol: 'http',
+    new HtmlWebpackPlugin({
+      template: path.resolve(__dirname, 'index.html'),
     }),
+    // new LiveReloadPlugin({
+    //   protocol: 'http',
+    // }),
     new NyanProgressPlugin(),
   ],
 };

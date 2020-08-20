@@ -4,7 +4,7 @@
   "description": "Precio Fishbone Training",
   "main": "app.tsx",
   "scripts": {
-    "start": "webpack --config ./webpack.config.js"
+    "start": "webpack-dev-server --inline --hot --config webpack.config.js"
   },
   "author": {
     "name": "PrecioFishbone"
@@ -50,6 +50,7 @@
     "file-saver": "^2.0.2",
     "filemanager-webpack-plugin": "^2.0.5",
     "glob": "^7.1.6",
+    "html-webpack-plugin": "^4.3.0",
     "lodash": "^4.17.15",
     "lodash-webpack-plugin": "^0.11.5",
     "mini-css-extract-plugin": "^0.9.0",

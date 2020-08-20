@@ -20,5 +20,6 @@ module.exports = {
       process.platform === 'win32' ? 'windows' : 'unix',
     ],
     '@typescript-eslint/explicit-module-boundary-types': 'off',
+    '@typescript-eslint/no-explicit-any': 'off',
   },
 };

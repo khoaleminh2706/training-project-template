@@ -14,19 +14,13 @@ class FileService {
     // merge data to file type
     jsonData.forEach(obj => {
       if (!obj !== undefined && obj?.type) {
-        switch (obj.type) {
-          case 'file':
-            obj = <IFile>obj;
-            break;
-          case 'folder':
-            obj = <IFolder>obj;
-        }
-        this.data.push(obj);
+        if (obj.type === 'file') this.data.push(<IFile>obj);
+        else if (obj.type === 'folder') this.data.push(<IFolder>obj);
       }
     });
   };
 
-  private getDataFromServer = (): Array<any> => {
+  private getDataFromServer = (): any => {
     // save to local
     LocalData.save('items', serverData);
     return serverData;
@@ -35,77 +29,52 @@ class FileService {
   public createNewFile = (
     newFile: IFileCreateInput,
     parentId?: string,
-  ): ServiceResult => {
-    // check duplicate file name
-    if (this.hasAlreadyExisted(newFile.name, parentId)) {
-      return {
-        success: false,
-        errorMessage: 'File đã tồn tại',
-      };
-    }
+  ) =>
+    new Promise<ServiceResult>((resolve, reject) => {
+      // check duplicate file name
+      // if (this.hasAlreadyExisted(newFile.name, parentId)) {
+      //   reject({
+      //     success: false,
+      //     errorMessage: 'File đã tồn tại',
+      //   });
+      // }
 
-    try {
-      const fileToAdd: IBaseModel = {
-        id: Date.now().toString(),
-        name: newFile.name,
-        type: newFile.type,
-        createdAt: new Date(),
-        createdBy: 'Khoa',
-        modifiedAt: new Date(),
-        modifiedBy: 'Khoa',
-      };
-      switch (newFile.type) {
-        case 'file':
-          this.data.push({
-            ...fileToAdd,
-            extension: newFile.extension,
-          } as IFile);
-          break;
-        case 'folder':
-          this.data.push({
-            ...fileToAdd,
-            subFiles: [],
-          } as IFolder);
-          break;
-        case 'subfile':
-          const doc = this.data.find(
-            x => x.id === parentId,
-          ) as IFolder;
-          if (!doc) throw Error('Không tìm thấy parent doc.');
-          else if (doc.subFiles) {
-            doc.subFiles.push(fileToAdd as IFile);
+      try {
+        const fileToAdd: IBaseModel = {
+          id: Date.now().toString(),
+          name: newFile.name,
+          type: newFile.type,
+          createdAt: new Date(),
+          createdBy: 'Khoa',
+          modifiedAt: new Date(),
+          modifiedBy: 'Khoa',
+        };
+        switch (newFile.type) {
+          case 'file':
+            this.data.push({
+              ...fileToAdd,
+              extension: newFile.extension,
+            } as IFile);
+            break;
+          case 'folder':
+            this.data.push({
+              ...fileToAdd,
+              subFiles: [],
+            } as IFolder);
+            break;
+          default:
+            reject({ success: false, errorMessgae: 'Failed' });
+            break;
+        }
 
-            this.data.map(item => {
-              if (item.id === parentId) {
-                return doc;
-              }
-              return item;
-            });
-          } else {
-            this.data.map(item => {
-              if (item.id === parentId) {
-                return {
-                  ...item,
-                  subFile: [fileToAdd as IFile],
-                };
-              }
-              return item;
-            });
-          }
-          break;
-        case 'subfolder':
-          break;
+        // save new data to localStorage
+        LocalData.save('items', this.data);
+      } catch (err) {
+        reject({ success: false, errorMessgae: err });
       }
 
-      // save new data to localStorage
-      LocalData.save('items', this.data);
-    } catch (err) {
-      console.error('Error', err);
-      return { success: false, errorMessage: err };
-    }
-
-    return { success: true };
-  };
+      reject({ success: true });
+    });
 
   public getDoc(id: string): ServiceResult {
     const doc = this.data.find(x => x.id === id);
