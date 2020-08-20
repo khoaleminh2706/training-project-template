@@ -70,7 +70,6 @@ function handleModalShow(event: ModalEventHandler<HTMLElement>) {
 
   let item: IBaseModel | undefined;
   if (currentId) {
-    // TODO: Fix this
     const result = fileService.getDoc(currentId);
     if (result.success && result.data) item = result.data;
   }
