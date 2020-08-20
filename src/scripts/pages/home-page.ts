@@ -48,7 +48,7 @@ ready(() => {
   });
 });
 
-function showContextMenu(show: boolean = true) {
+function showContextMenu(show = true) {
   if (contextMenu)
     contextMenu.style.display = show ? 'block' : 'none';
 }
@@ -67,10 +67,10 @@ function handleModalShow(event: ModalEventHandler<HTMLElement>) {
   const type = btn.data('file');
   const currentId = `${btn.data('id')}`;
 
-  let item: IBaseModel | undefined = undefined;
+  let item: IBaseModel | undefined;
   if (currentId) {
     // TODO: Fix this
-    let result = fileService.getDoc(currentId);
+    const result = fileService.getDoc(currentId);
     if (result.success && result.data) item = result.data;
   }
 
@@ -124,14 +124,12 @@ function handleModalShow(event: ModalEventHandler<HTMLElement>) {
             );
             return;
           }
-        } else {
-          if (!extension) {
-            // handle error
-            errorList.append(
-              '<li class="text-danger">Tên file phải có extension.</li>',
-            );
-            return;
-          }
+        } else if (!extension) {
+          // handle error
+          errorList.append(
+            '<li class="text-danger">Tên file phải có extension.</li>',
+          );
+          return;
         }
       }
 
@@ -145,7 +143,6 @@ function handleModalShow(event: ModalEventHandler<HTMLElement>) {
           currentId,
         );
         if (result) {
-          console.log(result);
           errorList.append(`<li class="text-danger">${result}</li>`);
           return;
         }
@@ -190,7 +187,7 @@ function contextMenuListener(
     contextMenu.style.top = e.y.toString();
     contextMenu.style.left = e.x.toString();
 
-    let currentId = this.getAttribute('data-id') ?? undefined;
+    const currentId = this.getAttribute('data-id') ?? undefined;
 
     if (currentId) {
       // display id on context menu
@@ -201,16 +198,16 @@ function contextMenuListener(
       if (contextMenuHeader)
         (contextMenuHeader as HTMLElement).innerText = `File Id = ${currentId}`;
 
-      let subFolderbtn = contextMenu.querySelector(
+      const subFolderbtn = contextMenu.querySelector(
         'button[data-file="subfolder"]',
       ) as HTMLElement;
-      let subFilebtn = contextMenu.querySelector(
+      const subFilebtn = contextMenu.querySelector(
         'button[data-file="subfile"]',
       ) as HTMLElement;
-      let btnEdit = contextMenu.querySelector(
+      const btnEdit = contextMenu.querySelector(
         'button[data-task="edit"]',
       ) as HTMLElement;
-      let btnDelete = contextMenu.querySelector(
+      const btnDelete = contextMenu.querySelector(
         'button[data-task="delete"]',
       ) as HTMLElement;
 
@@ -247,7 +244,7 @@ function handleCreate(
     parentId,
   );
   if (!success || errorMessage) return errorMessage;
-  else return undefined;
+  return undefined;
 }
 
 function handleEdit(
@@ -259,11 +256,11 @@ function handleEdit(
     fileName,
   );
   if (!success || errorMessage) return errorMessage;
-  else return undefined;
+  return undefined;
 }
 
 function handleDelete(id: string): string | undefined {
   const { success, errorMessage } = fileService.removeItem(id);
   if (!success || errorMessage) return errorMessage;
-  else return undefined;
+  return undefined;
 }

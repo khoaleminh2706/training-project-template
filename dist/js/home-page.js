@@ -12436,22 +12436,7 @@ return jQuery;
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 function renderForm(item) {
-  const html = `
-    <form>
-      <div class="form-group">
-        <input type="text" 
-            class="form-control" 
-            id="file-name"
-            placeholder="Tên file"
-            name="file-name"
-            value="${item ? item.name : ''}"
-        />
-      </div>
-      <div class="container">
-        <ul id="error-messages"></ul>
-      </div>
-    </form>
-    `;
+  var html = "\n    <form>\n      <div class=\"form-group\">\n        <input type=\"text\" \n            class=\"form-control\" \n            id=\"file-name\"\n            placeholder=\"T\xEAn file\"\n            name=\"file-name\"\n            value=\"".concat(item ? item.name : '', "\"\n        />\n      </div>\n      <div class=\"container\">\n        <ul id=\"error-messages\"></ul>\n      </div>\n    </form>\n    ");
   return html;
 }
 
@@ -12468,25 +12453,17 @@ function renderForm(item) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-const tableRow = (data, container) => {
+var tableRow = function tableRow(data, container) {
   if (!container) {
     console.error('Cannot find conatiner');
     return;
   }
 
-  let html = '';
+  var html = '';
 
   if ((data === null || data === void 0 ? void 0 : data.length) !== 0) {
-    data.map(file => {
-      html += `<tr data-id="${file.id}">
-            <td data-label="File Type" scope="row">
-            <span><i class="fas ${file.extension !== undefined ? 'fa-file-excel icon-excel' : 'fa-folder'}"></i></span>
-            </td>
-            <td data-label="Name"><span>${file.name}</span></td>
-            <td data-label="Modified"><span>${file.modifiedAt}</span></td>
-            <td data-label="Modified By"><span>${file.modifiedBy}</span></td>
-            <td></td>
-        </tr>`;
+    data.map(function (file) {
+      html += "<tr data-id=\"".concat(file.id, "\">\n            <td data-label=\"File Type\" scope=\"row\">\n            <span><i class=\"fas ").concat(file.extension !== undefined ? 'fa-file-excel icon-excel' : 'fa-folder', "\"></i></span>\n            </td>\n            <td data-label=\"Name\"><span>").concat(file.name, "</span></td>\n            <td data-label=\"Modified\"><span>").concat(file.modifiedAt, "</span></td>\n            <td data-label=\"Modified By\"><span>").concat(file.modifiedBy, "</span></td>\n            <td></td>\n        </tr>");
     });
     container.innerHTML = html;
   } else {
@@ -12507,7 +12484,7 @@ const tableRow = (data, container) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-const serverData = [{
+var serverData = [{
   id: '1',
   name: 'CAS',
   type: 'folder',
@@ -12589,19 +12566,19 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const point = document.querySelector('#doc-list tbody');
-const contextMenu = document.getElementById('context-menu');
-let fileService;
-Object(_utilities_helper__WEBPACK_IMPORTED_MODULE_5__["default"])(() => {
+var point = document.querySelector('#doc-list tbody');
+var contextMenu = document.getElementById('context-menu');
+var fileService;
+Object(_utilities_helper__WEBPACK_IMPORTED_MODULE_5__["default"])(function () {
   // prevent enter and backspace
   jquery__WEBPACK_IMPORTED_MODULE_0___default()(function () {
-    const keyStop = {
+    var keyStop = {
       8: ':not(input:text, textarea, input:file, input:password)',
       13: 'input:text, input:password',
       end: null
     };
     jquery__WEBPACK_IMPORTED_MODULE_0___default()(document).bind('keydown', function (event) {
-      const selector = keyStop[event.which];
+      var selector = keyStop[event.which];
 
       if (selector !== undefined && jquery__WEBPACK_IMPORTED_MODULE_0___default()(event.target).is(selector)) {
         event.preventDefault(); // stop event
@@ -12615,13 +12592,16 @@ Object(_utilities_helper__WEBPACK_IMPORTED_MODULE_5__["default"])(() => {
   Object(_components_tableRow__WEBPACK_IMPORTED_MODULE_7__["default"])(fileService.Data(), point);
   addContextMenu(); // Modal to handle create and edit
 
-  jquery__WEBPACK_IMPORTED_MODULE_0___default()('#file-modal').on('show.bs.modal', event => handleModalShow(event));
+  jquery__WEBPACK_IMPORTED_MODULE_0___default()('#file-modal').on('show.bs.modal', function (event) {
+    return handleModalShow(event);
+  });
   window.addEventListener('click', function () {
     showContextMenu(false);
   });
 });
 
-function showContextMenu(show = true) {
+function showContextMenu() {
+  var show = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
   if (contextMenu) contextMenu.style.display = show ? 'block' : 'none';
 }
 /**
@@ -12630,40 +12610,39 @@ function showContextMenu(show = true) {
 
 
 function handleModalShow(event) {
-  const btnElement = event.relatedTarget;
+  var btnElement = event.relatedTarget;
 
   if (!btnElement) {
     console.error('Không tìm thấy button');
     return;
   }
 
-  const btn = jquery__WEBPACK_IMPORTED_MODULE_0___default()(btnElement);
-  const task = btn.data('task');
-  const type = btn.data('file');
-  const currentId = `${btn.data('id')}`;
-  let item = undefined;
+  var btn = jquery__WEBPACK_IMPORTED_MODULE_0___default()(btnElement);
+  var task = btn.data('task');
+  var type = btn.data('file');
+  var currentId = "".concat(btn.data('id'));
+  var item;
 
   if (currentId) {
     // TODO: Fix this
-    let result = fileService.getDoc(currentId);
+    var result = fileService.getDoc(currentId);
     if (result.success && result.data) item = result.data;
   }
 
-  const modal = jquery__WEBPACK_IMPORTED_MODULE_0___default()(event.target);
-  modal.find('.modal-title').text(`${task} ${type} ${currentId === '' ? currentId : ''}`); // render form body
+  var modal = jquery__WEBPACK_IMPORTED_MODULE_0___default()(event.target);
+  modal.find('.modal-title').text("".concat(task, " ").concat(type, " ").concat(currentId === '' ? currentId : '')); // render form body
 
-  if (task !== 'delete') modal.find('.modal-body').html(Object(_components_modalForm__WEBPACK_IMPORTED_MODULE_8__["default"])(item));else modal.find('.modal-body').html(`<p>Are you sure you want to delete item Id=${currentId}</p>`);
-  modal.find('.modal-footer').html(`<button type="submit"
-  class="btn btn-primary" id="btnSubmitForm">${task}</button>`);
-  const errorList = modal.find('#error-messages');
-  jquery__WEBPACK_IMPORTED_MODULE_0___default()('#btnSubmitForm').on('click', event => {
-    var _a;
-
+  if (task !== 'delete') modal.find('.modal-body').html(Object(_components_modalForm__WEBPACK_IMPORTED_MODULE_8__["default"])(item));else modal.find('.modal-body').html("<p>Are you sure you want to delete item Id=".concat(currentId, "</p>"));
+  modal.find('.modal-footer').html("<button type=\"submit\"\n  class=\"btn btn-primary\" id=\"btnSubmitForm\">".concat(task, "</button>"));
+  var errorList = modal.find('#error-messages');
+  jquery__WEBPACK_IMPORTED_MODULE_0___default()('#btnSubmitForm').on('click', function (event) {
     event.preventDefault();
 
     if (task === 'create' || task === 'edit') {
+      var _modal$find$val;
+
       // Data validation
-      const name = (_a = modal.find('input#file-name').val()) === null || _a === void 0 ? void 0 : _a.toString();
+      var name = (_modal$find$val = modal.find('input#file-name').val()) === null || _modal$find$val === void 0 ? void 0 : _modal$find$val.toString();
 
       if (name === undefined || name === '') {
         errorList.append('<li class="text-danger">Vui lòng điền tên file.</li>');
@@ -12671,7 +12650,7 @@ function handleModalShow(event) {
       } // get file extension
 
 
-      let extension;
+      var extension;
 
       if (type === 'file') {
         if (name.lastIndexOf('.') !== -1) {
@@ -12682,25 +12661,22 @@ function handleModalShow(event) {
             errorList.append('<li class="text-danger">Tên file phải có extension.</li>');
             return;
           }
-        } else {
-          if (!extension) {
-            // handle error
-            errorList.append('<li class="text-danger">Tên file phải có extension.</li>');
-            return;
-          }
+        } else if (!extension) {
+          // handle error
+          errorList.append('<li class="text-danger">Tên file phải có extension.</li>');
+          return;
         }
       }
 
       if (task === 'create') {
-        const result = handleCreate({
-          name,
-          type,
-          extension
+        var _result = handleCreate({
+          name: name,
+          type: type,
+          extension: extension
         }, currentId);
 
-        if (result) {
-          console.log(result);
-          errorList.append(`<li class="text-danger">${result}</li>`);
+        if (_result) {
+          errorList.append("<li class=\"text-danger\">".concat(_result, "</li>"));
           return;
         }
       } else if (task === 'edit' && currentId) {
@@ -12720,10 +12696,10 @@ function handleModalShow(event) {
 
 function addContextMenu() {
   if (contextMenu) {
-    const docs = document.querySelectorAll('#doc-list tbody tr');
+    var docs = document.querySelectorAll('#doc-list tbody tr');
 
     if (docs) {
-      docs.forEach(doc => {
+      docs.forEach(function (doc) {
         contextMenuListener(doc, contextMenu);
       });
     }
@@ -12732,22 +12708,22 @@ function addContextMenu() {
 
 function contextMenuListener(el, contextMenu) {
   el.addEventListener('contextmenu', function (e) {
-    var _a;
+    var _this$getAttribute;
 
     e.preventDefault();
     contextMenu.style.display = 'block';
     contextMenu.style.top = e.y.toString();
     contextMenu.style.left = e.x.toString();
-    let currentId = (_a = this.getAttribute('data-id')) !== null && _a !== void 0 ? _a : undefined;
+    var currentId = (_this$getAttribute = this.getAttribute('data-id')) !== null && _this$getAttribute !== void 0 ? _this$getAttribute : undefined;
 
     if (currentId) {
       // display id on context menu
-      const contextMenuHeader = contextMenu.querySelector('.dropdown-header');
-      if (contextMenuHeader) contextMenuHeader.innerText = `File Id = ${currentId}`;
-      let subFolderbtn = contextMenu.querySelector('button[data-file="subfolder"]');
-      let subFilebtn = contextMenu.querySelector('button[data-file="subfile"]');
-      let btnEdit = contextMenu.querySelector('button[data-task="edit"]');
-      let btnDelete = contextMenu.querySelector('button[data-task="delete"]');
+      var contextMenuHeader = contextMenu.querySelector('.dropdown-header');
+      if (contextMenuHeader) contextMenuHeader.innerText = "File Id = ".concat(currentId);
+      var subFolderbtn = contextMenu.querySelector('button[data-file="subfolder"]');
+      var subFilebtn = contextMenu.querySelector('button[data-file="subfile"]');
+      var btnEdit = contextMenu.querySelector('button[data-task="edit"]');
+      var btnDelete = contextMenu.querySelector('button[data-task="delete"]');
 
       if (btnEdit && btnDelete) {
         btnEdit.setAttribute('data-id', currentId);
@@ -12770,27 +12746,30 @@ function contextMenuListener(el, contextMenu) {
 }
 
 function handleCreate(newFile, parentId) {
-  const {
-    success,
-    errorMessage
-  } = fileService.createNewFile(newFile, parentId);
-  if (!success || errorMessage) return errorMessage;else return undefined;
+  var _fileService$createNe = fileService.createNewFile(newFile, parentId),
+      success = _fileService$createNe.success,
+      errorMessage = _fileService$createNe.errorMessage;
+
+  if (!success || errorMessage) return errorMessage;
+  return undefined;
 }
 
 function handleEdit(id, fileName) {
-  const {
-    success,
-    errorMessage
-  } = fileService.editFileName(id, fileName);
-  if (!success || errorMessage) return errorMessage;else return undefined;
+  var _fileService$editFile = fileService.editFileName(id, fileName),
+      success = _fileService$editFile.success,
+      errorMessage = _fileService$editFile.errorMessage;
+
+  if (!success || errorMessage) return errorMessage;
+  return undefined;
 }
 
 function handleDelete(id) {
-  const {
-    success,
-    errorMessage
-  } = fileService.removeItem(id);
-  if (!success || errorMessage) return errorMessage;else return undefined;
+  var _fileService$removeIt = fileService.removeItem(id),
+      success = _fileService$removeIt.success,
+      errorMessage = _fileService$removeIt.errorMessage;
+
+  if (!success || errorMessage) return errorMessage;
+  return undefined;
 }
 
 /***/ }),
@@ -12806,23 +12785,41 @@ function handleDelete(id) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _constants_serverData__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../constants/_serverData */ "./src/scripts/constants/_serverData.ts");
 /* harmony import */ var _utilities_LocalData__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../utilities/_LocalData */ "./src/scripts/utilities/_LocalData.ts");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
 
 
-class FileService {
-  constructor() {
-    this.p_data = [];
 
-    this.getData = () => {
-      let jsonData = _utilities_LocalData__WEBPACK_IMPORTED_MODULE_1__["default"].get('items');
+var FileService = /*#__PURE__*/function () {
+  function FileService() {
+    var _this = this;
+
+    _classCallCheck(this, FileService);
+
+    this.data = [];
+
+    this.getData = function () {
+      var jsonData = _utilities_LocalData__WEBPACK_IMPORTED_MODULE_1__["default"].get('items');
 
       if (jsonData.length === 0) {
-        jsonData = this.getDataFromServer();
+        jsonData = _this.getDataFromServer();
       } // merge data to file type
 
 
-      jsonData.forEach(obj => {
-        if (!obj !== undefined && (obj === null || obj === void 0 ? void 0 : obj.type)) {
+      jsonData.forEach(function (obj) {
+        var _obj;
+
+        if (!obj !== undefined && ((_obj = obj) === null || _obj === void 0 ? void 0 : _obj.type)) {
           switch (obj.type) {
             case 'file':
               obj = obj;
@@ -12832,20 +12829,20 @@ class FileService {
               obj = obj;
           }
 
-          this.p_data.push(obj);
+          _this.data.push(obj);
         }
       });
     };
 
-    this.getDataFromServer = () => {
+    this.getDataFromServer = function () {
       // save to local
       _utilities_LocalData__WEBPACK_IMPORTED_MODULE_1__["default"].save('items', _constants_serverData__WEBPACK_IMPORTED_MODULE_0__["default"]);
       return _constants_serverData__WEBPACK_IMPORTED_MODULE_0__["default"];
     };
 
-    this.createNewFile = (newFile, parentId) => {
+    this.createNewFile = function (newFile, parentId) {
       // check duplicate file name
-      if (this.hasAlreadyExisted(newFile.name, parentId)) {
+      if (_this.hasAlreadyExisted(newFile.name, parentId)) {
         return {
           success: false,
           errorMessage: 'File đã tồn tại'
@@ -12853,7 +12850,7 @@ class FileService {
       }
 
       try {
-        let fileToAdd = {
+        var fileToAdd = {
           id: Date.now().toString(),
           name: newFile.name,
           type: newFile.type,
@@ -12865,22 +12862,28 @@ class FileService {
 
         switch (newFile.type) {
           case 'file':
-            this.p_data.push(Object.assign(Object.assign({}, fileToAdd), {
+            _this.data.push(_objectSpread(_objectSpread({}, fileToAdd), {}, {
               extension: newFile.extension
             }));
+
             break;
 
           case 'folder':
-            this.p_data.push(Object.assign(Object.assign({}, fileToAdd), {
+            _this.data.push(_objectSpread(_objectSpread({}, fileToAdd), {}, {
               subFiles: []
             }));
+
             break;
 
           case 'subfile':
-            let doc = this.p_data.find(x => x.id === parentId);
+            var doc = _this.data.find(function (x) {
+              return x.id === parentId;
+            });
+
             if (!doc) throw Error('Không tìm thấy parent doc.');else if (doc.subFiles) {
               doc.subFiles.push(fileToAdd);
-              this.p_data.map(item => {
+
+              _this.data.map(function (item) {
                 if (item.id === parentId) {
                   return doc;
                 }
@@ -12888,12 +12891,13 @@ class FileService {
                 return item;
               });
             } else {
-              this.p_data.map(item => {
-                if (item.id === parentId) {}
+              _this.data.map(function (item) {
+                if (item.id === parentId) {
+                  return _objectSpread(_objectSpread({}, item), {}, {
+                    subFile: [fileToAdd]
+                  });
+                }
 
-                return Object.assign(Object.assign({}, item), {
-                  subFile: [fileToAdd]
-                });
                 return item;
               });
             }
@@ -12904,7 +12908,7 @@ class FileService {
         } // save new data to localStorage
 
 
-        _utilities_LocalData__WEBPACK_IMPORTED_MODULE_1__["default"].save('items', this.p_data);
+        _utilities_LocalData__WEBPACK_IMPORTED_MODULE_1__["default"].save('items', _this.data);
       } catch (err) {
         console.error('Error', err);
         return {
@@ -12918,19 +12922,26 @@ class FileService {
       };
     };
 
-    this.hasAlreadyExisted = (fileName, parentId) => {
-      var _a; // check subfile
-
-
+    this.hasAlreadyExisted = function (fileName, parentId) {
+      // check subfile
       if (parentId) {
-        let doc = this.p_data.find(x => x.id === parentId && x.type === 'folder');
-        if (doc) if ((_a = doc.subFiles) === null || _a === void 0 ? void 0 : _a.find(x => x.name === fileName)) {
+        var _doc$subFiles;
+
+        var doc = _this.data.find(function (x) {
+          return x.id === parentId && x.type === 'folder';
+        });
+
+        if (doc) if ((_doc$subFiles = doc.subFiles) === null || _doc$subFiles === void 0 ? void 0 : _doc$subFiles.find(function (x) {
+          return x.name === fileName;
+        })) {
           return true;
         }
       } // check file
 
 
-      if (!this.p_data.find(x => x.name === fileName)) {
+      if (!_this.data.find(function (x) {
+        return x.name === fileName;
+      })) {
         return true;
       }
 
@@ -12938,56 +12949,71 @@ class FileService {
     };
   }
 
-  getDoc(id) {
-    let doc = this.p_data.find(x => x.id === id);
-    if (doc) return {
-      success: true,
-      data: doc
-    };else return {
-      success: false
-    };
-  }
+  _createClass(FileService, [{
+    key: "getDoc",
+    value: function getDoc(id) {
+      var doc = this.data.find(function (x) {
+        return x.id === id;
+      });
+      if (doc) return {
+        success: true,
+        data: doc
+      };
+      return {
+        success: false
+      };
+    }
+  }, {
+    key: "editFileName",
+    value: function editFileName(id, name) {
+      this.data = this.data.map(function (item) {
+        if (item.id === id) {
+          return _objectSpread(_objectSpread({}, item), {}, {
+            name: name
+          });
+        }
 
-  editFileName(id, name) {
-    this.p_data = this.p_data.map(item => {
-      if (item.id === id) {
-        return Object.assign(Object.assign({}, item), {
-          name
-        });
-      }
+        return item;
+      }); // TODO: file vs folder?
+      // TODO: output error if any
+      // save new data to localStorage
 
-      return item;
-    }); // TODO: file vs folder?
-    // TODO: output error if any
-    // save new data to localStorage
+      _utilities_LocalData__WEBPACK_IMPORTED_MODULE_1__["default"].save('items', this.data);
+      return {
+        success: true
+      };
+    }
+  }, {
+    key: "removeItem",
+    value: function removeItem(id) {
+      this.data = this.data.filter(function (x) {
+        return x.id !== id;
+      }); // TODO: check errors if any
+      // save new data to localStorage
 
-    _utilities_LocalData__WEBPACK_IMPORTED_MODULE_1__["default"].save('items', this.p_data);
-    return {
-      success: true
-    };
-  }
+      _utilities_LocalData__WEBPACK_IMPORTED_MODULE_1__["default"].save('items', this.data);
+      return {
+        success: true
+      };
+    }
+  }, {
+    key: "Data",
+    value: function Data() {
+      return this.data;
+    }
+  }, {
+    key: "isFolder",
+    value: function isFolder(id) {
+      var item = this.data.find(function (x) {
+        return x.id === id;
+      });
+      if (item && item.type === 'folder') return true;
+      return false;
+    }
+  }]);
 
-  removeItem(id) {
-    this.p_data = this.p_data.filter(x => x.id !== id); // TODO: check errors if any
-    // save new data to localStorage
-
-    _utilities_LocalData__WEBPACK_IMPORTED_MODULE_1__["default"].save('items', this.p_data);
-    return {
-      success: true
-    };
-  }
-
-  Data() {
-    return this.p_data;
-  }
-
-  isFolder(id) {
-    let item = this.p_data.find(x => x.id === id);
-    if (item && item.type === 'folder') return true;
-    return false;
-  }
-
-}
+  return FileService;
+}();
 
 /* harmony default export */ __webpack_exports__["default"] = (FileService);
 
@@ -13003,7 +13029,7 @@ class FileService {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 function get(name) {
-  const data = localStorage.getItem(name);
+  var data = localStorage.getItem(name);
   if (!data) return [];
   return JSON.parse(data);
 }
@@ -13020,8 +13046,8 @@ function save(name, data) {
 }
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  get,
-  save
+  get: get,
+  save: save
 });
 
 /***/ }),
@@ -13035,7 +13061,7 @@ function save(name, data) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-const ready = fn => {
+var ready = function ready(fn) {
   if (document.readyState !== 'loading') {
     fn();
   } else {

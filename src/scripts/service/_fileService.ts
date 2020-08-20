@@ -2,7 +2,7 @@ import serverData from '../constants/_serverData';
 import LocalData from '../utilities/_LocalData';
 
 class FileService {
-  private p_data: Array<IBaseModel> = [];
+  private data: Array<IBaseModel> = [];
 
   public getData = () => {
     let jsonData = LocalData.get<IBaseModel>('items');
@@ -21,7 +21,7 @@ class FileService {
           case 'folder':
             obj = <IFolder>obj;
         }
-        this.p_data.push(obj);
+        this.data.push(obj);
       }
     });
   };
@@ -45,7 +45,7 @@ class FileService {
     }
 
     try {
-      let fileToAdd: IBaseModel = {
+      const fileToAdd: IBaseModel = {
         id: Date.now().toString(),
         name: newFile.name,
         type: newFile.type,
@@ -56,33 +56,33 @@ class FileService {
       };
       switch (newFile.type) {
         case 'file':
-          this.p_data.push({
+          this.data.push({
             ...fileToAdd,
             extension: newFile.extension,
           } as IFile);
           break;
         case 'folder':
-          this.p_data.push({
+          this.data.push({
             ...fileToAdd,
             subFiles: [],
           } as IFolder);
           break;
         case 'subfile':
-          let doc = this.p_data.find(
+          const doc = this.data.find(
             x => x.id === parentId,
           ) as IFolder;
           if (!doc) throw Error('Không tìm thấy parent doc.');
           else if (doc.subFiles) {
             doc.subFiles.push(fileToAdd as IFile);
 
-            this.p_data.map(item => {
+            this.data.map(item => {
               if (item.id === parentId) {
                 return doc;
               }
               return item;
             });
           } else {
-            this.p_data.map(item => {
+            this.data.map(item => {
               if (item.id === parentId) {
                 return {
                   ...item,
@@ -98,7 +98,7 @@ class FileService {
       }
 
       // save new data to localStorage
-      LocalData.save('items', this.p_data);
+      LocalData.save('items', this.data);
     } catch (err) {
       console.error('Error', err);
       return { success: false, errorMessage: err };
@@ -108,13 +108,13 @@ class FileService {
   };
 
   public getDoc(id: string): ServiceResult {
-    let doc = this.p_data.find(x => x.id === id);
+    const doc = this.data.find(x => x.id === id);
     if (doc) return { success: true, data: doc };
-    else return { success: false };
+    return { success: false };
   }
 
   public editFileName(id: string, name: string): ServiceResult {
-    this.p_data = this.p_data.map(item => {
+    this.data = this.data.map(item => {
       if (item.id === id) {
         return {
           ...item,
@@ -127,16 +127,16 @@ class FileService {
     // TODO: output error if any
 
     // save new data to localStorage
-    LocalData.save('items', this.p_data);
+    LocalData.save('items', this.data);
     return { success: true };
   }
 
   public removeItem(id: string): ServiceResult {
-    this.p_data = this.p_data.filter(x => x.id !== id);
+    this.data = this.data.filter(x => x.id !== id);
 
     // TODO: check errors if any
     // save new data to localStorage
-    LocalData.save('items', this.p_data);
+    LocalData.save('items', this.data);
 
     return { success: true };
   }
@@ -147,7 +147,7 @@ class FileService {
   ): boolean => {
     // check subfile
     if (parentId) {
-      let doc = this.p_data.find(
+      const doc = this.data.find(
         x => x.id === parentId && x.type === 'folder',
       );
       if (doc)
@@ -159,7 +159,7 @@ class FileService {
     }
 
     // check file
-    if (!this.p_data.find(x => x.name === fileName)) {
+    if (!this.data.find(x => x.name === fileName)) {
       return true;
     }
 
@@ -167,11 +167,11 @@ class FileService {
   };
 
   public Data() {
-    return this.p_data;
+    return this.data;
   }
 
   public isFolder(id: string) {
-    let item = this.p_data.find(x => x.id === id);
+    const item = this.data.find(x => x.id === id);
     if (item && item.type === 'folder') return true;
     return false;
   }
