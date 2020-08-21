@@ -1,77 +1,48 @@
 <html>
   <head>
     <title>Assignment</title>
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0"
-    />
-    <!-- <link rel="stylesheet" href="dist/css/home-page.css" /> -->
-  </head>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    
+  <link href="css/home-page.css" rel="stylesheet"></head>
   <body id="home-page">
-    <!-- Navbar -->
+    
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <a class="navbar-brand" href="#"></a>
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-toggle="collapse"
-        data-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
 
-      <div
-        class="collapse navbar-collapse"
-        id="navbarSupportedContent"
-      >
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item">
             <a class="nav-link" href="#" role="button">
-              <i
-                class="ms-Icon ms-Icon--Add icon-pink"
-                aria-hidden="true"
-              ></i>
+              <i class="ms-Icon ms-Icon--Add icon-pink" aria-hidden="true"></i>
               New
               <i class="fas fa-chevron-down"></i>
             </a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="#" role="button">
-              <i
-                class="ms-Icon ms-Icon--Upload icon-pink"
-                aria-hidden="true"
-              ></i>
+              <i class="ms-Icon ms-Icon--Upload icon-pink" aria-hidden="true"></i>
               Upload
               <i class="fas fa-chevron-down"></i>
             </a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="#">
-              <i
-                class="ms-Icon ms-Icon--SyncToPC icon-pink"
-                aria-hidden="true"
-              ></i>
+              <i class="ms-Icon ms-Icon--SyncToPC icon-pink" aria-hidden="true"></i>
               Sync
             </a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="#">
-              <i
-                class="ms-Icon ms-Icon--ExcelDocument icon-excel"
-                aria-hidden="true"
-              ></i>
+              <i class="ms-Icon ms-Icon--ExcelDocument icon-excel" aria-hidden="true"></i>
               Export to Excel
             </a>
           </li>
           <li class="nav-item" role="button">
             <a class="nav-link" href="#">
-              <i
-                class="ms-Icon ms-Icon--Flow icon-pink"
-                aria-hidden="true"
-              ></i>
+              <i class="ms-Icon ms-Icon--Flow icon-pink" aria-hidden="true"></i>
               Flow
               <i class="fas fa-chevron-down"></i>
             </a>
@@ -86,31 +57,17 @@
     </nav>
 
     <div class="container-fluid" id="doc-list">
-      <!-- Heading -->
+      
       <h1>Documents</h1>
 
-      <button
-        type="button"
-        class="btn btn-primary btn-new"
-        data-toggle="modal"
-        data-target="#file-modal"
-        data-task="create"
-        data-file="file"
-      >
+      <button type="button" class="btn btn-primary btn-new" data-toggle="modal" data-target="#file-modal" data-task="create" data-file="file">
         <i class="fas fa-file"></i> New file
       </button>
-      <button
-        type="button"
-        class="btn btn-primary btn-new"
-        data-toggle="modal"
-        data-target="#file-modal"
-        data-task="create"
-        data-file="folder"
-      >
+      <button type="button" class="btn btn-primary btn-new" data-toggle="modal" data-target="#file-modal" data-task="create" data-file="folder">
         <i class="fas fa-folder"></i> New folder
       </button>
 
-      <!-- Documents list -->
+      
       <table class="table" id="doc-list">
         <thead>
           <tr>
@@ -131,31 +88,19 @@
         </thead>
         <tbody></tbody>
       </table>
-      <!-- Documents list -->
+      
     </div>
-    <!-- container -->
+    
 
-    <!-- Modal -->
-    <div
-      class="modal fade"
-      id="file-modal"
-      tabindex="-1"
-      role="dialog"
-      aria-labelledby="exampleModalLabel"
-      aria-hidden="true"
-    >
+    
+    <div class="modal fade" id="file-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="exampleModalLabel">
               Modal title
             </h5>
-            <button
-              type="button"
-              class="close"
-              data-dismiss="modal"
-              aria-label="Close"
-            >
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
@@ -164,53 +109,26 @@
         </div>
       </div>
     </div>
-    <!-- Modal -->
+    
 
-    <!-- Context Menu -->
+    
     <div class="dropdown-menu" id="context-menu">
       <h6 class="dropdown-header"></h6>
-      <button
-        class="dropdown-item"
-        data-toggle="modal"
-        data-target="#file-modal"
-        data-task="edit"
-        data-file="file"
-      >
+      <button class="dropdown-item" data-toggle="modal" data-target="#file-modal" data-task="edit" data-file="file">
         <i class="fas fa-pen"></i> Sửa
       </button>
-      <button
-        class="dropdown-item"
-        data-toggle="modal"
-        data-target="#file-modal"
-        data-task="delete"
-        data-file="file"
-      >
+      <button class="dropdown-item" data-toggle="modal" data-target="#file-modal" data-task="delete" data-file="file">
         <i class="fas fa-trash"></i> Xóa
       </button>
-      <button
-        class="dropdown-item hidden"
-        data-toggle="modal"
-        data-target="#file-modal"
-        data-task="create"
-        data-file="subfolder"
-      >
+      <button class="dropdown-item hidden" data-toggle="modal" data-target="#file-modal" data-task="create" data-file="subfolder">
         <i class="fas fa-pen"></i> New Folder
       </button>
-      <button
-        class="dropdown-item hidden"
-        data-toggle="modal"
-        data-target="#file-modal"
-        data-task="create"
-        data-file="subfile"
-      >
+      <button class="dropdown-item hidden" data-toggle="modal" data-target="#file-modal" data-task="create" data-file="subfile">
         <i class="fas fa-pen"></i> New File
       </button>
     </div>
-    <!-- Context Menu -->
+    
 
-    <!-- <script
-      type="text/javascript"
-      src="dist/js/home-page.js"
-    ></script> -->
-  </body>
+    
+  <script src="js/home-page.js"></script></body>
 </html>
