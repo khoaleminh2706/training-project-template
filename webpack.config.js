@@ -3,7 +3,7 @@ const FixStyleOnlyEntriesPlugin = require('webpack-fix-style-only-entries');
 const path = require('path');
 const glob = require('glob');
 const sass = require('sass');
-const LiveReloadPlugin = require('webpack-livereload-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const getEntries = function() {
   return glob
@@ -47,7 +47,6 @@ const commonConfig = {
     filename: 'js/[name].js',
     chunkFilename: '[name].bundle.js?ver=[chunkhash]',
     path: path.join(__dirname, '/dist/'),
-    //    publicPath: '/build/',
   },
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
@@ -137,10 +136,14 @@ const commonConfig = {
       filename: 'css/[name].css',
       chunkFilename: '[id].css',
     }),
-    new LiveReloadPlugin({
-      protocol: 'http',
+    new HtmlWebpackPlugin({
+      template: './index.html',
+      inject: true,
+      minify: {
+        removeComments: true,
+        collapseWhitespace: false,
+      },
     }),
-    new NyanProgressPlugin(),
   ],
 };
 
