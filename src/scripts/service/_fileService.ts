@@ -32,12 +32,12 @@ class FileService {
   ) =>
     new Promise<ServiceResult>((resolve, reject) => {
       // check duplicate file name
-      // if (this.hasAlreadyExisted(newFile.name, parentId)) {
-      //   reject({
-      //     success: false,
-      //     errorMessage: 'File đã tồn tại',
-      //   });
-      // }
+      if (this.hasAlreadyExisted(newFile.name, parentId)) {
+        reject({
+          success: false,
+          errorMessage: 'File đã tồn tại',
+        });
+      }
 
       try {
         const fileToAdd: IBaseModel = {
@@ -117,18 +117,21 @@ class FileService {
     // check subfile
     if (parentId) {
       const doc = this.data.find(
-        x => x.id === parentId && x.type === 'folder',
+        x => x.id == parentId && x.type === 'folder',
       );
-      if (doc)
+      if (doc) {
+        const folder = <IFolder>doc;
         if (
-          (doc as IFolder).subFiles?.find(x => x.name === fileName)
+          folder.subFiles &&
+          folder.subFiles.find(x => x.name === fileName)
         ) {
           return true;
         }
+      }
     }
 
     // check file
-    if (!this.data.find(x => x.name === fileName)) {
+    if (this.data.find(x => x.name === fileName)) {
       return true;
     }
 
