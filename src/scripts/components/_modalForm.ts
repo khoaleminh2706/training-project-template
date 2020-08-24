@@ -1,4 +1,6 @@
-function renderForm(item?: IBaseModel): string {
+import BaseModel from "../types/BaseModel";
+
+function renderForm(item?: BaseModel): string {
   const html = `
     <form>
       <div class="form-group">

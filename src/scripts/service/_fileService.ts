@@ -1,11 +1,17 @@
+import BaseModel from '../types/BaseModel'
+import Folder from '../types/Folder'
+import File from '../types/FileType'
+import FileCreateInput from '../types/FileCreateInput';
+
 import serverData from '../constants/_serverData';
 import LocalData from '../utilities/_LocalData';
 
+
 class FileService {
-  private data: Array<IBaseModel> = [];
+  private data: Array<BaseModel> = [];
 
   public getData = () => {
-    let jsonData = LocalData.get<IBaseModel>('items');
+    let jsonData = LocalData.get<BaseModel>('items');
 
     if (jsonData.length === 0) {
       jsonData = this.getDataFromServer();
@@ -14,8 +20,8 @@ class FileService {
     // merge data to file type
     jsonData.forEach(obj => {
       if (!obj !== undefined && obj?.type) {
-        if (obj.type === 'file') this.data.push(<IFile>obj);
-        else if (obj.type === 'folder') this.data.push(<IFolder>obj);
+        if (obj.type === 'file') this.data.push(<File>obj);
+        else if (obj.type === 'folder') this.data.push(<Folder>obj);
       }
     });
   };
@@ -27,7 +33,7 @@ class FileService {
   };
 
   public createNewFile = (
-    newFile: IFileCreateInput,
+    newFile: FileCreateInput,
     parentId?: string,
   ) =>
     new Promise<ServiceResult>((resolve, reject) => {
@@ -40,7 +46,7 @@ class FileService {
       }
 
       try {
-        const fileToAdd: IBaseModel = {
+        const fileToAdd: BaseModel = {
           id: Date.now().toString(),
           name: newFile.name,
           type: newFile.type,
@@ -54,13 +60,13 @@ class FileService {
             this.data.push({
               ...fileToAdd,
               extension: newFile.extension,
-            } as IFile);
+            } as File);
             break;
           case 'folder':
             this.data.push({
               ...fileToAdd,
               subFiles: [],
-            } as IFolder);
+            } as Folder);
             break;
           default:
             reject({ success: false, errorMessgae: 'Failed' });
@@ -120,7 +126,7 @@ class FileService {
         x => x.id == parentId && x.type === 'folder',
       );
       if (doc) {
-        const folder = <IFolder>doc;
+        const folder = <Folder>doc;
         if (
           folder.subFiles &&
           folder.subFiles.find(x => x.name === fileName)
@@ -152,7 +158,7 @@ class FileService {
 type ServiceResult = {
   success: boolean;
   errorMessage?: string;
-  data?: IBaseModel;
+  data?: BaseModel;
 };
 
 export default FileService;

@@ -9,6 +9,8 @@ import ready from '../utilities/_helper';
 import FileService from '../service/_fileService';
 import tableRow from '../components/_tableRow';
 import renderForm from '../components/_modalForm';
+import BaseModel from '../types/BaseModel';
+import FileCreateInput from '../types/FileCreateInput';
 
 const point = document.querySelector<HTMLElement>('#doc-list tbody');
 const contextMenu = document.getElementById('context-menu');
@@ -17,14 +19,14 @@ let fileService: FileService;
 ready(() => {
   console.log('Error: noe lreaod');
   // prevent enter and backspace
-  $(function() {
+  $(function () {
     const keyStop: any = {
       8: ':not(input:text, textarea, input:file, input:password)', // stop backspace = back
       13: 'input:text, input:password', // stop enter = submit
 
       end: null,
     };
-    $(document).bind('keydown', function(event) {
+    $(document).bind('keydown', function (event) {
       const selector = keyStop[event.which];
 
       if (selector !== undefined && $(event.target).is(selector)) {
@@ -44,7 +46,7 @@ ready(() => {
     handleModalShow(event),
   );
 
-  window.addEventListener('click', function() {
+  window.addEventListener('click', function () {
     showContextMenu(false);
   });
 });
@@ -68,7 +70,7 @@ function handleModalShow(event: ModalEventHandler<HTMLElement>) {
   const type = btn.data('file');
   const currentId = btn.data('id');
 
-  let item: IBaseModel | undefined;
+  let item: BaseModel | undefined;
   if (currentId) {
     const result = fileService.getDoc(currentId);
     if (result.success && result.data) item = result.data;
@@ -184,7 +186,7 @@ function contextMenuListener(
   el: HTMLElement,
   contextMenu: HTMLElement,
 ) {
-  el.addEventListener('contextmenu', function(e) {
+  el.addEventListener('contextmenu', function (e) {
     e.preventDefault();
 
     contextMenu.style.display = 'block';
@@ -240,7 +242,7 @@ function contextMenuListener(
 }
 
 const handleCreate = async (
-  newFile: IFileCreateInput,
+  newFile: FileCreateInput,
   parentId?: string,
 ) => {
   const { success, errorMessage } = await fileService.createNewFile(

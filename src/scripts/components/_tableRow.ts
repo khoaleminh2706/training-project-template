@@ -1,5 +1,8 @@
+import BaseModel from "../types/BaseModel";
+import FileType from "../types/FileType";
+
 const tableRow = (
-  data: Array<IBaseModel>,
+  data: Array<BaseModel>,
   container: HTMLElement | null,
 ) => {
   if (!container) {
@@ -12,18 +15,18 @@ const tableRow = (
       html += `<tr data-id="${file.id}">
             <td data-label="File Type" scope="row">
             <span><i class="fas ${
-              (file as IFile).extension !== undefined
-                ? 'fa-file-excel icon-excel'
-                : 'fa-folder'
-            }"></i></span>
+        (file as FileType).extension !== undefined
+          ? 'fa-file-excel icon-excel'
+          : 'fa-folder'
+        }"></i></span>
             </td>
             <td data-label="Name"><span>${file.name}</span></td>
             <td data-label="Modified"><span>${
-              file.modifiedAt
-            }</span></td>
+        file.modifiedAt
+        }</span></td>
             <td data-label="Modified By"><span>${
-              file.modifiedBy
-            }</span></td>
+        file.modifiedBy
+        }</span></td>
             <td></td>
         </tr>`;
     });
