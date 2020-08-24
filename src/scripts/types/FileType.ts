@@ -1,7 +1,7 @@
-import BaseModel from './BaseModel'
+import BaseModel from './BaseModel';
 
 interface FileType extends BaseModel {
   extension: string;
 }
 
-export default FileType
+export default FileType;

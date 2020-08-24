@@ -19,14 +19,14 @@ let fileService: FileService;
 ready(() => {
   console.log('Error: noe lreaod');
   // prevent enter and backspace
-  $(function () {
+  $(function() {
     const keyStop: any = {
       8: ':not(input:text, textarea, input:file, input:password)', // stop backspace = back
       13: 'input:text, input:password', // stop enter = submit
 
       end: null,
     };
-    $(document).bind('keydown', function (event) {
+    $(document).bind('keydown', function(event) {
       const selector = keyStop[event.which];
 
       if (selector !== undefined && $(event.target).is(selector)) {
@@ -46,7 +46,7 @@ ready(() => {
     handleModalShow(event),
   );
 
-  window.addEventListener('click', function () {
+  window.addEventListener('click', function() {
     showContextMenu(false);
   });
 });
@@ -186,7 +186,7 @@ function contextMenuListener(
   el: HTMLElement,
   contextMenu: HTMLElement,
 ) {
-  el.addEventListener('contextmenu', function (e) {
+  el.addEventListener('contextmenu', function(e) {
     e.preventDefault();
 
     contextMenu.style.display = 'block';

@@ -8,4 +8,4 @@ interface BaseModel {
   modifiedBy: string;
 }
 
-export default BaseModel
+export default BaseModel;

@@ -1,4 +1,4 @@
-import BaseModel from "../types/BaseModel";
+import BaseModel from '../types/BaseModel';
 
 function renderForm(item?: BaseModel): string {
   const html = `

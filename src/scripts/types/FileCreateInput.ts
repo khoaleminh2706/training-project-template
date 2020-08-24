@@ -3,4 +3,4 @@ interface FileCreateInput {
   type: string;
   extension?: string;
 }
-export default FileCreateInput
+export default FileCreateInput;

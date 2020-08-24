@@ -1,11 +1,10 @@
-import BaseModel from '../types/BaseModel'
-import Folder from '../types/Folder'
-import File from '../types/FileType'
+import BaseModel from '../types/BaseModel';
+import Folder from '../types/Folder';
+import File from '../types/FileType';
 import FileCreateInput from '../types/FileCreateInput';
 
 import serverData from '../constants/_serverData';
 import LocalData from '../utilities/_LocalData';
-
 
 class FileService {
   private data: Array<BaseModel> = [];
