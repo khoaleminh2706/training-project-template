@@ -1,8 +1,4 @@
 import $ from 'jquery';
-import 'bootstrap/js/dist/util';
-import 'bootstrap/js/dist/button';
-import 'bootstrap/js/dist/collapse';
-import 'bootstrap/js/dist/modal';
 import { ModalEventHandler } from 'bootstrap';
 
 import ready from '../utilities/_helper';
@@ -12,12 +8,16 @@ import renderForm from '../components/_modalForm';
 import BaseModel from '../types/BaseModel';
 import FileCreateInput from '../types/FileCreateInput';
 
+require('bootstrap/js/dist/util');
+require('bootstrap/js/dist/button');
+require('bootstrap/js/dist/collapse');
+require('bootstrap/js/dist/modal');
+
 const point = document.querySelector<HTMLElement>('#doc-list tbody');
 const contextMenu = document.getElementById('context-menu');
 let fileService: FileService;
 
 ready(() => {
-  console.log('Error: noe lreaod');
   // prevent enter and backspace
   $(function() {
     const keyStop: any = {
