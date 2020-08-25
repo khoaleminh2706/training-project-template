@@ -145,7 +145,12 @@ const commonConfig = {
         collapseWhitespace: false,
       },
     }),
-  ],
+    ],
+    optimization: {
+        splitChunks: {
+            chunks: 'all',
+        },
+    }
 };
 
 module.exports = commonConfig;
