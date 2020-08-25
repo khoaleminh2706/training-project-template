@@ -46,7 +46,6 @@ namespace FileServer
       }
       app.UseHttpsRedirection();
 
-      // app.UseDefaultFiles();
       app.UseStaticFiles();
 
       app.UseRouting();

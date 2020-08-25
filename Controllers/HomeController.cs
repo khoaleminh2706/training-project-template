@@ -18,12 +18,7 @@ namespace FileServer.Controllers
     [Authorize]
     public IActionResult Index()
     {
-      return View("~/index.html");
-    }
-
-    public IActionResult Privacy()
-    {
-      return View();
+      return File("~/index.html", "text/html");
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
