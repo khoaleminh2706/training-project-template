@@ -5,10 +5,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Authentication.AzureAD.UI;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Mvc.Authorization;
-using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 
 namespace FileServer
 {
@@ -24,32 +22,39 @@ namespace FileServer
     // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices(IServiceCollection services)
     {
-      services.AddRazorPages();
-      services.Configure<CookiePolicyOptions>(options =>
-        {
-          // This lambda determines whether user consent for non-essential cookies is needed for a given request.
-          options.CheckConsentNeeded = context => true;
-          options.MinimumSameSitePolicy = SameSiteMode.None;
-        });
+      // services.Configure<CookiePolicyOptions>(options =>
+      //   {
+      //     // This lambda determines whether user consent for non-essential cookies is needed for a given request.
+      //     options.CheckConsentNeeded = context => true;
+      //     options.MinimumSameSitePolicy = SameSiteMode.Unspecified;
+      //   });
+
 
       services.AddAuthentication(AzureADDefaults.AuthenticationScheme)
               .AddAzureAD(options => Configuration.Bind("AzureAd", options));
 
-      services.Configure<OpenIdConnectOptions>(AzureADDefaults.OpenIdScheme, options =>
-      {
-        options.Authority = options.Authority + "/v2.0/";         // Microsoft identity platform
+      // services.Configure<OpenIdConnectOptions>(AzureADDefaults.OpenIdScheme, options =>
+      // {
+      //   options.Authority = options.Authority + "/v2.0/";         // Microsoft identity platform
 
-        options.TokenValidationParameters.ValidateIssuer = false; // accept several tenants (here simplified)
-      });
+      //   options.TokenValidationParameters.ValidateIssuer = false; // accept several tenants (here simplified)
+      // });
 
-      services.AddMvc(options =>
-      {
-        // options.EnableEndpointRouting = false;
-        var policy = new AuthorizationPolicyBuilder()
-                 .RequireAuthenticatedUser()
-                 .Build();
-        options.Filters.Add(new AuthorizeFilter(policy));
-      });
+      // services.AddControllers(options =>
+      // {
+      //   // options.EnableEndpointRouting = false;
+      //   var policy = new AuthorizationPolicyBuilder()
+      //            .RequireAuthenticatedUser()
+      //            .Build();
+      //   options.Filters.Add(new AuthorizeFilter(policy));
+      // });
+      services.AddControllers();
+
+      services.AddHttpsRedirection(options =>
+  {
+    options.RedirectStatusCode = StatusCodes.Status307TemporaryRedirect;
+    options.HttpsPort = 5001;
+  });
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -62,25 +67,23 @@ namespace FileServer
       else
       {
         app.UseExceptionHandler("/Error");
+        app.UseHsts();
       }
 
-      // app.Use((context, next) =>
-      // {
-      //   context.Request.Scheme = "https";
-      //   return next();
-      // });
-
-      // app.UseHttpsRedirection();
-      app.UseRouting();
+      app.UseHttpsRedirection();
       app.UseStaticFiles();
 
-      app.UseCookiePolicy();
+      app.UseRouting();
+
       app.UseAuthentication();
-      // app.UseAuthorization();
+      app.UseAuthorization();
 
       app.UseEndpoints(endpoints =>
       {
-        endpoints.MapRazorPages();
+        endpoints.MapControllerRoute(
+          name: "default",
+          pattern: "{controller=Home}/{action=Index}/{id?}"
+        );
       });
     }
   }
