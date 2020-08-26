@@ -1,4 +1,6 @@
-﻿using FileServer.Models.Exceptions;
+﻿using FileServer.Data;
+using FileServer.Data.Entities;
+using FileServer.Models.Exceptions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
@@ -12,13 +14,13 @@ namespace FileServer.Middleware
     public class ErrorHandlingMiddleware
     {
         private readonly RequestDelegate _next;
-
+        
         public ErrorHandlingMiddleware(RequestDelegate next)
         {
             _next = next;
         }
 
-        public async Task Invoke(HttpContext context, IWebHostEnvironment env)
+        public async Task Invoke(HttpContext context, IWebHostEnvironment env, ApplicationDbContext dbContext)
         {
             try
             {
@@ -26,11 +28,11 @@ namespace FileServer.Middleware
             }
             catch (Exception ex)
             {
-                await HandleExceptionAsync(context, ex, env);
+                await HandleExceptionAsync(context, ex, env, dbContext);
             }
         }
 
-        private static Task HandleExceptionAsync(HttpContext context, Exception exception, IWebHostEnvironment env)
+        private async Task HandleExceptionAsync(HttpContext context, Exception exception, IWebHostEnvironment env, ApplicationDbContext dbContext)
         {
             HttpStatusCode status;
             string message;
@@ -55,10 +57,20 @@ namespace FileServer.Middleware
                     stackTrace = exception.StackTrace;
             }
 
+            // Save errors to database
+            Error errorEntity = new Error()
+            {
+                Message = exception.Message,
+                Content = exception.StackTrace,
+                CreateBy = "me"
+            };
+            dbContext.Errors.Add(errorEntity);
+            await dbContext.SaveChangesAsync();
+
             var result = JsonSerializer.Serialize(new { error = message, stackTrace });
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int)status;
-            return context.Response.WriteAsync(result);
+            await context.Response.WriteAsync(result);
         }
     }
 }

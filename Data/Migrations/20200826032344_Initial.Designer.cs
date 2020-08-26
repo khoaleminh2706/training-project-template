@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FileServer.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200825091341_Intitial")]
-    partial class Intitial
+    [Migration("20200826032344_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -21,7 +21,7 @@ namespace FileServer.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("FileServer.Data.Entities.Exception", b =>
+            modelBuilder.Entity("FileServer.Data.Entities.Error", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()

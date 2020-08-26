@@ -19,7 +19,7 @@ namespace FileServer.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("FileServer.Data.Entities.Exception", b =>
+            modelBuilder.Entity("FileServer.Data.Entities.Error", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()

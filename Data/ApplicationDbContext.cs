@@ -15,11 +15,14 @@ namespace FileServer.Data
 
         }
 
+        public DbSet<File> Files { get; set; }
+        public DbSet<Error> Errors { get; set; }
+
         #region Methods
         protected override void OnModelCreating(ModelBuilder moduleBuilder)
         {
             moduleBuilder.Entity<File>().ToTable("Files");
-            moduleBuilder.Entity<Exception>().ToTable("ExceptionLogs");
+            moduleBuilder.Entity<Error>().ToTable("ExceptionLogs");
         }
         #endregion
     }

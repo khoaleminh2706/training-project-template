@@ -4,9 +4,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FileServer.Data.Entities
 {
-    public class Exception
+    public class Error
     {
-        public Exception()
+        public Error()
         {
 
         }
@@ -29,7 +29,7 @@ namespace FileServer.Data.Entities
         [Required]
         public string Content { get; set; }
 
-        public DateTime CreatedAt { get; set; } = DateTime.Now;
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow.AddHours(7);
 
         /// <summary>
         /// user id
