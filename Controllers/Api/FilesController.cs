@@ -2,9 +2,9 @@
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
-using System.IO;
 using FileServer.Services;
 using FileServer.Models;
+using FileServer.Models.Exceptions;
 
 namespace FileServer.Controllers.Api
 {
@@ -28,22 +28,27 @@ namespace FileServer.Controllers.Api
         }
 
         [HttpPost]
-        public async Task<byte[]> Upload(IFormFile file)
+        public async Task<ActionResult<FileViewModel>> Upload(FileCreateInput input, IFormFile file)
         {
-            if (file == null || file.Length == 0)
+            if (input.Type == "folder")
             {
-                throw new System.Exception();
+
+            }
+            else
+            {
+                // check file tồn tại
+                if (file == null || file.Length == 0)
+                {
+                    throw new BadRequestException("Thiếu file");
+                }
+
+                // 
+
+                //create file
+                return await _fileService.SaveFile(file, input);
             }
 
-            byte[] buffer = null;
-
-            using (MemoryStream ms = new MemoryStream())
-            {
-                await file.CopyToAsync(ms);
-                buffer = new byte[ms.Length];
-                buffer = ms.ToArray();
-            }
-            return buffer;
+            throw new BadRequestException("Không xác định loại file");
         }
     }
 }

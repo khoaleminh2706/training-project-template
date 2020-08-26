@@ -26,19 +26,11 @@ namespace FileServer.Data.Repositories
             return await _context.Files.AsNoTracking().ToListAsync();
         }
 
-        public Task<File> Create(FileCreateInput input, byte[] fileBytes)
+        public async Task<File> SaveFile(File input)
         {
-            throw new NotImplementedException();
-        }
-
-        public Task<string> Delete(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<File> Update(int id)
-        {
-            throw new NotImplementedException();
+            _context.Files.Add(input);
+            await _context.SaveChangesAsync();
+            return input;
         }
     }
 }

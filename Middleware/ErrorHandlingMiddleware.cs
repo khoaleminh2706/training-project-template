@@ -3,7 +3,6 @@ using FileServer.Data.Entities;
 using FileServer.Models.Exceptions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Hosting;
 using System;
 using System.Net;
 using System.Text.Json;
@@ -36,7 +35,6 @@ namespace FileServer.Middleware
         {
             HttpStatusCode status;
             string message;
-            var stackTrace = String.Empty;
 
             var exceptionType = exception.GetType();
             if (exceptionType == typeof(BadRequestException))
@@ -53,8 +51,6 @@ namespace FileServer.Middleware
             {
                 status = HttpStatusCode.InternalServerError;
                 message = exception.Message;
-                if (env.IsEnvironment("Development"))
-                    stackTrace = exception.StackTrace;
             }
 
             // Save errors to database
@@ -67,7 +63,7 @@ namespace FileServer.Middleware
             dbContext.Errors.Add(errorEntity);
             await dbContext.SaveChangesAsync();
 
-            var result = JsonSerializer.Serialize(new { error = message, stackTrace });
+            var result = JsonSerializer.Serialize(new { error = message });
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int)status;
             await context.Response.WriteAsync(result);

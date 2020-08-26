@@ -1,6 +1,9 @@
 ﻿using FileServer.Data.Repositories;
 using FileServer.Models;
+using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using FileEntity = FileServer.Data.Entities.File;
@@ -31,6 +34,37 @@ namespace FileServer.Services
                 ModifiedAt = entity.ModilfiedAt,
                 ModifiedBy = entity.ModifiedBy
             }).ToList();
+        }
+
+        public async Task<FileViewModel> SaveFile(IFormFile inputFile, FileCreateInput input)
+        {
+            byte[] buffer = null;
+            using (MemoryStream ms = new MemoryStream())
+            {
+                await inputFile.CopyToAsync(ms);
+                buffer = new byte[ms.Length];
+                buffer = ms.ToArray();
+            }
+
+            var fileEntity = await _fileRepository.SaveFile(new FileEntity
+            {
+                Name = inputFile.Name,
+                Type = input.Type,
+                Content = buffer,
+                ParentId = new Guid(input.ParenId),
+                Extension = input.Extension,
+                CreatedBy  = "Khoa",
+                ModifiedBy = "Khoa"
+            });
+
+            return new FileViewModel 
+            { 
+                Id = fileEntity.Id,
+                Type = fileEntity.Type,
+                Content = fileEntity.Content,
+                ModifiedAt = fileEntity.ModilfiedAt,
+                ModifiedBy = fileEntity.ModifiedBy
+            };
         }
     }
 }
