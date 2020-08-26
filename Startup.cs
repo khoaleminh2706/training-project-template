@@ -12,6 +12,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using FileServer.Data.Repositories;
+using FileServer.Services;
 
 namespace FileServer
 {
@@ -50,12 +52,15 @@ namespace FileServer
                 )
             );
 
+            services.AddTransient<IFileRepository, FileRepository>();
+            services.AddTransient<IFileService, FileService>();
+
             services.AddControllers(options =>
             {
-                var policy = new AuthorizationPolicyBuilder()
-                                .RequireAuthenticatedUser()
-                                .Build();
-                options.Filters.Add(new AuthorizeFilter(policy));
+                //var policy = new AuthorizationPolicyBuilder()
+                //                .RequireAuthenticatedUser()
+                //                .Build();
+                //options.Filters.Add(new AuthorizeFilter(policy));
             })
             .AddJsonOptions(options =>
             {
