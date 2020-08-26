@@ -32,7 +32,7 @@ namespace FileServer.Data.Migrations
                     Type = table.Column<string>(maxLength: 6, nullable: false),
                     Extension = table.Column<string>(maxLength: 5, nullable: true),
                     Content = table.Column<byte[]>(nullable: true),
-                    ParentId = table.Column<Guid>(nullable: false),
+                    ParentId = table.Column<Guid>(nullable: true),
                     CreatedBy = table.Column<string>(nullable: false),
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     ModifiedBy = table.Column<string>(nullable: false),
