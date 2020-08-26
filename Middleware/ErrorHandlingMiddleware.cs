@@ -1,4 +1,4 @@
-﻿using FileServer.Models;
+﻿using FileServer.Models.Exceptions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;

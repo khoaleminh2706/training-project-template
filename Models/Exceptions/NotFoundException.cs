@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FileServer.Models
+namespace FileServer.Models.Exceptions
 {
     public class NotFoundException: Exception
     {

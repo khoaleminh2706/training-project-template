@@ -1,13 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using FileServer.Models;
+using FileServer.Models.Exceptions;
 
 namespace FileServer.Controllers.Api
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class FileController : ControllerBase
+    public class FilesController : ControllerBase
     {
-        public FileController()
+        public FilesController()
         {
 
         }
