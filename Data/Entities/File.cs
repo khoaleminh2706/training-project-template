@@ -39,7 +39,7 @@ namespace FileServer.Data.Entities
         /// Id của folder chứa nó
         /// Điều kiện: item của id này phải là folder
         /// </summary>
-        public Guid ParentId { get; set; }
+        public Guid? ParentId { get; set; } = null;
 
         [Required]
         public string CreatedBy { get; set; }
