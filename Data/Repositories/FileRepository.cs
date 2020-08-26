@@ -3,6 +3,8 @@ using FileServer.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 
 namespace FileServer.Data.Repositories
@@ -16,9 +18,9 @@ namespace FileServer.Data.Repositories
             _context = context;
         }
 
-        public Task<File> Get(int id)
+        public async Task<File> Find(Guid id)
         {
-            throw new NotImplementedException();
+            return await _context.Files.Where(e => e.Id == id).FirstOrDefaultAsync();
         }
 
         public async Task<IEnumerable<File>> GetAll()

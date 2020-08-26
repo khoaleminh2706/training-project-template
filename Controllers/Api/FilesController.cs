@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using FileServer.Services;
 using FileServer.Models;
 using FileServer.Models.Exceptions;
+using System;
 
 namespace FileServer.Controllers.Api
 {
@@ -27,6 +28,12 @@ namespace FileServer.Controllers.Api
             return result;
         }
 
+        public async Task<ActionResult<FileViewModel>> Get(string id)
+        {
+            Guid guid = new Guid(id);
+            return await _fileService.Find(guid);
+        }
+
         [HttpPost]
         public async Task<ActionResult<FileViewModel>> Upload(FileCreateInput input, IFormFile file)
         {
@@ -42,7 +49,7 @@ namespace FileServer.Controllers.Api
                     throw new BadRequestException("Thiếu file");
                 }
 
-                // 
+                // check file 5MB
 
                 //create file
                 return await _fileService.SaveFile(file, input);

@@ -36,6 +36,21 @@ namespace FileServer.Services
             }).ToList();
         }
 
+        public async Task<FileViewModel> Find(Guid id)
+        {
+            var result = await _fileRepository.Find(id);
+
+            return new FileViewModel
+            {
+                Id = result.Id,
+                Name = result.Name,
+                Type = result.Type,
+                Content = result.Content,
+                ModifiedAt = result.ModilfiedAt,
+                ModifiedBy = result.ModifiedBy
+            };
+        }
+
         public async Task<FileViewModel> SaveFile(IFormFile inputFile, FileCreateInput input)
         {
             byte[] buffer = null;
