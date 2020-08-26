@@ -27,6 +27,7 @@ namespace FileServer.Services
                 Id = entity.Id,
                 Name = entity.Name,
                 Type = entity.Type,
+                Content = entity.Content,
                 ModifiedAt = entity.ModilfiedAt,
                 ModifiedBy = entity.ModifiedBy
             }).ToList();
