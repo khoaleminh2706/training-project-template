@@ -20,7 +20,11 @@ const tableRow = (
                 : 'fa-folder'
             }"></i></span>
             </td>
-            <td data-label="Name"><span>${file.name}</span></td>
+            <td data-label="Name"><span>${
+              file.type == 'file'
+                ? `<a target='_blank' href='/api/files/${file.id}/download'>${file.name}</a>`
+                : file.name
+            }</span></td>
             <td data-label="Modified"><span>${
               file.modifiedAt
             }</span></td>
