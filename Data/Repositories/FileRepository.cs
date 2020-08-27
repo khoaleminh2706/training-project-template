@@ -1,10 +1,9 @@
 ﻿using FileServer.Data.Entities;
-using FileServer.Models;
+using FileServer.Models.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 
 namespace FileServer.Data.Repositories
@@ -20,7 +19,7 @@ namespace FileServer.Data.Repositories
 
         public async Task<File> Find(Guid id)
         {
-            return await _context.Files.Where(e => e.Id == id).FirstOrDefaultAsync();
+            return await _context.Files.FirstOrDefaultAsync(e => e.Id == id);
         }
 
         public async Task<IEnumerable<File>> GetAll()
@@ -33,6 +32,19 @@ namespace FileServer.Data.Repositories
             _context.Files.Add(input);
             await _context.SaveChangesAsync();
             return input;
+        }
+
+        public async Task<File> Delete(Guid id)
+        {
+            var fileToDelete = await Find(id);
+            if (fileToDelete == null)
+            {
+                throw new NotFoundException("Không tìm thấy file");
+            }
+            _context.Files.Remove(fileToDelete);
+            await _context.SaveChangesAsync();
+
+            return fileToDelete;
         }
     }
 }

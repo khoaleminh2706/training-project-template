@@ -81,5 +81,22 @@ namespace FileServer.Services
                 ModifiedBy = fileEntity.ModifiedBy
             };
         }
+
+        public async Task<FileViewModel> Delete(string id)
+        {
+            Guid guid = new Guid(id);
+            var fileEntity = await _fileRepository.Delete(guid);
+
+            // TODO: Check if has childs
+
+            return new FileViewModel
+            {
+                Id = fileEntity.Id,
+                Type = fileEntity.Type,
+                Content = fileEntity.Content,
+                ModifiedAt = fileEntity.ModilfiedAt,
+                ModifiedBy = fileEntity.ModifiedBy
+            };
+        }
     }
 }

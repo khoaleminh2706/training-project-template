@@ -11,5 +11,6 @@ namespace FileServer.Services
         Task<List<FileViewModel>> GetAll();
         Task<FileViewModel> Find(Guid id);
         Task<FileViewModel> SaveFile(IFormFile inputFile, FileCreateInput input);
+        Task<FileViewModel> Delete(string id);
     }
 }
