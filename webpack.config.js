@@ -46,8 +46,8 @@ const commonConfig = {
   output: {
     filename: 'js/[name].js',
     chunkFilename: '[name].bundle.js?ver=[chunkhash]',
-    path: path.join(__dirname, '/wwwroot/'),
-    publicPath: './'
+    path: path.join(__dirname, '/Server/wwwroot/'),
+    publicPath: './',
   },
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
@@ -145,12 +145,12 @@ const commonConfig = {
         collapseWhitespace: false,
       },
     }),
-    ],
-    optimization: {
-        splitChunks: {
-            chunks: 'all',
-        },
-    }
+  ],
+  optimization: {
+    splitChunks: {
+      chunks: 'all',
+    },
+  },
 };
 
 module.exports = commonConfig;

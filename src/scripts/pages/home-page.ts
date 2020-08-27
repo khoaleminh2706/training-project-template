@@ -37,18 +37,19 @@ ready(() => {
   });
 
   fileService = new FileService();
-  fileService.getData();
-  tableRow(fileService.Data(), point);
-  addContextMenu();
+  fileService
+    .getData()
+    .then(() => tableRow(fileService.Data(), point))
+    .catch(err => console.log(err));
 
   // Modal to handle create and edit
-  $('#file-modal').on('show.bs.modal', event =>
-    handleModalShow(event),
-  );
+  // $('#file-modal').on('show.bs.modal', event =>
+  //   handleModalShow(event),
+  // );
 
-  window.addEventListener('click', function() {
-    showContextMenu(false);
-  });
+  // window.addEventListener('click', function() {
+  //   showContextMenu(false);
+  // });
 });
 
 function showContextMenu(show = true) {

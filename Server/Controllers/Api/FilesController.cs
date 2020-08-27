@@ -6,11 +6,13 @@ using FileServer.Services;
 using FileServer.Models;
 using FileServer.Models.Exceptions;
 using System;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FileServer.Controllers.Api
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class FilesController : ControllerBase
     {
         private readonly IFileService _fileService;

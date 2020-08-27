@@ -30,6 +30,7 @@ namespace FileServer.Services
                 Id = entity.Id,
                 Name = entity.Name,
                 Type = entity.Type,
+                Extension = entity.Extension,
                 Content = entity.Content,
                 ModifiedAt = entity.ModilfiedAt,
                 ModifiedBy = entity.ModifiedBy

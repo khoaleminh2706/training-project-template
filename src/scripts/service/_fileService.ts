@@ -1,20 +1,25 @@
+import $ from 'jquery';
+
 import BaseModel from '../types/BaseModel';
 import Folder from '../types/Folder';
 import File from '../types/FileType';
 import FileCreateInput from '../types/FileCreateInput';
 
-import serverData from '../constants/_serverData';
-import LocalData from '../utilities/_LocalData';
-
 class FileService {
   private data: Array<BaseModel> = [];
 
-  public getData = () => {
-    let jsonData = LocalData.get<BaseModel>('items');
+  public getData = async () => {
+    let jsonData: any[] = [];
 
-    if (jsonData.length === 0) {
-      jsonData = this.getDataFromServer();
-    }
+    jsonData = await $.ajax('/api/files', {
+      type: 'GET',
+      async: true,
+      success: data => {
+        return data;
+      },
+      error: err => console.log(err),
+    });
+    console.log(jsonData);
 
     // merge data to file type
     jsonData.forEach(obj => {
@@ -23,12 +28,6 @@ class FileService {
         else if (obj.type === 'folder') this.data.push(<Folder>obj);
       }
     });
-  };
-
-  private getDataFromServer = (): any => {
-    // save to local
-    LocalData.save('items', serverData);
-    return serverData;
   };
 
   public createNewFile = (
@@ -73,7 +72,7 @@ class FileService {
         }
 
         // save new data to localStorage
-        LocalData.save('items', this.data);
+        // LocalData.save('items', this.data);
       } catch (err) {
         reject({ success: false, errorMessgae: err });
       }
@@ -101,7 +100,7 @@ class FileService {
     // TODO: output error if any
 
     // save new data to localStorage
-    LocalData.save('items', this.data);
+    // LocalData.save('items', this.data);
     return { success: true };
   }
 
@@ -110,7 +109,7 @@ class FileService {
 
     // TODO: check errors if any
     // save new data to localStorage
-    LocalData.save('items', this.data);
+    // LocalData.save('items', this.data);
 
     return { success: true };
   }

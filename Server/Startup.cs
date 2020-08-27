@@ -57,10 +57,10 @@ namespace FileServer
 
             services.AddControllers(options =>
             {
-                //var policy = new AuthorizationPolicyBuilder()
-                //                .RequireAuthenticatedUser()
-                //                .Build();
-                //options.Filters.Add(new AuthorizeFilter(policy));
+                var policy = new AuthorizationPolicyBuilder()
+                                .RequireAuthenticatedUser()
+                                .Build();
+                options.Filters.Add(new AuthorizeFilter(policy));
             })
             .AddJsonOptions(options =>
             {
