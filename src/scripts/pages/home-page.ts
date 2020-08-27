@@ -41,7 +41,8 @@ ready(() => {
   // Modal to handle create and edit
   $('#file-modal').on('show.bs.modal', event => {
     const customerModel = new CustomModal(event, fileService);
-    customerModel.renderModel();
-    tableRow(fileService.Data(), point);
+    customerModel
+      .renderModal()
+      .then(() => tableRow(fileService.Data(), point));
   });
 });

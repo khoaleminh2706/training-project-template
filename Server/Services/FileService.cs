@@ -99,5 +99,19 @@ namespace FileServer.Services
                 ModifiedBy = fileEntity.ModifiedBy
             };
         }
+
+        public async Task<FileViewModel> AddFolder(string name)
+        {
+            var fileEntity = await _fileRepository.Add(name);
+
+            return new FileViewModel
+            {
+                Id = fileEntity.Id,
+                Type = fileEntity.Type,
+                Content = fileEntity.Content,
+                ModifiedAt = fileEntity.ModilfiedAt,
+                ModifiedBy = fileEntity.ModifiedBy
+            };
+        }
     }
 }

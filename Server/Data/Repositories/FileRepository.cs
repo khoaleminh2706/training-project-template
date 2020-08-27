@@ -1,9 +1,11 @@
 ﻿using FileServer.Data.Entities;
 using FileServer.Models.Exceptions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace FileServer.Data.Repositories
@@ -11,10 +13,12 @@ namespace FileServer.Data.Repositories
     public class FileRepository : IFileRepository
     {
         private readonly ApplicationDbContext _context;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public FileRepository(ApplicationDbContext context)
+        public FileRepository(ApplicationDbContext context, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<File> Find(Guid id)
@@ -24,7 +28,7 @@ namespace FileServer.Data.Repositories
 
         public async Task<IEnumerable<File>> GetAll()
         {
-            return await _context.Files.ToListAsync();
+            return await _context.Files.OrderBy(e => e.CreatedAt).ToListAsync();
         }
 
         public async Task<File> SaveFile(File input)
@@ -45,6 +49,33 @@ namespace FileServer.Data.Repositories
             await _context.SaveChangesAsync();
 
             return fileToDelete;
+        }
+
+        public async Task<File> Add(string name)
+        {
+            var file = await _context.Files.FirstOrDefaultAsync(e => e.Name ==  name);
+            if (file != null)
+            {
+                throw new BadRequestException("Folder đã tồn tại");
+            }
+
+            var userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            // save
+            File newFolder = new File
+            {
+                Id = Guid.NewGuid(),
+                Name = name,
+                Type = "folder",
+                Content = null,
+                Extension = null,
+                ModifiedBy = userId,
+                CreatedBy = userId,
+                CreatedAt = DateTime.UtcNow.AddHours(7),
+                ModilfiedAt = DateTime.UtcNow.AddHours(7)
+            };
+            _context.Files.Add(newFolder);
+            await _context.SaveChangesAsync();
+            return newFolder;
         }
     }
 }

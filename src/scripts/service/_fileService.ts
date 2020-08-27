@@ -43,54 +43,52 @@ class FileService {
     });
   };
 
-  public createNewFile = (
-    newFile: FileCreateInput,
-    parentId?: string,
-  ) =>
+  public createNewFolder = (name: string, parentId?: string) =>
     new Promise<ServiceResult>((resolve, reject) => {
       // check duplicate file name
-      if (this.hasAlreadyExisted(newFile.name, parentId)) {
+      if (this.hasAlreadyExisted(name, parentId)) {
         reject({
           success: false,
-          errorMessage: 'File đã tồn tại',
+          errorMessage: 'Folder đã tồn tại',
         });
       }
 
-      try {
-        const fileToAdd: BaseModel = {
-          id: Date.now().toString(),
-          name: newFile.name,
-          type: newFile.type,
-          createdAt: new Date(),
-          createdBy: 'Khoa',
-          modifiedAt: new Date(),
-          modifiedBy: 'Khoa',
-        };
-        switch (newFile.type) {
-          case 'file':
-            this.data.push({
-              ...fileToAdd,
-              extension: newFile.extension,
-            } as File);
-            break;
-          case 'folder':
-            this.data.push({
-              ...fileToAdd,
-              subFiles: [],
-            } as Folder);
-            break;
-          default:
-            reject({ success: false, errorMessgae: 'Failed' });
-            break;
-        }
+      $.ajax({
+        type: 'POST',
+        url: '/api/files/folder',
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify({ name }),
+        dataType: 'json',
+      })
+        .done(data => {
+          // save new data to localdata
+          console.log(data);
+          const addnew: File = {
+            id: data.id,
 
-        // save new data to localStorage
-        // LocalData.save('items', this.data);
-      } catch (err) {
-        reject({ success: false, errorMessgae: err });
-      }
+            // TODO: Sửa lại chỗ này
+            name,
+            extension: data.extension,
+            type: data.type,
+            modifiedAt: data.modifiedAt,
+            modifiedBy: data.modifiedBy,
+            createdAt: data.createdAt,
+            createdBy: data.createdBy,
+          };
 
-      resolve({ success: true });
+          this.data.push(addnew);
+
+          resolve({ success: true });
+        })
+        .catch(err => {
+          console.error(err.responseText);
+          reject({
+            success: false,
+            errorMessage: err.responseText
+              ? err.responseText
+              : (err as any).error,
+          });
+        });
     });
 
   public getDoc(id: string): ServiceResult {

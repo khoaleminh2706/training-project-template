@@ -1,5 +1,4 @@
 import BaseModel from '../types/BaseModel';
-import FileType from '../types/FileType';
 
 const tableRow = (
   data: Array<BaseModel>,
@@ -15,7 +14,7 @@ const tableRow = (
       html += `<tr data-id="${file.id}">
             <td data-label="File Type" scope="row">
             <span><i class="fas ${
-              (file as FileType).extension !== undefined
+              file.type == 'file'
                 ? 'fa-file-excel icon-excel'
                 : 'fa-folder'
             }"></i></span>

@@ -155,132 +155,10 @@
 /************************************************************************/
 /******/ ({
 
-/***/ "./src/scripts/components/_modalForm.ts":
-/*!**********************************************!*\
-  !*** ./src/scripts/components/_modalForm.ts ***!
-  \**********************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-function renderForm(item) {
-  var html = "\n    <form>\n      <div class=\"form-group\">\n        <input type=\"text\" \n            class=\"form-control\" \n            id=\"file-name\"\n            placeholder=\"T\xEAn file\"\n            name=\"file-name\"\n            value=\"" + (item ? item.name : '') + "\"\n        />\n      </div>\n      <div class=\"container\">\n        <ul id=\"error-messages\"></ul>\n      </div>\n    </form>\n    ";
-  return html;
-}
-
-exports.default = renderForm;
-
-/***/ }),
-
-/***/ "./src/scripts/components/_tableRow.ts":
-/*!*********************************************!*\
-  !*** ./src/scripts/components/_tableRow.ts ***!
-  \*********************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var tableRow = function tableRow(data, container) {
-  if (!container) {
-    console.error('Cannot find conatiner');
-    return;
-  }
-
-  var html = '';
-
-  if ((data === null || data === void 0 ? void 0 : data.length) !== 0) {
-    data.map(function (file) {
-      html += "<tr data-id=\"" + file.id + "\">\n            <td data-label=\"File Type\" scope=\"row\">\n            <span><i class=\"fas " + (file.extension !== undefined ? 'fa-file-excel icon-excel' : 'fa-folder') + "\"></i></span>\n            </td>\n            <td data-label=\"Name\"><span>" + file.name + "</span></td>\n            <td data-label=\"Modified\"><span>" + file.modifiedAt + "</span></td>\n            <td data-label=\"Modified By\"><span>" + file.modifiedBy + "</span></td>\n            <td></td>\n        </tr>";
-    });
-    container.innerHTML = html;
-  } else {
-    container.innerHTML = 'Không có dữ liệu nào';
-  }
-};
-
-exports.default = tableRow;
-
-/***/ }),
-
-/***/ "./src/scripts/constants/_serverData.ts":
-/*!**********************************************!*\
-  !*** ./src/scripts/constants/_serverData.ts ***!
-  \**********************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-var serverData = [{
-  id: '1',
-  name: 'CAS',
-  type: 'folder',
-  createdAt: new Date(),
-  createdBy: 'main',
-  modifiedAt: new Date(),
-  modifiedBy: 'Megan Bowen',
-  subFiles: []
-}, {
-  id: '2',
-  name: 'CoasterAndBargeLoading.xlsx',
-  type: 'file',
-  extension: 'xlsx',
-  createdAt: new Date(),
-  createdBy: 'main',
-  modifiedAt: new Date(),
-  modifiedBy: 'Administrator MOD'
-}, {
-  id: '3',
-  name: 'RevenueByService.xlsx',
-  type: 'file',
-  extension: 'xlsx',
-  createdAt: new Date(),
-  createdBy: 'main',
-  modifiedAt: new Date(),
-  modifiedBy: 'Administrator MOD'
-}, {
-  id: '4',
-  name: 'RevenueByService2016.xlsx',
-  type: 'file',
-  extension: 'xlsx',
-  createdAt: new Date(),
-  createdBy: 'main',
-  modifiedAt: new Date(),
-  modifiedBy: 'Administrator MOD'
-}, {
-  id: '5',
-  name: 'RevenueByService2017.xlsx',
-  type: 'file',
-  extension: 'xlsx',
-  createdAt: new Date(),
-  createdBy: 'main',
-  modifiedAt: new Date(),
-  modifiedBy: 'Administrator MOD'
-}];
-exports.default = serverData;
-
-/***/ }),
-
-/***/ "./src/scripts/pages/home-page.ts":
-/*!****************************************!*\
-  !*** ./src/scripts/pages/home-page.ts ***!
-  \****************************************/
+/***/ "./src/scripts/components/_customModal.ts":
+/*!************************************************!*\
+  !*** ./src/scripts/components/_customModal.ts ***!
+  \************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -442,13 +320,248 @@ Object.defineProperty(exports, "__esModule", {
 
 var jquery_1 = __importDefault(__webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js"));
 
+var CustomModal =
+/** @class */
+function () {
+  function CustomModal(endpoint, fileService) {
+    var _this = this;
+
+    this.renderModal = function () {
+      return new Promise(function (resolve, reject) {
+        var btnElement = _this.endpoint.relatedTarget;
+
+        if (!btnElement) {
+          console.error('Không tìm thấy button');
+          return;
+        }
+
+        var btn = jquery_1.default(btnElement);
+        var task = btn.data('task');
+        var type = btn.data('file');
+        var currentId = btn.data('id');
+        var item;
+
+        if (currentId) {
+          var result = _this.fileService.getDoc(currentId);
+
+          if (result.success && result.data) item = result.data;
+        }
+
+        var modal = jquery_1.default(_this.endpoint.target);
+        modal.find('.modal-title').text(task + " " + type); // render form body
+
+        var modalBody = modal.find('.modal-body');
+        if (task == 'delete') modalBody.html("<p>Are you sure you want to delete item Id=" + currentId + "</p>");else _this.renderForm(modalBody, undefined, type);
+        modal.find('.modal-footer').html("<button type=\"submit\"\n  class=\"btn btn-primary\" id=\"btnSubmitForm\">" + task + "</button>");
+        var errorList = modal.find('#error-messages');
+        jquery_1.default('#btnSubmitForm').on('click', function (event) {
+          var _a;
+
+          event.preventDefault();
+
+          if (task === 'create' || task === 'edit') {
+            // Data validation
+            // const name = modal
+            //   .find('input#file-name')
+            //   .val()
+            //   ?.toString();
+            // if (name === undefined || name === '') {
+            //   errorList.append(
+            //     '<li class="text-danger">Vui lòng điền tên file.</li>',
+            //   );
+            //   return;
+            // }
+            // // get file extension
+            // let extension: string | undefined;
+            // if (type == 'folder') {
+            //   if (name.lastIndexOf('.') !== -1) {
+            //     extension = name
+            //       .toString()
+            //       .substr(name.lastIndexOf('.') + 1);
+            //     if (!extension) {
+            //       // handle error
+            //       errorList.append(
+            //         '<li class="text-danger">Tên file phải có extension.</li>',
+            //       );
+            //       return;
+            //     }
+            //   } else if (!extension) {
+            //     // handle error
+            //     errorList.append(
+            //       '<li class="text-danger">Tên file phải có extension.</li>',
+            //     );
+            //     return;
+            //   }
+            // }
+            if (type == 'folder') {
+              var name_1 = (_a = modal.find('input#file-name').val()) === null || _a === void 0 ? void 0 : _a.toString();
+              if (name_1) _this.fileService.createNewFolder(name_1, currentId).then(function (result) {
+                if (result.success) {
+                  // Do something
+                  // hide modal
+                  modal.modal('hide');
+                  resolve();
+                }
+              }).catch(function (error) {
+                errorList.append("<li class=\"text-danger\">" + error.errorMessage + "</li>");
+                reject();
+              });
+            } // if (task === 'create') {
+            //   this.handleCreate(
+            //     {
+            //       name,
+            //       type,
+            //       extension,
+            //     },
+            //     currentId,
+            //   )
+            //     .then(result => {
+            //       if (result) {
+            //         // Do something
+            //       }
+            //     })
+            //     .catch(error => {
+            //       errorList.append(
+            //         `<li class="text-danger">${error}</li>`,
+            //       );
+            //     });
+            // } else if (task === 'edit' && currentId) {
+            //   this.handleEdit(currentId, name);
+            // }
+
+          }
+        });
+      });
+    };
+
+    this.renderForm = function (element, item, type) {
+      if (type === void 0) {
+        type = 'folder';
+      }
+
+      if (type == 'folder') {
+        element.html("\n      <form>\n        <div class=\"form-group\">\n          <input type=\"text\" \n              class=\"form-control\" \n              id=\"file-name\"\n              placeholder=\"T\xEAn file\"\n              name=\"file-name\"\n              value=\"" + (item ? item.name : '') + "\"\n          />\n        </div>\n        <div class=\"container\">\n          <ul id=\"error-messages\"></ul>\n        </div>\n      </form>\n      ");
+      } else {
+        element.html("\n      <form>\n      <div class=\"form-group\">\n        <input type=\"file\" \n            class=\"form-control\" \n            id=\"fileupload\"\n            placeholder=\"T\xEAn file\"\n            name=\"fileupload\"\n        />\n      </div>\n      <div class=\"container\">\n        <ul id=\"error-messages\"></ul>\n      </div>\n    </form>\n      ");
+      }
+    };
+
+    this.handleCreateFolder = function (name, parentId) {
+      return __awaiter(_this, void 0, void 0, function () {
+        var _a, success, errorMessage;
+
+        return __generator(this, function (_b) {
+          switch (_b.label) {
+            case 0:
+              return [4
+              /*yield*/
+              ];
+
+            case 1:
+              _a = _b.sent(), success = _a.success, errorMessage = _a.errorMessage;
+              if (!success || errorMessage) throw errorMessage;
+              return [2
+              /*return*/
+              , true];
+          }
+        });
+      });
+    };
+
+    this.handleEdit = function (id, fileName) {
+      var _a = _this.fileService.editFileName(id, fileName),
+          success = _a.success,
+          errorMessage = _a.errorMessage;
+
+      if (!success || errorMessage) return errorMessage;
+      return undefined;
+    };
+
+    this.handleDelete = function (id) {
+      var _a = _this.fileService.removeItem(id),
+          success = _a.success,
+          errorMessage = _a.errorMessage;
+
+      if (!success || errorMessage) return errorMessage;
+      return undefined;
+    };
+
+    this.endpoint = endpoint;
+    this.fileService = fileService;
+  }
+
+  return CustomModal;
+}();
+
+exports.default = CustomModal;
+
+/***/ }),
+
+/***/ "./src/scripts/components/_tableRow.ts":
+/*!*********************************************!*\
+  !*** ./src/scripts/components/_tableRow.ts ***!
+  \*********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var tableRow = function tableRow(data, container) {
+  if (!container) {
+    console.error('Cannot find conatiner');
+    return;
+  }
+
+  var html = '';
+
+  if ((data === null || data === void 0 ? void 0 : data.length) !== 0) {
+    data.map(function (file) {
+      html += "<tr data-id=\"" + file.id + "\">\n            <td data-label=\"File Type\" scope=\"row\">\n            <span><i class=\"fas " + (file.type == 'file' ? 'fa-file-excel icon-excel' : 'fa-folder') + "\"></i></span>\n            </td>\n            <td data-label=\"Name\"><span>" + file.name + "</span></td>\n            <td data-label=\"Modified\"><span>" + file.modifiedAt + "</span></td>\n            <td data-label=\"Modified By\"><span>" + file.modifiedBy + "</span></td>\n            <td></td>\n        </tr>";
+    });
+    container.innerHTML = html;
+  } else {
+    container.innerHTML = 'Không có dữ liệu nào';
+  }
+};
+
+exports.default = tableRow;
+
+/***/ }),
+
+/***/ "./src/scripts/pages/home-page.ts":
+/*!****************************************!*\
+  !*** ./src/scripts/pages/home-page.ts ***!
+  \****************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var __importDefault = this && this.__importDefault || function (mod) {
+  return mod && mod.__esModule ? mod : {
+    "default": mod
+  };
+};
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var jquery_1 = __importDefault(__webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js"));
+
 var _helper_1 = __importDefault(__webpack_require__(/*! ../utilities/_helper */ "./src/scripts/utilities/_helper.ts"));
 
 var _fileService_1 = __importDefault(__webpack_require__(/*! ../service/_fileService */ "./src/scripts/service/_fileService.ts"));
 
 var _tableRow_1 = __importDefault(__webpack_require__(/*! ../components/_tableRow */ "./src/scripts/components/_tableRow.ts"));
 
-var _modalForm_1 = __importDefault(__webpack_require__(/*! ../components/_modalForm */ "./src/scripts/components/_modalForm.ts"));
+var _customModal_1 = __importDefault(__webpack_require__(/*! ../components/_customModal */ "./src/scripts/components/_customModal.ts"));
 
 __webpack_require__(/*! bootstrap/js/dist/util */ "./node_modules/bootstrap/js/dist/util.js");
 
@@ -459,7 +572,6 @@ __webpack_require__(/*! bootstrap/js/dist/collapse */ "./node_modules/bootstrap/
 __webpack_require__(/*! bootstrap/js/dist/modal */ "./node_modules/bootstrap/js/dist/modal.js");
 
 var point = document.querySelector('#doc-list tbody');
-var contextMenu = document.getElementById('context-menu');
 var fileService;
 
 _helper_1.default(function () {
@@ -481,209 +593,19 @@ _helper_1.default(function () {
     });
   });
   fileService = new _fileService_1.default();
-  fileService.getData();
-
-  _tableRow_1.default(fileService.Data(), point);
-
-  addContextMenu(); // Modal to handle create and edit
+  fileService.getData().then(function () {
+    return _tableRow_1.default(fileService.Data(), point);
+  }).catch(function (err) {
+    return console.error(err);
+  }); // Modal to handle create and edit
 
   jquery_1.default('#file-modal').on('show.bs.modal', function (event) {
-    return handleModalShow(event);
-  });
-  window.addEventListener('click', function () {
-    showContextMenu(false);
-  });
-});
-
-function showContextMenu(show) {
-  if (show === void 0) {
-    show = true;
-  }
-
-  if (contextMenu) contextMenu.style.display = show ? 'block' : 'none';
-}
-/**
- * Hàm phụ trách về modal
- */
-
-
-function handleModalShow(event) {
-  var btnElement = event.relatedTarget;
-
-  if (!btnElement) {
-    console.error('Không tìm thấy button');
-    return;
-  }
-
-  var btn = jquery_1.default(btnElement);
-  var task = btn.data('task');
-  var type = btn.data('file');
-  var currentId = btn.data('id');
-  var item;
-
-  if (currentId) {
-    var result = fileService.getDoc(currentId);
-    if (result.success && result.data) item = result.data;
-  }
-
-  var modal = jquery_1.default(event.target);
-  modal.find('.modal-title').text(task + " " + type + " " + (currentId === '' ? currentId : '')); // render form body
-
-  if (task !== 'delete') modal.find('.modal-body').html(_modalForm_1.default(item));else modal.find('.modal-body').html("<p>Are you sure you want to delete item Id=" + currentId + "</p>");
-  modal.find('.modal-footer').html("<button type=\"submit\"\n  class=\"btn btn-primary\" id=\"btnSubmitForm\">" + task + "</button>");
-  var errorList = modal.find('#error-messages');
-  jquery_1.default('#btnSubmitForm').on('click', function (event) {
-    var _a;
-
-    event.preventDefault();
-
-    if (task === 'create' || task === 'edit') {
-      // Data validation
-      var name_1 = (_a = modal.find('input#file-name').val()) === null || _a === void 0 ? void 0 : _a.toString();
-
-      if (name_1 === undefined || name_1 === '') {
-        errorList.append('<li class="text-danger">Vui lòng điền tên file.</li>');
-        return;
-      } // get file extension
-
-
-      var extension = void 0;
-
-      if (type === 'file') {
-        if (name_1.lastIndexOf('.') !== -1) {
-          extension = name_1.toString().substr(name_1.lastIndexOf('.') + 1);
-
-          if (!extension) {
-            // handle error
-            errorList.append('<li class="text-danger">Tên file phải có extension.</li>');
-            return;
-          }
-        } else if (!extension) {
-          // handle error
-          errorList.append('<li class="text-danger">Tên file phải có extension.</li>');
-          return;
-        }
-      }
-
-      if (task === 'create') {
-        handleCreate({
-          name: name_1,
-          type: type,
-          extension: extension
-        }, currentId).then(function (result) {
-          if (result) {// Do something
-          }
-        }).catch(function (error) {
-          errorList.append("<li class=\"text-danger\">" + error + "</li>");
-        });
-      } else if (task === 'edit' && currentId) {
-        handleEdit(currentId, name_1);
-      }
-    } else if (task === 'delete' && currentId) {
-      handleDelete(currentId);
-    } // hide modal
-
-
-    modal.modal('hide'); // rerender doc list
-
-    _tableRow_1.default(fileService.Data(), point);
-
-    addContextMenu();
-  });
-}
-
-function addContextMenu() {
-  if (contextMenu) {
-    var docs = document.querySelectorAll('#doc-list tbody tr');
-
-    if (docs) {
-      docs.forEach(function (doc) {
-        contextMenuListener(doc, contextMenu);
-      });
-    }
-  }
-}
-
-function contextMenuListener(el, contextMenu) {
-  el.addEventListener('contextmenu', function (e) {
-    var _a;
-
-    e.preventDefault();
-    contextMenu.style.display = 'block';
-    contextMenu.style.top = e.y.toString();
-    contextMenu.style.left = e.x.toString();
-    var currentId = (_a = this.getAttribute('data-id')) !== null && _a !== void 0 ? _a : undefined;
-
-    if (currentId) {
-      // display id on context menu
-      var contextMenuHeader = contextMenu.querySelector('.dropdown-header');
-      if (contextMenuHeader) contextMenuHeader.innerText = "File Id = " + currentId;
-      var subFolderbtn = contextMenu.querySelector('button[data-file="subfolder"]');
-      var subFilebtn = contextMenu.querySelector('button[data-file="subfile"]');
-      var btnEdit = contextMenu.querySelector('button[data-task="edit"]');
-      var btnDelete = contextMenu.querySelector('button[data-task="delete"]');
-
-      if (btnEdit && btnDelete) {
-        btnEdit.setAttribute('data-id', currentId);
-        btnDelete.setAttribute('data-id', currentId);
-      }
-
-      if (fileService.isFolder(currentId) && subFilebtn && subFolderbtn) {
-        subFilebtn.classList.remove('hidden');
-        subFilebtn.setAttribute('data-id', currentId);
-        subFolderbtn.classList.remove('hidden');
-        subFolderbtn.setAttribute('data-id', currentId);
-      }
-    } else {
-      console.error('Không tìm thấy id của đối tượng');
-      return;
-    }
-
-    return false;
-  });
-}
-
-var handleCreate = function handleCreate(newFile, parentId) {
-  return __awaiter(void 0, void 0, void 0, function () {
-    var _a, success, errorMessage;
-
-    return __generator(this, function (_b) {
-      switch (_b.label) {
-        case 0:
-          return [4
-          /*yield*/
-          , fileService.createNewFile(newFile, parentId)];
-
-        case 1:
-          _a = _b.sent(), success = _a.success, errorMessage = _a.errorMessage;
-          if (!success || errorMessage) return [2
-          /*return*/
-          , errorMessage];
-          return [2
-          /*return*/
-          , undefined];
-      }
+    var customerModel = new _customModal_1.default(event, fileService);
+    customerModel.renderModal().then(function () {
+      return _tableRow_1.default(fileService.Data(), point);
     });
   });
-};
-
-function handleEdit(id, fileName) {
-  var _a = fileService.editFileName(id, fileName),
-      success = _a.success,
-      errorMessage = _a.errorMessage;
-
-  if (!success || errorMessage) return errorMessage;
-  return undefined;
-}
-
-function handleDelete(id) {
-  var _a = fileService.removeItem(id),
-      success = _a.success,
-      errorMessage = _a.errorMessage;
-
-  if (!success || errorMessage) return errorMessage;
-  return undefined;
-}
+});
 
 /***/ }),
 
@@ -713,6 +635,149 @@ var __assign = this && this.__assign || function () {
   return __assign.apply(this, arguments);
 };
 
+var __awaiter = this && this.__awaiter || function (thisArg, _arguments, P, generator) {
+  function adopt(value) {
+    return value instanceof P ? value : new P(function (resolve) {
+      resolve(value);
+    });
+  }
+
+  return new (P || (P = Promise))(function (resolve, reject) {
+    function fulfilled(value) {
+      try {
+        step(generator.next(value));
+      } catch (e) {
+        reject(e);
+      }
+    }
+
+    function rejected(value) {
+      try {
+        step(generator["throw"](value));
+      } catch (e) {
+        reject(e);
+      }
+    }
+
+    function step(result) {
+      result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
+    }
+
+    step((generator = generator.apply(thisArg, _arguments || [])).next());
+  });
+};
+
+var __generator = this && this.__generator || function (thisArg, body) {
+  var _ = {
+    label: 0,
+    sent: function sent() {
+      if (t[0] & 1) throw t[1];
+      return t[1];
+    },
+    trys: [],
+    ops: []
+  },
+      f,
+      y,
+      t,
+      g;
+  return g = {
+    next: verb(0),
+    "throw": verb(1),
+    "return": verb(2)
+  }, typeof Symbol === "function" && (g[Symbol.iterator] = function () {
+    return this;
+  }), g;
+
+  function verb(n) {
+    return function (v) {
+      return step([n, v]);
+    };
+  }
+
+  function step(op) {
+    if (f) throw new TypeError("Generator is already executing.");
+
+    while (_) {
+      try {
+        if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+        if (y = 0, t) op = [op[0] & 2, t.value];
+
+        switch (op[0]) {
+          case 0:
+          case 1:
+            t = op;
+            break;
+
+          case 4:
+            _.label++;
+            return {
+              value: op[1],
+              done: false
+            };
+
+          case 5:
+            _.label++;
+            y = op[1];
+            op = [0];
+            continue;
+
+          case 7:
+            op = _.ops.pop();
+
+            _.trys.pop();
+
+            continue;
+
+          default:
+            if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) {
+              _ = 0;
+              continue;
+            }
+
+            if (op[0] === 3 && (!t || op[1] > t[0] && op[1] < t[3])) {
+              _.label = op[1];
+              break;
+            }
+
+            if (op[0] === 6 && _.label < t[1]) {
+              _.label = t[1];
+              t = op;
+              break;
+            }
+
+            if (t && _.label < t[2]) {
+              _.label = t[2];
+
+              _.ops.push(op);
+
+              break;
+            }
+
+            if (t[2]) _.ops.pop();
+
+            _.trys.pop();
+
+            continue;
+        }
+
+        op = body.call(thisArg, _);
+      } catch (e) {
+        op = [6, e];
+        y = 0;
+      } finally {
+        f = t = 0;
+      }
+    }
+
+    if (op[0] & 5) throw op[1];
+    return {
+      value: op[0] ? op[1] : void 0,
+      done: true
+    };
+  }
+};
+
 var __importDefault = this && this.__importDefault || function (mod) {
   return mod && mod.__esModule ? mod : {
     "default": mod
@@ -723,9 +788,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _serverData_1 = __importDefault(__webpack_require__(/*! ../constants/_serverData */ "./src/scripts/constants/_serverData.ts"));
-
-var _LocalData_1 = __importDefault(__webpack_require__(/*! ../utilities/_LocalData */ "./src/scripts/utilities/_LocalData.ts"));
+var jquery_1 = __importDefault(__webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js"));
 
 var FileService =
 /** @class */
@@ -736,82 +799,105 @@ function () {
     this.data = [];
 
     this.getData = function () {
-      var jsonData = _LocalData_1.default.get('items');
+      return __awaiter(_this, void 0, void 0, function () {
+        var jsonData;
 
-      if (jsonData.length === 0) {
-        jsonData = _this.getDataFromServer();
-      } // merge data to file type
+        var _this = this;
 
+        return __generator(this, function (_a) {
+          switch (_a.label) {
+            case 0:
+              jsonData = [];
+              return [4
+              /*yield*/
+              , jquery_1.default.ajax('/api/files', {
+                type: 'GET',
+                async: true,
+                success: function success(data) {
+                  return data;
+                },
+                error: function error(err) {
+                  return console.log(err);
+                }
+              })];
 
-      jsonData.forEach(function (obj) {
-        if (!obj !== undefined && (obj === null || obj === void 0 ? void 0 : obj.type)) {
-          if (obj.type === 'file') _this.data.push(obj);else if (obj.type === 'folder') _this.data.push(obj);
-        }
+            case 1:
+              jsonData = _a.sent(); // merge data to file type
+
+              jsonData.forEach(function (obj) {
+                if (!obj !== undefined && (obj === null || obj === void 0 ? void 0 : obj.type)) {
+                  try {
+                    switch (obj.type) {
+                      case 'file':
+                        _this.data.push(obj);
+
+                        break;
+
+                      case 'folder':
+                        _this.data.push(obj);
+
+                        break;
+
+                      default:
+                        throw new Error("Wrong file type" + JSON.stringify(obj));
+                    }
+                  } catch (err) {
+                    console.error(err);
+                  }
+                }
+              });
+              return [2
+              /*return*/
+              ];
+          }
+        });
       });
     };
 
-    this.getDataFromServer = function () {
-      // save to local
-      _LocalData_1.default.save('items', _serverData_1.default);
-
-      return _serverData_1.default;
-    };
-
-    this.createNewFile = function (newFile, parentId) {
+    this.createNewFolder = function (name, parentId) {
       return new Promise(function (resolve, reject) {
         // check duplicate file name
-        if (_this.hasAlreadyExisted(newFile.name, parentId)) {
+        if (_this.hasAlreadyExisted(name, parentId)) {
           reject({
             success: false,
-            errorMessage: 'File đã tồn tại'
+            errorMessage: 'Folder đã tồn tại'
           });
         }
 
-        try {
-          var fileToAdd = {
-            id: Date.now().toString(),
-            name: newFile.name,
-            type: newFile.type,
-            createdAt: new Date(),
-            createdBy: 'Khoa',
-            modifiedAt: new Date(),
-            modifiedBy: 'Khoa'
+        jquery_1.default.ajax({
+          type: 'POST',
+          url: '/api/files/folder',
+          contentType: 'application/json; charset=utf-8',
+          data: JSON.stringify({
+            name: name
+          }),
+          dataType: 'json'
+        }).done(function (data) {
+          // save new data to localdata
+          console.log(data);
+          var addnew = {
+            id: data.id,
+            // TODO: Sửa lại chỗ này
+            name: name,
+            extension: data.extension,
+            type: data.type,
+            modifiedAt: data.modifiedAt,
+            modifiedBy: data.modifiedBy,
+            createdAt: data.createdAt,
+            createdBy: data.createdBy
           };
 
-          switch (newFile.type) {
-            case 'file':
-              _this.data.push(__assign(__assign({}, fileToAdd), {
-                extension: newFile.extension
-              }));
+          _this.data.push(addnew);
 
-              break;
-
-            case 'folder':
-              _this.data.push(__assign(__assign({}, fileToAdd), {
-                subFiles: []
-              }));
-
-              break;
-
-            default:
-              reject({
-                success: false,
-                errorMessgae: 'Failed'
-              });
-              break;
-          } // save new data to localStorage
-
-
-          _LocalData_1.default.save('items', _this.data);
-        } catch (err) {
+          resolve({
+            success: true
+          });
+        }).catch(function (err) {
+          console.error(err.responseText);
           reject({
             success: false,
-            errorMessgae: err
+            errorMessage: err.responseText ? err.responseText : err.error
           });
-        }
-
-        resolve({
-          success: true
         });
       });
     };
@@ -870,8 +956,7 @@ function () {
     }); // TODO: file vs folder?
     // TODO: output error if any
     // save new data to localStorage
-
-    _LocalData_1.default.save('items', this.data);
+    // LocalData.save('items', this.data);
 
     return {
       success: true
@@ -883,8 +968,7 @@ function () {
       return x.id !== id;
     }); // TODO: check errors if any
     // save new data to localStorage
-
-    _LocalData_1.default.save('items', this.data);
+    // LocalData.save('items', this.data);
 
     return {
       success: true
@@ -907,44 +991,6 @@ function () {
 }();
 
 exports.default = FileService;
-
-/***/ }),
-
-/***/ "./src/scripts/utilities/_LocalData.ts":
-/*!*********************************************!*\
-  !*** ./src/scripts/utilities/_LocalData.ts ***!
-  \*********************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-function get(name) {
-  var data = localStorage.getItem(name);
-  if (!data) return [];
-  return JSON.parse(data);
-}
-
-function save(name, data) {
-  try {
-    localStorage.setItem(name, JSON.stringify(data));
-  } catch (err) {
-    console.log(err);
-    return false;
-  }
-
-  return true;
-}
-
-exports.default = {
-  get: get,
-  save: save
-};
 
 /***/ }),
 

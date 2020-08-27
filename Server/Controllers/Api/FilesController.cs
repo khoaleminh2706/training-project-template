@@ -23,17 +23,24 @@ namespace FileServer.Controllers.Api
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<FileViewModel>>> GetFiles ()
+        public async Task<ActionResult<List<FileViewModel>>> GetFiles()
         {
             // TODO: paging and sorting
             var result = await _fileService.GetAll();
             return result;
         }
 
+        [HttpGet("{id}")]
         public async Task<ActionResult<FileViewModel>> Get(string id)
         {
             Guid guid = new Guid(id);
             return await _fileService.Find(guid);
+        }
+
+        [HttpPost("folder")]
+        public async Task<ActionResult<FileViewModel>> AddFolder([FromBody] FileCreateInput input)
+        {
+            return await _fileService.AddFolder(input.Name);
         }
 
         [HttpPost]
@@ -58,6 +65,12 @@ namespace FileServer.Controllers.Api
             }
 
             throw new BadRequestException("Không xác định loại file");
+        }
+
+        [HttpGet("error")]
+        public Task<ActionResult> Error()
+        {
+            throw new BadRequestException("You are wrong");
         }
     }
 }

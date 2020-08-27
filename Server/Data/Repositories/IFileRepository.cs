@@ -9,6 +9,7 @@ namespace FileServer.Data.Repositories
     {
         Task<IEnumerable<File>> GetAll();
         Task<File> Find(Guid id);
+        Task<File> Add(string name);
         Task<File> SaveFile(File input);
         Task<File> Delete(Guid id);
     }
