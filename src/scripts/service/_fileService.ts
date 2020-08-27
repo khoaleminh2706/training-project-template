@@ -19,13 +19,26 @@ class FileService {
       },
       error: err => console.log(err),
     });
-    console.log(jsonData);
 
     // merge data to file type
     jsonData.forEach(obj => {
       if (!obj !== undefined && obj?.type) {
-        if (obj.type === 'file') this.data.push(<File>obj);
-        else if (obj.type === 'folder') this.data.push(<Folder>obj);
+        try {
+          switch (obj.type) {
+            case 'file':
+              this.data.push(<File>obj);
+              break;
+            case 'folder':
+              this.data.push(<Folder>obj);
+              break;
+            default:
+              throw new Error(
+                `Wrong file type${JSON.stringify(obj)}`,
+              );
+          }
+        } catch (err) {
+          console.error(err);
+        }
       }
     });
   };

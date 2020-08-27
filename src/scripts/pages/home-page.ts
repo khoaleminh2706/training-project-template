@@ -40,7 +40,7 @@ ready(() => {
   fileService
     .getData()
     .then(() => tableRow(fileService.Data(), point))
-    .catch(err => console.log(err));
+    .catch(err => console.error(err));
 
   // Modal to handle create and edit
   // $('#file-modal').on('show.bs.modal', event =>
