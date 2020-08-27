@@ -47,9 +47,13 @@ namespace FileServer
             });
 
             services.AddDbContext<ApplicationDbContext>(options =>
+            {
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")
-                )
+                );
+                options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+            }
+                
             );
 
             services.AddTransient<IFileRepository, FileRepository>();

@@ -24,7 +24,7 @@ namespace FileServer.Data.Repositories
 
         public async Task<IEnumerable<File>> GetAll()
         {
-            return await _context.Files.AsNoTracking().ToListAsync();
+            return await _context.Files.ToListAsync();
         }
 
         public async Task<File> SaveFile(File input)
