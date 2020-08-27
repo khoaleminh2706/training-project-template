@@ -44,27 +44,18 @@ namespace FileServer.Controllers.Api
         }
 
         [HttpPost]
-        public async Task<ActionResult<FileViewModel>> Upload(FileCreateInput input, IFormFile file)
+        public async Task<ActionResult<FileViewModel>> Upload(IFormFile uploadFile)
         {
-            if (input.Type == "folder")
+            // check file tồn tại
+            if (uploadFile == null || uploadFile.Length == 0)
             {
-
-            }
-            else
-            {
-                // check file tồn tại
-                if (file == null || file.Length == 0)
-                {
-                    throw new BadRequestException("Thiếu file");
-                }
-
-                // check file 5MB
-
-                //create file
-                return await _fileService.SaveFile(file, input);
+                throw new BadRequestException("Thiếu file");
             }
 
-            throw new BadRequestException("Không xác định loại file");
+            // TODO: check file 5MB
+            
+            //create file
+            return await _fileService.SaveFile(uploadFile);
         }
 
         [HttpGet("error")]

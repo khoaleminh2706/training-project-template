@@ -1,4 +1,5 @@
 ﻿using FileServer.Data.Entities;
+using FileServer.Models;
 using FileServer.Models.Exceptions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -33,6 +34,9 @@ namespace FileServer.Data.Repositories
 
         public async Task<File> SaveFile(File input)
         {
+            var userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            input.ModifiedBy = userId;
+            input.CreatedBy = userId;
             _context.Files.Add(input);
             await _context.SaveChangesAsync();
             return input;

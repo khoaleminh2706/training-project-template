@@ -1,6 +1,7 @@
 ﻿using FileServer.Data.Repositories;
 using FileServer.Models;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -52,25 +53,31 @@ namespace FileServer.Services
             };
         }
 
-        public async Task<FileViewModel> SaveFile(IFormFile inputFile, FileCreateInput input)
+        public async Task<FileViewModel> SaveFile(IFormFile file)
         {
             byte[] buffer = null;
             using (MemoryStream ms = new MemoryStream())
             {
-                await inputFile.CopyToAsync(ms);
+                await file.CopyToAsync(ms);
                 buffer = new byte[ms.Length];
                 buffer = ms.ToArray();
             }
 
+            // get file extension
+            var fileExtension = Path.GetExtension(file.FileName);
+
+
+
+
             var fileEntity = await _fileRepository.SaveFile(new FileEntity
             {
-                Name = inputFile.Name,
-                Type = input.Type,
+                Name = file.Name,
+                Type = "file",
                 Content = buffer,
-                ParentId = new Guid(input.ParenId),
-                Extension = input.Extension,
-                CreatedBy  = "Khoa",
-                ModifiedBy = "Khoa"
+                ParentId = null,
+                Extension = fileExtension,
+                CreatedAt  = DateTime.UtcNow.AddHours(7),
+                ModilfiedAt = DateTime.UtcNow.AddHours(7)
             });
 
             return new FileViewModel 

@@ -99,7 +99,8 @@ class CustomModal {
               ?.toString();
 
             if (name)
-            this.fileService.createNewFolder(name, currentId)
+              this.fileService
+                .createNewFolder(name, currentId)
                 .then(result => {
                   if (result.success) {
                     // Do something
@@ -116,28 +117,25 @@ class CustomModal {
                 });
           }
 
-          // if (task === 'create') {
-          //   this.handleCreate(
-          //     {
-          //       name,
-          //       type,
-          //       extension,
-          //     },
-          //     currentId,
-          //   )
-          //     .then(result => {
-          //       if (result) {
-          //         // Do something
-          //       }
-          //     })
-          //     .catch(error => {
-          //       errorList.append(
-          //         `<li class="text-danger">${error}</li>`,
-          //       );
-          //     });
-          // } else if (task === 'edit' && currentId) {
-          //   this.handleEdit(currentId, name);
-          // }
+          if (type == 'file') {
+            const file = modal.find('#fileupload');
+            const formData = new FormData();
+            formData.append('uploadFile', (file[0] as any).files[0]);
+
+            this.fileService
+              .uploadFile(formData, currentId)
+              .then(result => {
+                // hide modal
+                modal.modal('hide');
+                resolve();
+              })
+              .catch(error => {
+                errorList.append(
+                  `<li class="text-danger">${error.errorMessage}</li>`,
+                );
+                reject();
+              });
+          }
         }
       });
     });
@@ -181,36 +179,6 @@ class CustomModal {
     </form>
       `);
     }
-  };
-
-  private handleCreateFolder = async (
-    name: string,
-    parentId?: string,
-  ): Promise<boolean> => {
-    const {
-      success,
-      errorMessage,
-    } = await 
-    if (!success || errorMessage) throw errorMessage;
-    return true;
-  };
-
-  private handleEdit = (
-    id: string,
-    fileName: string,
-  ): string | undefined => {
-    const { success, errorMessage } = this.fileService.editFileName(
-      id,
-      fileName,
-    );
-    if (!success || errorMessage) return errorMessage;
-    return undefined;
-  };
-
-  private handleDelete = (id: string): string | undefined => {
-    const { success, errorMessage } = this.fileService.removeItem(id);
-    if (!success || errorMessage) return errorMessage;
-    return undefined;
   };
 }
 

@@ -62,10 +62,8 @@ class FileService {
       })
         .done(data => {
           // save new data to localdata
-          console.log(data);
           const addnew: File = {
             id: data.id,
-
             // TODO: Sửa lại chỗ này
             name,
             extension: data.extension,
@@ -78,6 +76,33 @@ class FileService {
 
           this.data.push(addnew);
 
+          resolve({ success: true });
+        })
+        .catch(err => {
+          console.error(err.responseText);
+          reject({
+            success: false,
+            errorMessage: err.responseText
+              ? err.responseText
+              : (err as any).error,
+          });
+        });
+    });
+
+  public uploadFile = (formData: FormData, parentId?: string) =>
+    new Promise<ServiceResult>((resolve, reject) => {
+      $.ajax({
+        type: 'post',
+        url: '/api/files',
+        processData: false,
+        contentType: false,
+        data: formData,
+      })
+        .done(result => {
+          result.name = (formData.getAll(
+            'uploadFile',
+          )[0] as any).name;
+          this.data.push(result);
           resolve({ success: true });
         })
         .catch(err => {
