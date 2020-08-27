@@ -1,5 +1,4 @@
 import BaseModel from '../types/BaseModel';
-import FileType from '../types/FileType';
 
 const tableRow = (
   data: Array<BaseModel>,
