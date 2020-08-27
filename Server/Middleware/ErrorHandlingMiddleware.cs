@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Net;
+using System.Security.Claims;
 using System.Text.Json;
 using System.Threading.Tasks;
 
@@ -13,10 +14,12 @@ namespace FileServer.Middleware
     public class ErrorHandlingMiddleware
     {
         private readonly RequestDelegate _next;
-        
-        public ErrorHandlingMiddleware(RequestDelegate next)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
+        public ErrorHandlingMiddleware(RequestDelegate next, IHttpContextAccessor httpContextAccessor)
         {
             _next = next;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task Invoke(HttpContext context, IWebHostEnvironment env, ApplicationDbContext dbContext)
@@ -53,12 +56,14 @@ namespace FileServer.Middleware
                 message = exception.Message;
             }
 
+            var userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+
             // Save errors to database
             Error errorEntity = new Error()
             {
                 Message = exception.Message,
                 Content = exception.StackTrace,
-                CreateBy = "me"
+                CreateBy = userId
             };
             dbContext.Errors.Add(errorEntity);
             await dbContext.SaveChangesAsync();
