@@ -53,7 +53,7 @@ namespace FileServer.Middleware
             else
             {
                 status = HttpStatusCode.InternalServerError;
-                message = exception.Message;
+                message = "Lỗi server";
             }
 
             var userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
