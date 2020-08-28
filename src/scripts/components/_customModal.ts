@@ -3,7 +3,6 @@ import { ModalEventHandler } from 'bootstrap';
 
 import BaseModel from '../types/BaseModel';
 import FileService from '../service/_fileService';
-import FileCreateInput from '../types/FileCreateInput';
 
 class CustomModal {
   private endpoint: ModalEventHandler<HTMLElement>;

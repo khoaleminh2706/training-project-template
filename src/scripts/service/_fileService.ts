@@ -3,7 +3,6 @@ import $ from 'jquery';
 import BaseModel from '../types/BaseModel';
 import Folder from '../types/Folder';
 import File from '../types/FileType';
-import FileCreateInput from '../types/FileCreateInput';
 
 class FileService {
   private data: Array<BaseModel> = [];

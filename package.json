@@ -87,6 +87,7 @@
     "jquery": "^3.5.1",
     "keen-slider": "^5.0.5",
     "lit-html": "^1.2.1",
+    "moment": "^2.27.0",
     "popper.js": "^1.16.1"
   }
 }
