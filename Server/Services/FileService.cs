@@ -1,7 +1,6 @@
 ﻿using FileServer.Data.Repositories;
 using FileServer.Models;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -25,6 +24,23 @@ namespace FileServer.Services
             // TODO: use yield
             // UNDONE: add paging and sorting
             IEnumerable<FileEntity> fileEntities = await _fileRepository.GetAll();
+
+            // HACK: Tự gán DisplayName vào Id
+            foreach (var entity in fileEntities)
+            {
+                if (entity.ModifiedBy == "7eDi9RRGc3sCEJKsO8UY8t0Q41_iHX0FfQdc_gWKmY4")
+                {
+                    entity.ModifiedBy = "Khoa";
+                }
+                else if (entity.ModifiedBy == "xHL4tXdH5JeEjziMU28YcFC8FjQmPbiabaiqvKyiQPg")
+                {
+                    entity.ModifiedBy = "User 1";
+                }
+                else if (entity.ModifiedBy == "LoXDpYvrfi9VgW4dyNZpcUspXvpkypMHMAfJZkV4tNE")
+                {
+                    entity.ModifiedBy = "User 2";
+                }
+            }
 
             return fileEntities.Select(entity => new FileViewModel
             {
