@@ -1,12 +1,10 @@
-﻿using System.Diagnostics;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using FileServer.Models;
 using Microsoft.AspNetCore.Authorization;
 
 namespace FileServer.Controllers
 {
-  public class HomeController : Controller
+    public class HomeController : Controller
   {
     private readonly ILogger<HomeController> _logger;
 

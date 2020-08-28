@@ -27,7 +27,7 @@ namespace FileServer.Controllers.Api
                 {
                     Id = new Guid(),
                     Name = "CAS",
-                    Type = "fodler",
+                    Type = "folder",
                     Extension = "",
                     Content = null,
                     CreatedAt = DateTime.UtcNow.AddHours(7),

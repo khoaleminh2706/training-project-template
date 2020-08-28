@@ -7,12 +7,7 @@ using FileServer.Models;
 using FileServer.Models.Exceptions;
 using System;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.Extensions.Logging;
-using System.Net.Http;
-using System.Net;
-using System.Net.Http.Headers;
 using System.IO;
-using Microsoft.AspNetCore.Server.IIS.Core;
 
 namespace FileServer.Controllers.Api
 {
