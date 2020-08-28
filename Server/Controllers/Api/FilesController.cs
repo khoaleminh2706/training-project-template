@@ -7,6 +7,7 @@ using FileServer.Models;
 using FileServer.Models.Exceptions;
 using System;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Logging;
 
 namespace FileServer.Controllers.Api
 {
@@ -52,7 +53,11 @@ namespace FileServer.Controllers.Api
                 throw new BadRequestException("Thiếu file");
             }
 
-            // TODO: check file 5MB
+            // TODO: check file 2MB
+            if (uploadFile.Length > 2097152)
+            {
+                throw new BadRequestException("File không được lớn hơn 2MB");
+            }
             
             //create file
             return await _fileService.SaveFile(uploadFile);

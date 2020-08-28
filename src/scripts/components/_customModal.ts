@@ -55,43 +55,6 @@ class CustomModal {
         event.preventDefault();
 
         if (task === 'create' || task === 'edit') {
-          // Data validation
-          // const name = modal
-          //   .find('input#file-name')
-          //   .val()
-          //   ?.toString();
-
-          // if (name === undefined || name === '') {
-          //   errorList.append(
-          //     '<li class="text-danger">Vui lòng điền tên file.</li>',
-          //   );
-          //   return;
-          // }
-
-          // // get file extension
-          // let extension: string | undefined;
-
-          // if (type == 'folder') {
-          //   if (name.lastIndexOf('.') !== -1) {
-          //     extension = name
-          //       .toString()
-          //       .substr(name.lastIndexOf('.') + 1);
-          //     if (!extension) {
-          //       // handle error
-          //       errorList.append(
-          //         '<li class="text-danger">Tên file phải có extension.</li>',
-          //       );
-          //       return;
-          //     }
-          //   } else if (!extension) {
-          //     // handle error
-          //     errorList.append(
-          //       '<li class="text-danger">Tên file phải có extension.</li>',
-          //     );
-          //     return;
-          //   }
-          // }
-
           if (type == 'folder') {
             const name = modal
               .find('input#file-name')
@@ -118,13 +81,23 @@ class CustomModal {
           }
 
           if (type == 'file') {
-            const file = modal.find('#fileupload');
+            const fileInput = modal.find('#fileupload');
+            const file = (fileInput[0] as any).files[0];
+
+            // Check file size
+            if (file.size > 2097152) {
+              errorList.append(
+                `<li class="text-danger">File không được lớn hơn 2MB</li>`,
+              );
+              return;
+            }
+
             const formData = new FormData();
-            formData.append('uploadFile', (file[0] as any).files[0]);
+            formData.append('uploadFile', file);
 
             this.fileService
               .uploadFile(formData, currentId)
-              .then(result => {
+              .then(() => {
                 // hide modal
                 modal.modal('hide');
                 resolve();
@@ -133,7 +106,6 @@ class CustomModal {
                 errorList.append(
                   `<li class="text-danger">${error.errorMessage}</li>`,
                 );
-                reject();
               });
           }
         }
