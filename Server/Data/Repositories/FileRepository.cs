@@ -1,5 +1,4 @@
 ﻿using FileServer.Data.Entities;
-using FileServer.Models;
 using FileServer.Models.Exceptions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -29,7 +28,13 @@ namespace FileServer.Data.Repositories
 
         public async Task<IEnumerable<File>> GetAll()
         {
-            return await _context.Files.OrderBy(e => e.CreatedAt).ToListAsync();
+            var files = await _context.Files.OrderBy(e => e.CreatedAt).ToListAsync();
+            var ids = await _context.UserDatas.Where(u => files.Select(f => f.ModifiedBy).Distinct().Contains(u.Id)).ToListAsync();
+            return files.Select(f =>
+            {
+                f.ModifiedBy = ids.FirstOrDefault(id => id.Id == f.ModifiedBy).DisplayName;
+                return f;
+            }).ToList();
         }
 
         public async Task<File> SaveFile(File input)
