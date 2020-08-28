@@ -8,6 +8,11 @@ using FileServer.Models.Exceptions;
 using System;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
+using System.Net.Http;
+using System.Net;
+using System.Net.Http.Headers;
+using System.IO;
+using Microsoft.AspNetCore.Server.IIS.Core;
 
 namespace FileServer.Controllers.Api
 {
@@ -36,6 +41,30 @@ namespace FileServer.Controllers.Api
         {
             Guid guid = new Guid(id);
             return await _fileService.Find(guid);
+        }
+
+        [HttpGet("{id}/download")]
+        public async Task<IActionResult> DownloadFile(string id)
+        {
+            Guid guid = new Guid(id);
+            var file = await _fileService.Find(guid);
+
+            var mediaHeaders = new Dictionary<string, string>(){
+                {".xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"},
+                {".xls", "application/vnd.ms-excel"},
+                {".pdf", "application/pdf"}
+            };
+
+            if (file.Extension == null || mediaHeaders[file.Extension] == null)
+            {
+                throw new Exception($"Không support file đuôi: {file.Extension}");
+            }
+
+            MemoryStream ms = new MemoryStream(file.Content);
+            return new FileStreamResult(ms, mediaHeaders[file.Extension])
+            {
+                FileDownloadName = file.Name
+            };
         }
 
         [HttpPost("folder")]

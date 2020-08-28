@@ -47,6 +47,7 @@ namespace FileServer.Services
                 Id = result.Id,
                 Name = result.Name,
                 Type = result.Type,
+                Extension = result.Extension,
                 Content = result.Content,
                 ModifiedAt = result.ModilfiedAt,
                 ModifiedBy = result.ModifiedBy
@@ -67,11 +68,9 @@ namespace FileServer.Services
             var fileExtension = Path.GetExtension(file.FileName);
 
 
-
-
             var fileEntity = await _fileRepository.SaveFile(new FileEntity
             {
-                Name = file.Name,
+                Name = file.FileName,
                 Type = "file",
                 Content = buffer,
                 ParentId = null,

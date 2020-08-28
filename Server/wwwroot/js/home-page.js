@@ -217,39 +217,6 @@ function () {
           event.preventDefault();
 
           if (task === 'create' || task === 'edit') {
-            // Data validation
-            // const name = modal
-            //   .find('input#file-name')
-            //   .val()
-            //   ?.toString();
-            // if (name === undefined || name === '') {
-            //   errorList.append(
-            //     '<li class="text-danger">Vui lòng điền tên file.</li>',
-            //   );
-            //   return;
-            // }
-            // // get file extension
-            // let extension: string | undefined;
-            // if (type == 'folder') {
-            //   if (name.lastIndexOf('.') !== -1) {
-            //     extension = name
-            //       .toString()
-            //       .substr(name.lastIndexOf('.') + 1);
-            //     if (!extension) {
-            //       // handle error
-            //       errorList.append(
-            //         '<li class="text-danger">Tên file phải có extension.</li>',
-            //       );
-            //       return;
-            //     }
-            //   } else if (!extension) {
-            //     // handle error
-            //     errorList.append(
-            //       '<li class="text-danger">Tên file phải có extension.</li>',
-            //     );
-            //     return;
-            //   }
-            // }
             if (type == 'folder') {
               var name_1 = (_a = modal.find('input#file-name').val()) === null || _a === void 0 ? void 0 : _a.toString();
               if (name_1) _this.fileService.createNewFolder(name_1, currentId).then(function (result) {
@@ -266,17 +233,23 @@ function () {
             }
 
             if (type == 'file') {
-              var file = modal.find('#fileupload');
-              var formData = new FormData();
-              formData.append('uploadFile', file[0].files[0]);
+              var fileInput = modal.find('#fileupload');
+              var file = fileInput[0].files[0]; // Check file size
 
-              _this.fileService.uploadFile(formData, currentId).then(function (result) {
+              if (file.size > 2097152) {
+                errorList.append("<li class=\"text-danger\">File kh\xF4ng \u0111\u01B0\u1EE3c l\u1EDBn h\u01A1n 2MB</li>");
+                return;
+              }
+
+              var formData = new FormData();
+              formData.append('uploadFile', file);
+
+              _this.fileService.uploadFile(formData, currentId).then(function () {
                 // hide modal
                 modal.modal('hide');
                 resolve();
               }).catch(function (error) {
                 errorList.append("<li class=\"text-danger\">" + error.errorMessage + "</li>");
-                reject();
               });
             }
           }
@@ -331,7 +304,7 @@ var tableRow = function tableRow(data, container) {
 
   if ((data === null || data === void 0 ? void 0 : data.length) !== 0) {
     data.map(function (file) {
-      html += "<tr data-id=\"" + file.id + "\">\n            <td data-label=\"File Type\" scope=\"row\">\n            <span><i class=\"fas " + (file.type == 'file' ? 'fa-file-excel icon-excel' : 'fa-folder') + "\"></i></span>\n            </td>\n            <td data-label=\"Name\"><span>" + (file.type == 'file' ? "<a target=\"_blank\" href='/api/files/" + file.id + "/download'>" + file.name + "</a>" : file.name) + "</span></td>\n            <td data-label=\"Modified\"><span>" + file.modifiedAt + "</span></td>\n            <td data-label=\"Modified By\"><span>" + file.modifiedBy + "</span></td>\n            <td></td>\n        </tr>";
+      html += "<tr data-id=\"" + file.id + "\">\n            <td data-label=\"File Type\" scope=\"row\">\n            <span><i class=\"fas " + (file.type == 'file' ? 'fa-file-excel icon-excel' : 'fa-folder') + "\"></i></span>\n            </td>\n            <td data-label=\"Name\"><span>" + (file.type == 'file' ? "<a target='_blank' href='/api/files/" + file.id + "/download'>" + file.name + "</a>" : file.name) + "</span></td>\n            <td data-label=\"Modified\"><span>" + file.modifiedAt + "</span></td>\n            <td data-label=\"Modified By\"><span>" + file.modifiedBy + "</span></td>\n            <td></td>\n        </tr>";
     });
     container.innerHTML = html;
   } else {
