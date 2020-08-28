@@ -655,7 +655,7 @@ var tableRow = function tableRow(data, container) {
   var html = '';
 
   if ((data === null || data === void 0 ? void 0 : data.length) !== 0) {
-    data.map(function (file, index) {
+    data.map(function (file) {
       html += "<tr data-id=\"" + file.id + "\">\n            <td data-label=\"File Type\" scope=\"row\">\n              <span><i class=\"fas " + (file.type == 'file' ? 'fa-file-excel icon-excel' : 'fa-folder') + "\"></i></span>\n              <input type=\"checkbox\" data-value='" + file.id + "' class='chkChonFile' name='chonFile' />\n            </td>\n            <td data-label=\"Name\">\n            <span>" + (file.type == 'file' ? "<a target='_blank' href='/api/files/" + file.id + "/download'>" + file.name + "</a>" : file.name) + "</span></td>\n            <td data-label=\"Modified\"><span>" + moment_1.default(file.modifiedAt).format('DD/MM/YYYY') + "</span></td>\n            <td data-label=\"Modified By\"><span>" + file.modifiedBy + "</span></td>\n            <td></td>\n        </tr>";
     });
     container.innerHTML = html;

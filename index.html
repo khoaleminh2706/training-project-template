@@ -89,26 +89,38 @@
       <!-- Heading -->
       <h1>Documents</h1>
 
-      <button
-        type="button"
-        class="btn btn-primary btn-new"
-        data-toggle="modal"
-        data-target="#file-modal"
-        data-task="create"
-        data-file="file"
-      >
-        <i class="fas fa-file"></i> New file
-      </button>
-      <button
-        type="button"
-        class="btn btn-primary btn-new"
-        data-toggle="modal"
-        data-target="#file-modal"
-        data-task="create"
-        data-file="folder"
-      >
-        <i class="fas fa-folder"></i> New folder
-      </button>
+      <div class="row">
+        <button
+          type="button"
+          class="btn btn-primary btn-new"
+          data-toggle="modal"
+          data-target="#file-modal"
+          data-task="create"
+          data-file="file"
+        >
+          <i class="fas fa-file"></i> New file
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary btn-new"
+          data-toggle="modal"
+          data-target="#file-modal"
+          data-task="create"
+          data-file="folder"
+        >
+          <i class="fas fa-folder"></i> New folder
+        </button>
+      </div>
+
+      <div class="row hidden" id="menu-row">
+        <button type="button" class="btn">Update</button>
+        <button type="button" class="btn">Delete</button>
+        <button type="button" class="btn">New File</button>
+        <button type="button" class="btn">New Folder</button>
+        <button type="button" class="btn">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
 
       <!-- Documents list -->
       <table class="table" id="doc-list">

@@ -13855,5 +13855,8 @@ textarea.form-control {
 #home-page .hidden {
   display: none;
 }
+#home-page #menu-row {
+  border: 1px solid grey;
+}
 
 /*# sourceMappingURL=home-page.css.map*/
