@@ -80,6 +80,7 @@ namespace FileServer.Services
             return new FileViewModel 
             { 
                 Id = fileEntity.Id,
+                Name= fileEntity.Name,
                 Type = fileEntity.Type,
                 Content = fileEntity.Content,
                 ModifiedAt = fileEntity.ModilfiedAt,
@@ -97,6 +98,7 @@ namespace FileServer.Services
             return new FileViewModel
             {
                 Id = fileEntity.Id,
+                Name = fileEntity.Name,
                 Type = fileEntity.Type,
                 Content = fileEntity.Content,
                 ModifiedAt = fileEntity.ModilfiedAt,
@@ -111,6 +113,7 @@ namespace FileServer.Services
             return new FileViewModel
             {
                 Id = fileEntity.Id,
+                Name = fileEntity.Name,
                 Type = fileEntity.Type,
                 Content = fileEntity.Content,
                 ModifiedAt = fileEntity.ModilfiedAt,

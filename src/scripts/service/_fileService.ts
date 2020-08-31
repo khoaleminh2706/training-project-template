@@ -32,7 +32,7 @@ class FileService {
               break;
             default:
               throw new Error(
-                `Wrong file type${JSON.stringify(obj)}`,
+                `Wrong file type ${JSON.stringify(obj)}`,
               );
           }
         } catch (err) {
@@ -63,8 +63,7 @@ class FileService {
           // save new data to localdata
           const addnew: File = {
             id: data.id,
-            // TODO: Sửa lại chỗ này
-            name,
+            name: data.name,
             extension: data.extension,
             type: data.type,
             modifiedAt: data.modifiedAt,
@@ -98,9 +97,6 @@ class FileService {
         data: formData,
       })
         .done(result => {
-          result.name = (formData.getAll(
-            'uploadFile',
-          )[0] as any).name;
           this.data.push(result);
           resolve({ success: true });
         })

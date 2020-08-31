@@ -975,7 +975,7 @@ function () {
                         break;
 
                       default:
-                        throw new Error("Wrong file type" + JSON.stringify(obj));
+                        throw new Error("Wrong file type " + JSON.stringify(obj));
                     }
                   } catch (err) {
                     console.error(err);
@@ -1012,8 +1012,7 @@ function () {
           // save new data to localdata
           var addnew = {
             id: data.id,
-            // TODO: Sửa lại chỗ này
-            name: name,
+            name: data.name,
             extension: data.extension,
             type: data.type,
             modifiedAt: data.modifiedAt,
@@ -1046,8 +1045,6 @@ function () {
           contentType: false,
           data: formData
         }).done(function (result) {
-          result.name = formData.getAll('uploadFile')[0].name;
-
           _this.data.push(result);
 
           resolve({
