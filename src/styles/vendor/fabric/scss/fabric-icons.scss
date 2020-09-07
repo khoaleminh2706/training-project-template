@@ -3,7 +3,7 @@
 */
 @font-face {
   font-family: 'FabricMDL2Icons';
-  src: url('../fonts/fabric-icons.woff') format('woff');
+  src: url('../fonts/fabric-icons-592dc545.woff') format('woff');
 }
 
 .ms-Icon {
@@ -17,23 +17,25 @@
 }
 
 // Mixins
-@mixin ms-Icon--Flow { content: "\EF90"; }
+@mixin ms-Icon--Add { content: "\E710"; }
 @mixin ms-Icon--ExcelDocument { content: "\EF73"; }
-@mixin ms-Icon--SyncToPC { content: "\EE6E"; }
-@mixin ms-Icon--Upload { content: "\E898"; }
-@mixin ms-Icon--OpenFile { content: "\E8E5"; }
 @mixin ms-Icon--ExcelLogoInverse16 { content: "\F396"; }
 @mixin ms-Icon--FabricFolder { content: "\F0A9"; }
-@mixin ms-Icon--Add { content: "\E710"; }
+@mixin ms-Icon--Flow { content: "\EF90"; }
+@mixin ms-Icon--Glimmer { content: "\ECF4"; }
+@mixin ms-Icon--OpenFile { content: "\E8E5"; }
+@mixin ms-Icon--SyncToPC { content: "\EE6E"; }
+@mixin ms-Icon--Upload { content: "\E898"; }
 
 
 // Classes
-.ms-Icon--Flow:before { @include ms-Icon--Flow }
+.ms-Icon--Add:before { @include ms-Icon--Add }
 .ms-Icon--ExcelDocument:before { @include ms-Icon--ExcelDocument }
-.ms-Icon--SyncToPC:before { @include ms-Icon--SyncToPC }
-.ms-Icon--Upload:before { @include ms-Icon--Upload }
-.ms-Icon--OpenFile:before { @include ms-Icon--OpenFile }
 .ms-Icon--ExcelLogoInverse16:before { @include ms-Icon--ExcelLogoInverse16 }
 .ms-Icon--FabricFolder:before { @include ms-Icon--FabricFolder }
-.ms-Icon--Add:before { @include ms-Icon--Add }
+.ms-Icon--Flow:before { @include ms-Icon--Flow }
+.ms-Icon--Glimmer:before { @include ms-Icon--Glimmer }
+.ms-Icon--OpenFile:before { @include ms-Icon--OpenFile }
+.ms-Icon--SyncToPC:before { @include ms-Icon--SyncToPC }
+.ms-Icon--Upload:before { @include ms-Icon--Upload }
 
