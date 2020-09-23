@@ -7,10 +7,10 @@ namespace FileServer.Data.Repositories
 {
     public interface IFileRepository
     {
-        Task<IEnumerable<File>> GetAll();
-        Task<File> Find(Guid id);
-        Task<File> Add(string name);
-        Task<File> SaveFile(File input);
+        Task<IEnumerable<File>> GetAllAsync();
+        Task<File> FindAsync(Guid id);
+        Task<File> AddFolderAsync(string folderName);
+        Task<File> AddFileAsync(File input);
         Task<File> Delete(Guid id);
     }
 }

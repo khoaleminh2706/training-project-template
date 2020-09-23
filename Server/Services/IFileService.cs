@@ -8,10 +8,10 @@ namespace FileServer.Services
 {
     public interface IFileService
     {
-        Task<List<FileViewModel>> GetAll();
-        Task<FileViewModel> Find(Guid id);
-        Task<FileViewModel> AddFolder(string name);
-        Task<FileViewModel> SaveFile(IFormFile file);
-        Task<FileViewModel> Delete(string id);
+        Task<List<FileViewModel>> GetAllAsync();
+        Task<FileViewModel> FindAsync(Guid id);
+        Task<FileViewModel> AddFolderAsync(string name);
+        Task<FileViewModel> SaveFileAsync(IFormFile file);
+        Task<FileViewModel> DeleteAsync(string id);
     }
 }

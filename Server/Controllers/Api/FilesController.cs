@@ -27,7 +27,7 @@ namespace FileServer.Controllers.Api
         public async Task<ActionResult<List<FileViewModel>>> GetFiles()
         {
             // TODO: paging and sorting
-            var result = await _fileService.GetAll();
+            var result = await _fileService.GetAllAsync();
             return result;
         }
 
@@ -35,14 +35,14 @@ namespace FileServer.Controllers.Api
         public async Task<ActionResult<FileViewModel>> Get(string id)
         {
             Guid guid = new Guid(id);
-            return await _fileService.Find(guid);
+            return await _fileService.FindAsync(guid);
         }
 
         [HttpGet("{id}/download")]
         public async Task<IActionResult> DownloadFile(string id)
         {
             Guid guid = new Guid(id);
-            var file = await _fileService.Find(guid);
+            var file = await _fileService.FindAsync(guid);
 
             var mediaHeaders = new Dictionary<string, string>(){
                 {".xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"},
@@ -65,7 +65,7 @@ namespace FileServer.Controllers.Api
         [HttpPost("folder")]
         public async Task<ActionResult<FileViewModel>> AddFolder([FromBody] FileCreateInput input)
         {
-            return await _fileService.AddFolder(input.Name);
+            return await _fileService.AddFolderAsync(input.Name);
         }
 
         [HttpPost]
@@ -78,7 +78,7 @@ namespace FileServer.Controllers.Api
             }
 
             //create file
-            return await _fileService.SaveFile(uploadFile);
+            return await _fileService.SaveFileAsync(uploadFile);
         }
 
         [HttpGet("error")]

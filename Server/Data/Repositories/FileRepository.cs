@@ -21,12 +21,12 @@ namespace FileServer.Data.Repositories
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public async Task<File> Find(Guid id)
+        public async Task<File> FindAsync(Guid id)
         {
             return await _context.Files.FirstOrDefaultAsync(e => e.Id == id);
         }
 
-        public async Task<IEnumerable<File>> GetAll()
+        public async Task<IEnumerable<File>> GetAllAsync()
         {
             var files = await _context.Files.OrderBy(e => e.CreatedAt).ToListAsync();
             var ids = await _context.UserDatas.Where(u => files.Select(f => f.ModifiedBy).Distinct().Contains(u.Id)).ToListAsync();
@@ -37,7 +37,7 @@ namespace FileServer.Data.Repositories
             }).ToList();
         }
 
-        public async Task<File> SaveFile(File input)
+        public async Task<File> AddFileAsync(File input)
         {
             var userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
             input.ModifiedBy = userId;
@@ -49,7 +49,7 @@ namespace FileServer.Data.Repositories
 
         public async Task<File> Delete(Guid id)
         {
-            var fileToDelete = await Find(id);
+            var fileToDelete = await FindAsync(id);
             if (fileToDelete == null)
             {
                 throw new NotFoundException("Không tìm thấy file");
@@ -60,7 +60,7 @@ namespace FileServer.Data.Repositories
             return fileToDelete;
         }
 
-        public async Task<File> Add(string name)
+        public async Task<File> AddFolderAsync(string name)
         {
             var file = await _context.Files.FirstOrDefaultAsync(e => e.Name ==  name);
             if (file != null)

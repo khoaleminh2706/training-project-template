@@ -19,11 +19,11 @@ namespace FileServer.Services
             _fileRepository = fileRepository;
         }
 
-        public async Task<List<FileViewModel>> GetAll()
+        public async Task<List<FileViewModel>> GetAllAsync()
         {
             // TODO: use yield
             // UNDONE: add paging and sorting
-            IEnumerable<FileEntity> fileEntities = await _fileRepository.GetAll();
+            IEnumerable<FileEntity> fileEntities = await _fileRepository.GetAllAsync();
 
             return fileEntities.Select(entity => new FileViewModel
             {
@@ -36,9 +36,9 @@ namespace FileServer.Services
             }).ToList();
         }
 
-        public async Task<FileViewModel> Find(Guid id)
+        public async Task<FileViewModel> FindAsync(Guid id)
         {
-            var result = await _fileRepository.Find(id);
+            var result = await _fileRepository.FindAsync(id);
 
             return new FileViewModel
             {
@@ -52,7 +52,7 @@ namespace FileServer.Services
             };
         }
 
-        public async Task<FileViewModel> SaveFile(IFormFile file)
+        public async Task<FileViewModel> SaveFileAsync(IFormFile file)
         {
             byte[] buffer = null;
             using (MemoryStream ms = new MemoryStream())
@@ -66,7 +66,7 @@ namespace FileServer.Services
             var fileExtension = Path.GetExtension(file.FileName);
 
 
-            var fileEntity = await _fileRepository.SaveFile(new FileEntity
+            var fileEntity = await _fileRepository.AddFileAsync(new FileEntity
             {
                 Name = file.FileName,
                 Type = "file",
@@ -88,7 +88,7 @@ namespace FileServer.Services
             };
         }
 
-        public async Task<FileViewModel> Delete(string id)
+        public async Task<FileViewModel> DeleteAsync(string id)
         {
             Guid guid = new Guid(id);
             var fileEntity = await _fileRepository.Delete(guid);
@@ -106,9 +106,9 @@ namespace FileServer.Services
             };
         }
 
-        public async Task<FileViewModel> AddFolder(string name)
+        public async Task<FileViewModel> AddFolderAsync(string name)
         {
-            var fileEntity = await _fileRepository.Add(name);
+            var fileEntity = await _fileRepository.AddFolderAsync(name);
 
             return new FileViewModel
             {

@@ -52,14 +52,12 @@ namespace FileServer
                     Configuration.GetConnectionString("DefaultConnection")
                 );
                 options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
-            }
-                
-            );
+            });
 
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-
-            services.AddTransient<IFileRepository, FileRepository>();
-            services.AddTransient<IFileService, FileService>();
+            services.AddHttpContextAccessor();
+            
+            services.AddScoped<IFileRepository, FileRepository>();
+            services.AddScoped<IFileService, FileService>();
 
             services.AddControllers(options =>
             {
