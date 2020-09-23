@@ -1,6 +1,6 @@
 ﻿using FileServer.Repositories;
 using FileServer.Shared.ViewModels;
-using Microsoft.AspNetCore.Http;
+//using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -52,41 +52,42 @@ namespace FileServer.Services
             };
         }
 
-        public async Task<FileViewModel> SaveFileAsync(IFormFile file)
-        {
-            byte[] buffer = null;
-            using (MemoryStream ms = new MemoryStream())
-            {
-                await file.CopyToAsync(ms);
-                buffer = new byte[ms.Length];
-                buffer = ms.ToArray();
-            }
+        // FIXME: Fix this
+        //public async Task<FileViewModel> SaveFileAsync(IFormFile file)
+        //{
+        //    byte[] buffer = null;
+        //    using (MemoryStream ms = new MemoryStream())
+        //    {
+        //        await file.CopyToAsync(ms);
+        //        buffer = new byte[ms.Length];
+        //        buffer = ms.ToArray();
+        //    }
 
-            // get file extension
-            var fileExtension = Path.GetExtension(file.FileName);
+        //    // get file extension
+        //    var fileExtension = Path.GetExtension(file.FileName);
 
 
-            var fileEntity = await _fileRepository.AddFileAsync(new FileEntity
-            {
-                Name = file.FileName,
-                Type = "file",
-                Content = buffer,
-                ParentId = null,
-                Extension = fileExtension,
-                CreatedAt  = DateTime.UtcNow.AddHours(7),
-                ModilfiedAt = DateTime.UtcNow.AddHours(7)
-            });
+        //    var fileEntity = await _fileRepository.AddFileAsync(new FileEntity
+        //    {
+        //        Name = file.FileName,
+        //        Type = "file",
+        //        Content = buffer,
+        //        ParentId = null,
+        //        Extension = fileExtension,
+        //        CreatedAt  = DateTime.UtcNow.AddHours(7),
+        //        ModilfiedAt = DateTime.UtcNow.AddHours(7)
+        //    });
 
-            return new FileViewModel 
-            { 
-                Id = fileEntity.Id,
-                Name= fileEntity.Name,
-                Type = fileEntity.Type,
-                Content = fileEntity.Content,
-                ModifiedAt = fileEntity.ModilfiedAt,
-                ModifiedBy = fileEntity.ModifiedBy
-            };
-        }
+        //    return new FileViewModel 
+        //    { 
+        //        Id = fileEntity.Id,
+        //        Name= fileEntity.Name,
+        //        Type = fileEntity.Type,
+        //        Content = fileEntity.Content,
+        //        ModifiedAt = fileEntity.ModilfiedAt,
+        //        ModifiedBy = fileEntity.ModifiedBy
+        //    };
+        //}
 
         public async Task<FileViewModel> DeleteAsync(string id)
         {

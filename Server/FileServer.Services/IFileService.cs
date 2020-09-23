@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using FileServer.Shared.ViewModels;
-using Microsoft.AspNetCore.Http;
 
 namespace FileServer.Services
 {
@@ -11,7 +10,8 @@ namespace FileServer.Services
         Task<List<FileViewModel>> GetAllAsync();
         Task<FileViewModel> FindAsync(Guid id);
         Task<FileViewModel> AddFolderAsync(string name);
-        Task<FileViewModel> SaveFileAsync(IFormFile file);
+        // FIXME: only pass file input
+        //Task<FileViewModel> SaveFileAsync(IFormFile file);
         Task<FileViewModel> DeleteAsync(string id);
     }
 }
