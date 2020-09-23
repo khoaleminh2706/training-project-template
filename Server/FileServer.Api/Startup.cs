@@ -14,6 +14,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using FileServer.Data.Repositories;
 using FileServer.Services;
+using System.IO;
+using System.Net;
 
 namespace FileServer
 {
@@ -88,18 +90,28 @@ namespace FileServer
 
             app.UseMiddleware(typeof(ErrorHandlingMiddleware));
 
-            app.UseRouting();
             app.UseCookiePolicy();
+
             app.UseAuthentication();
+            
+            app.UseRouting();
             app.UseAuthorization();
 
-            app.UseStaticFiles();
+            app.UseDefaultFiles();
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                OnPrepareResponse = ctx =>
+                {
+                    if (!ctx.Context.User.Identity.IsAuthenticated)
+                    {
+                        ctx.Context.Response.Redirect("https://login.microsoftonline.com/");
+                    }
+                }
+            });
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllerRoute(
-                  name: "default",
-                  pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapControllers();
             });
         }
     }

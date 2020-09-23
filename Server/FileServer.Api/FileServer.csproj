@@ -26,4 +26,10 @@
 	  <Content Remove="node_modules\**" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <ProjectReference Include="..\FileServer.Repositories\FileServer.Repositories.csproj" />
+	  <ProjectReference Include="..\FileServer.Services\FileServer.Services.csproj" />
+	  <ProjectReference Include="..\FileServer.Shared\FileServer.Shared.csproj" />
+	</ItemGroup>
+
 </Project>
