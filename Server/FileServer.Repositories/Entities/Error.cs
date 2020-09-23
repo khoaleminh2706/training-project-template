@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FileServer.Repositories.Entities
 {
-    public class Error
+    internal class Error
     {
         public Error()
         {
@@ -15,27 +15,27 @@ namespace FileServer.Repositories.Entities
         [Key]
         [Required]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        internal int Id { get; set; }
         
         /// <summary>
         /// Error message 
         /// </summary>
         [Required]
-        public string Message { get; set; }
+        internal string Message { get; set; }
 
         /// <summary>
         /// StrackTrace của lỗi
         /// </summary>
         [Required]
-        public string Content { get; set; }
+        internal string Content { get; set; }
 
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow.AddHours(7);
+        internal DateTime CreatedAt { get; set; } = DateTime.UtcNow.AddHours(7);
 
         /// <summary>
         /// user id
         /// </summary>
         // TODO: get id of current user
-        public string  CreateBy { get; set; }
+        internal string  CreateBy { get; set; }
         #endregion
     }
 }

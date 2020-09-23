@@ -78,7 +78,8 @@ namespace FileServer.Controllers.Api
             }
 
             //create file
-            return await _fileService.SaveFileAsync(uploadFile);
+            //return await _fileService.SaveFileAsync(uploadFile);
+            return null;
         }
 
         [HttpGet("error")]

@@ -1,22 +1,23 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using FileServer.Repositories.Entities;
+using Microsoft.EntityFrameworkCore;
 
-namespace FileServer.Repositories.Entities
+namespace FileServer.Repositories
 {
-    public class ApplicationDbContext: DbContext
+    internal class ApplicationDbContext: DbContext
     {
-        public ApplicationDbContext(): base()
+        internal ApplicationDbContext(): base()
         {
 
         }
 
-        public ApplicationDbContext(DbContextOptions options): base(options)
+        internal ApplicationDbContext(DbContextOptions options): base(options)
         {
 
         }
 
-        public DbSet<File> Files { get; set; }
-        public DbSet<Error> Errors { get; set; }
-        public DbSet<UserData> UserDatas { get; set; }
+        internal DbSet<File> Files { get; set; }
+        internal DbSet<Error> Errors { get; set; }
+        internal DbSet<UserData> UserDatas { get; set; }
 
         #region Methods
         protected override void OnModelCreating(ModelBuilder moduleBuilder)

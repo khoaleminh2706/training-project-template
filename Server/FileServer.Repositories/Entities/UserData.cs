@@ -1,8 +1,8 @@
 ﻿namespace FileServer.Repositories.Entities
 {
-    public class UserData
+    internal class UserData
     {
-        public string Id { get; set; }
-        public string DisplayName { get; set; }
+        internal string Id { get; set; }
+        internal string DisplayName { get; set; }
     }
 }
