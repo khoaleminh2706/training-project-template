@@ -16,6 +16,7 @@ using FileServer.Data.Repositories;
 using FileServer.Services;
 using System.IO;
 using System.Net;
+using Microsoft.AspNetCore.Mvc;
 
 namespace FileServer
 {
@@ -93,21 +94,39 @@ namespace FileServer
             app.UseCookiePolicy();
 
             app.UseAuthentication();
-            
-            app.UseRouting();
-            app.UseAuthorization();
 
-            app.UseDefaultFiles();
-            app.UseStaticFiles(new StaticFileOptions
+            app.Use(async (context, next) =>
             {
-                OnPrepareResponse = ctx =>
+                if (context.User.Identity.IsAuthenticated)
                 {
-                    if (!ctx.Context.User.Identity.IsAuthenticated)
+                    await next.Invoke();
+                }
+                else
+                {
+                    if (context.Request.Headers["X-Requested-With"] == "XMLHttpRequest")
                     {
-                        ctx.Context.Response.Redirect("https://login.microsoftonline.com/");
+                        // webapp will then do a location.reload() which triggers the auth
+                        context.Response.StatusCode = 401;
+                    }
+                    else
+                    {
+                        string auth = context.Request.Headers["Authorization"];
+                        if (string.IsNullOrEmpty(auth) || !auth.StartsWith("Bearer ", System.StringComparison.OrdinalIgnoreCase))
+                        {
+                            await context.ChallengeAsync();
+                        }
+                        else
+                        {
+                            await next.Invoke();
+                        }
                     }
                 }
             });
+
+            app.UseRouting();
+
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
 
             app.UseEndpoints(endpoints =>
             {
