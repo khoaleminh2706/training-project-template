@@ -46,7 +46,7 @@ const commonConfig = {
   output: {
     filename: 'js/[name].js',
     chunkFilename: '[name].bundle.js?ver=[chunkhash]',
-    path: path.join(__dirname, '/Server/wwwroot/'),
+    path: path.join(__dirname, '/Server/FileServer.Api/wwwroot/'),
     publicPath: './',
   },
   resolve: {
