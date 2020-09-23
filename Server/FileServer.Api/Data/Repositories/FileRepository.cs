@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace FileServer.Data.Repositories
 {
-    public class FileRepository : IFileRepository
+    internal class FileRepository : IFileRepository
     {
         private readonly ApplicationDbContext _context;
         private readonly IHttpContextAccessor _httpContextAccessor;
@@ -86,5 +86,6 @@ namespace FileServer.Data.Repositories
             await _context.SaveChangesAsync();
             return newFolder;
         }
+
     }
 }

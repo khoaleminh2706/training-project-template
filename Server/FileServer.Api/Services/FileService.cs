@@ -1,5 +1,5 @@
 ﻿using FileServer.Data.Repositories;
-using FileServer.Models;
+using FileServer.Shared.ViewModels;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
@@ -10,7 +10,7 @@ using FileEntity = FileServer.Data.Entities.File;
 
 namespace FileServer.Services
 {
-    public class FileService : IFileService
+    internal class FileService : IFileService
     {
         private readonly IFileRepository _fileRepository;
 

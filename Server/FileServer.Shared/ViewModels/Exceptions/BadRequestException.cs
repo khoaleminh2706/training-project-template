@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FileServer.Models.Exceptions
+namespace FileServer.Shared.ViewModels.Exceptions
 {
     public class BadRequestException: Exception
     {

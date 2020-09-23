@@ -1,4 +1,4 @@
-﻿namespace FileServer.Models
+﻿namespace FileServer.Shared.ViewModels
 {
     public class FileCreateInput
     {

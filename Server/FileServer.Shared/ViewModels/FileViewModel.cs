@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FileServer.Models
+namespace FileServer.Shared.ViewModels
 {
     // UNDONE: Hiển thị file ở dưới thư mục
     public class FileViewModel

@@ -1,6 +1,6 @@
 ﻿using FileServer.Data;
 using FileServer.Data.Entities;
-using FileServer.Models.Exceptions;
+using FileServer.Shared.ViewModels.Exceptions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using System;

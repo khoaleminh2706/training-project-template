@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using FileServer.Models;
+using FileServer.Shared.ViewModels;
 using Microsoft.AspNetCore.Http;
 
 namespace FileServer.Services
