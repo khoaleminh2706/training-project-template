@@ -7,16 +7,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using FileServer.Middleware;
+using FileServer.Middlewares;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using FileServer.Data.Repositories;
 using FileServer.Services;
-using System.IO;
-using System.Net;
-using Microsoft.AspNetCore.Mvc;
 
 namespace FileServer
 {
