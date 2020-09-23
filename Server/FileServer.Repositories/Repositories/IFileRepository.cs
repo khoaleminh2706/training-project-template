@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using FileServer.Repositories.Entities;
+using FileServer.Shared.Models;
 
 namespace FileServer.Repositories
 {
     public interface IFileRepository
     {
-        //Task<IEnumerable<File>> GetAllAsync();
-        //Task<File> FindAsync(Guid id);
-        //Task<File> AddFolderAsync(string folderName);
-        //Task<File> AddFileAsync(File input);
-        //Task<File> Delete(Guid id);
+        Task<IEnumerable<FileModel>> GetAllAsync();
+        Task<FileModel> FindAsync(Guid id);
+        Task<FileModel> AddFolderAsync(string folderName);
+        Task<FileModel> AddFileAsync(FileModel input);
+        Task<FileModel> Delete(Guid id);
     }
 }

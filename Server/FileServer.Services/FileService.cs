@@ -1,12 +1,11 @@
 ﻿using FileServer.Repositories;
+using FileServer.Shared.Models;
 using FileServer.Shared.ViewModels;
-//using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using FileEntity = FileServer.Repositories.Entities.File;
 
 namespace FileServer.Services
 {
@@ -23,7 +22,7 @@ namespace FileServer.Services
         {
             // TODO: use yield
             // UNDONE: add paging and sorting
-            IEnumerable<FileEntity> fileEntities = await _fileRepository.GetAllAsync();
+            IEnumerable<FileModel> fileEntities = await _fileRepository.GetAllAsync();
 
             return fileEntities.Select(entity => new FileViewModel
             {
@@ -46,7 +45,6 @@ namespace FileServer.Services
                 Name = result.Name,
                 Type = result.Type,
                 Extension = result.Extension,
-                Content = result.Content,
                 ModifiedAt = result.ModilfiedAt,
                 ModifiedBy = result.ModifiedBy
             };
@@ -101,7 +99,6 @@ namespace FileServer.Services
                 Id = fileEntity.Id,
                 Name = fileEntity.Name,
                 Type = fileEntity.Type,
-                Content = fileEntity.Content,
                 ModifiedAt = fileEntity.ModilfiedAt,
                 ModifiedBy = fileEntity.ModifiedBy
             };
@@ -116,7 +113,6 @@ namespace FileServer.Services
                 Id = fileEntity.Id,
                 Name = fileEntity.Name,
                 Type = fileEntity.Type,
-                Content = fileEntity.Content,
                 ModifiedAt = fileEntity.ModilfiedAt,
                 ModifiedBy = fileEntity.ModifiedBy
             };

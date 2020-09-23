@@ -9,7 +9,6 @@ namespace FileServer.Shared.ViewModels
         public string Name { get; set; }
         public string Type { get; set; }
         public string Extension { get; set; }
-        public byte[] Content { get; set; }
         public DateTime ModifiedAt { get; set; }
         public string ModifiedBy { get; set; }
     }

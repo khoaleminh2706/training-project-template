@@ -21,7 +21,7 @@ namespace FileServer.Middlewares
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public async Task Invoke(HttpContext context, IWebHostEnvironment env, ApplicationDbContext dbContext)
+        public async Task Invoke(HttpContext context, IWebHostEnvironment env)
         {
             try
             {
@@ -29,11 +29,11 @@ namespace FileServer.Middlewares
             }
             catch (Exception ex)
             {
-                await HandleExceptionAsync(context, ex, env, dbContext);
+                await HandleExceptionAsync(context, ex, env);
             }
         }
 
-        private async Task HandleExceptionAsync(HttpContext context, Exception exception, IWebHostEnvironment env, ApplicationDbContext dbContext)
+        private async Task HandleExceptionAsync(HttpContext context, Exception exception, IWebHostEnvironment env)
         {
             HttpStatusCode status;
             string message;

@@ -5,11 +5,6 @@ namespace FileServer.Repositories.Entities
 {
     internal class File
     {
-        internal File()
-        {
-
-        }
-
         #region Properties
         [Key]
         [Required]

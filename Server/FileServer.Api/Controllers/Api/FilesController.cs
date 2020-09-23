@@ -55,7 +55,7 @@ namespace FileServer.Controllers.Api
                 throw new Exception($"Không support file đuôi: {file.Extension}");
             }
 
-            MemoryStream ms = new MemoryStream(file.Content);
+            MemoryStream ms = new MemoryStream(null); // FIXME: Use this new MemoryStream(file.Content);
             return new FileStreamResult(ms, mediaHeaders[file.Extension])
             {
                 FileDownloadName = file.Name
