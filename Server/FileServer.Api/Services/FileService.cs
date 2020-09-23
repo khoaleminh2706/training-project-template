@@ -1,4 +1,4 @@
-﻿using FileServer.Data.Repositories;
+﻿using FileServer.Repositories;
 using FileServer.Shared.ViewModels;
 using Microsoft.AspNetCore.Http;
 using System;
@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using FileEntity = FileServer.Data.Entities.File;
+using FileEntity = FileServer.Repositories.Entities.File;
 
 namespace FileServer.Services
 {

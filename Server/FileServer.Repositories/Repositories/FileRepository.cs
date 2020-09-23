@@ -1,24 +1,20 @@
-﻿using FileServer.Data.Entities;
-using FileServer.Models.Exceptions;
-using Microsoft.AspNetCore.Http;
+﻿using FileServer.Repositories.Entities;
+using FileServer.Shared.ViewModels.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 
-namespace FileServer.Data.Repositories
+namespace FileServer.Repositories
 {
     internal class FileRepository : IFileRepository
     {
         private readonly ApplicationDbContext _context;
-        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public FileRepository(ApplicationDbContext context, IHttpContextAccessor httpContextAccessor)
+        public FileRepository(ApplicationDbContext context)
         {
             _context = context;
-            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<File> FindAsync(Guid id)
@@ -39,9 +35,10 @@ namespace FileServer.Data.Repositories
 
         public async Task<File> AddFileAsync(File input)
         {
-            var userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            input.ModifiedBy = userId;
-            input.CreatedBy = userId;
+            // FIXME: Build a service to get userid instead
+            //var userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            //input.ModifiedBy = userId;
+            //input.CreatedBy = userId;
             _context.Files.Add(input);
             await _context.SaveChangesAsync();
             return input;
@@ -68,7 +65,7 @@ namespace FileServer.Data.Repositories
                 throw new BadRequestException("Folder đã tồn tại");
             }
 
-            var userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            //var userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
             // save
             File newFolder = new File
             {
@@ -77,8 +74,8 @@ namespace FileServer.Data.Repositories
                 Type = "folder",
                 Content = null,
                 Extension = null,
-                ModifiedBy = userId,
-                CreatedBy = userId,
+                //ModifiedBy = userId,
+                //CreatedBy = userId,
                 CreatedAt = DateTime.UtcNow.AddHours(7),
                 ModilfiedAt = DateTime.UtcNow.AddHours(7)
             };

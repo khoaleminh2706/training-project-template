@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace FileServer.Data.Entities
+namespace FileServer.Repositories.Entities
 {
     public class Error
     {

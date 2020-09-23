@@ -1,5 +1,4 @@
-﻿using FileServer.Data;
-using FileServer.Data.Entities;
+﻿using FileServer.Repositories.Entities;
 using FileServer.Shared.ViewModels.Exceptions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -58,15 +57,15 @@ namespace FileServer.Middlewares
 
             var userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-            // Save errors to database
-            Error errorEntity = new Error()
-            {
-                Message = exception.Message,
-                Content = exception.StackTrace,
-                CreateBy = userId
-            };
-            dbContext.Errors.Add(errorEntity);
-            await dbContext.SaveChangesAsync();
+            // FIXME: Save errors to database
+            //Error errorEntity = new Error()
+            //{
+            //    Message = exception.Message,
+            //    Content = exception.StackTrace,
+            //    CreateBy = userId
+            //};
+            //dbContext.Errors.Add(errorEntity);
+            //await dbContext.SaveChangesAsync();
 
             var result = JsonSerializer.Serialize(new { error = message });
             context.Response.ContentType = "application/json";

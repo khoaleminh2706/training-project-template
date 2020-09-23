@@ -1,4 +1,4 @@
-﻿namespace FileServer.Data.Entities
+﻿namespace FileServer.Repositories.Entities
 {
     public class UserData
     {

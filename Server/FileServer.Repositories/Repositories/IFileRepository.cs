@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using FileServer.Data.Entities;
+using FileServer.Repositories.Entities;
 
-namespace FileServer.Data.Repositories
+namespace FileServer.Repositories
 {
     public interface IFileRepository
     {

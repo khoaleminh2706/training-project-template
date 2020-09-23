@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using FileServer.Data.Entities;
 
-namespace FileServer.Data
+namespace FileServer.Repositories.Entities
 {
     public class ApplicationDbContext: DbContext
     {
