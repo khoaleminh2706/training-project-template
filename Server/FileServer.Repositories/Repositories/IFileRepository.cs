@@ -7,7 +7,7 @@ namespace FileServer.Repositories
 {
     public interface IFileRepository
     {
-        Task<IEnumerable<FileModel>> GetAllAsync();
+        Task<List<FileModel>> GetAllAsync();
         Task<FileModel> FindAsync(Guid id);
         Task<FileModel> AddFolderAsync(string folderName);
         Task<FileModel> AddFileAsync(FileModel input);

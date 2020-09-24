@@ -10,9 +10,9 @@ namespace FileServer.Repositories
         {
             services.AddDbContext<ApplicationDbContext>(options =>
             {
-                //options.UseSqlServer(
-                //    configuration.GetConnectionString("DefaultConnection")
-                //);
+                options.UseSqlServer(
+                    "Server=DESKTOP-NIPNEO2\\KHOA;Database=TrainingApp;User Id=sa;Password=Khoa276@;Integrated Security=False;MultipleActiveResultSets=True"
+                );
                 options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
             });
 

@@ -1,10 +1,9 @@
-﻿using FileServer.Repositories;
+﻿using AutoMapper;
+using FileServer.Repositories;
 using FileServer.Shared.Models;
 using FileServer.Shared.ViewModels;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace FileServer.Services
@@ -12,27 +11,20 @@ namespace FileServer.Services
     internal class FileService : IFileService
     {
         private readonly IFileRepository _fileRepository;
+        private readonly IMapper _mapper;
 
-        public FileService(IFileRepository fileRepository)
+        public FileService(IFileRepository fileRepository, IMapper mapper)
         {
             _fileRepository = fileRepository;
+            _mapper = mapper;
         }
 
         public async Task<List<FileViewModel>> GetAllAsync()
         {
             // TODO: use yield
             // UNDONE: add paging and sorting
-            IEnumerable<FileModel> fileEntities = await _fileRepository.GetAllAsync();
-
-            return fileEntities.Select(entity => new FileViewModel
-            {
-                Id = entity.Id,
-                Name = entity.Name,
-                Type = entity.Type,
-                Extension = entity.Extension,
-                ModifiedAt = entity.ModilfiedAt,
-                ModifiedBy = entity.ModifiedBy
-            }).ToList();
+            List<FileModel> result = await _fileRepository.GetAllAsync();
+            return _mapper.Map<List<FileModel>, List<FileViewModel>>(result);
         }
 
         public async Task<FileViewModel> FindAsync(Guid id)

@@ -1,4 +1,5 @@
-﻿using FileServer.Repositories.Entities;
+﻿using AutoMapper;
+using FileServer.Repositories.Entities;
 using FileServer.Shared.Models;
 using FileServer.Shared.ViewModels.Exceptions;
 using Microsoft.EntityFrameworkCore;
@@ -12,10 +13,12 @@ namespace FileServer.Repositories
     internal class FileRepository : IFileRepository
     {
         private readonly ApplicationDbContext _context;
+        private readonly IMapper _mapper;
 
-        public FileRepository(ApplicationDbContext context)
+        public FileRepository(ApplicationDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         public async Task<FileModel> FindAsync(Guid id)
@@ -28,7 +31,6 @@ namespace FileServer.Repositories
                 Name = result.Name,
                 Type = result.Type,
                 Extension = result.Extension,
-                Content = result.Content,
                 ParentId = result.ParentId,
                 CreatedBy = result.CreatedBy,
                 CreatedAt = result.CreatedAt
@@ -40,21 +42,23 @@ namespace FileServer.Repositories
             return await _context.Files.FirstOrDefaultAsync(e => e.Id == id);
         }
 
-        public async Task<IEnumerable<FileModel>> GetAllAsync()
+        public async Task<List<FileModel>> GetAllAsync()
         {
             var files = await _context.Files.OrderBy(e => e.CreatedAt).ToListAsync();
-            var ids = await _context.UserDatas.Where(u => files.Select(f => f.ModifiedBy).Distinct().Contains(u.Id)).ToListAsync();
-            return files.Select(f => new FileModel
-            {
-                Id = f.Id,
-                Name = f.Name,
-                Type = f.Type,
-                Extension = f.Extension,
-                Content = f.Content,
-                ParentId = f.ParentId,
-                CreatedBy = f.CreatedBy,
-                CreatedAt = f.CreatedAt
-            }).ToList();
+
+            var result = _mapper.Map<IEnumerable<File>, List<FileModel>>(files);
+            return result;
+
+            //return files.Select(f => new FileModel
+            //{
+            //    Id = f.Id,
+            //    Name = f.Name,
+            //    Type = f.Type,
+            //    Extension = f.Extension,
+            //    ParentId = f.ParentId,
+            //    CreatedBy = f.CreatedBy,
+            //    CreatedAt = f.CreatedAt
+            //}).ToList();
         }
 
         public async Task<FileModel> AddFileAsync(FileModel input)
@@ -69,7 +73,6 @@ namespace FileServer.Repositories
                 Name = input.Name,
                 Type = input.Type,
                 Extension = input.Extension,
-                Content = input.Content,
                 ParentId = input.ParentId,
                 CreatedBy = input.CreatedBy,
                 CreatedAt = input.CreatedAt
@@ -95,7 +98,6 @@ namespace FileServer.Repositories
                 Name = fileToDelete.Name,
                 Type = fileToDelete.Type,
                 Extension = fileToDelete.Extension,
-                Content = fileToDelete.Content,
                 ParentId = fileToDelete.ParentId,
                 CreatedBy = fileToDelete.CreatedBy,
                 CreatedAt = fileToDelete.CreatedAt
@@ -117,7 +119,6 @@ namespace FileServer.Repositories
                 Id = Guid.NewGuid(),
                 Name = name,
                 Type = "folder",
-                Content = null,
                 Extension = null,
                 //ModifiedBy = userId,
                 //CreatedBy = userId,
@@ -132,7 +133,6 @@ namespace FileServer.Repositories
                 Name = newFolder.Name,
                 Type = newFolder.Type,
                 Extension = newFolder.Extension,
-                Content = newFolder.Content,
                 ParentId = newFolder.ParentId,
                 CreatedBy = newFolder.CreatedBy,
                 CreatedAt = newFolder.CreatedAt

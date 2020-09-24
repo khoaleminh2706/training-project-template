@@ -5,12 +5,12 @@ namespace FileServer.Repositories
 {
     internal class ApplicationDbContext: DbContext
     {
-        internal ApplicationDbContext(): base()
+        public ApplicationDbContext(): base()
         {
 
         }
 
-        internal ApplicationDbContext(DbContextOptions options): base(options)
+        public ApplicationDbContext(DbContextOptions options): base(options)
         {
 
         }

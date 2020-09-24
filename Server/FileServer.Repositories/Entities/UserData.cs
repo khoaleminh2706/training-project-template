@@ -1,8 +1,11 @@
-﻿namespace FileServer.Repositories.Entities
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace FileServer.Repositories.Entities
 {
     internal class UserData
     {
-        internal string Id { get; set; }
-        internal string DisplayName { get; set; }
+        [Key]
+        public string Id { get; set; }
+        public string DisplayName { get; set; }
     }
 }

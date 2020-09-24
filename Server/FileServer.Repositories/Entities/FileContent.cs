@@ -7,14 +7,14 @@ namespace FileServer.Repositories.Entities
     {
         [Key]
         [Required]
-        internal Guid FileId { get; set; }
+        public Guid FileId { get; set; }
 
         /// <summary>
         /// File Content
         /// Nếu là file thì phải có 
         /// </summary>
-        internal byte[] Content { get; set; }
+        public byte[] Content { get; set; }
 
-        internal File File { get; set; }
+        public File File { get; set; }
     }
 }

@@ -8,41 +8,41 @@ namespace FileServer.Repositories.Entities
         #region Properties
         [Key]
         [Required]
-        internal Guid Id { get; set; }
+        public Guid Id { get; set; }
 
         [Required]
         [Range(0, 100, ErrorMessage = "Tên File phải từ 0-100 ký tự")]
-        internal string Name { get; set; }
+        public string Name { get; set; }
         
         [Required]
         [MaxLength(6)]
-        internal string Type { get; set; }
+        public string Type { get; set; }
         
         /// <summary>
         /// Nếu Type là File thì có extension
         /// </summary>
         [MaxLength(5, ErrorMessage = "Phần đuôi file có nhiều nhất 5 ký tự")]
-        internal string Extension { get; set; }
+        public string Extension { get; set; }
 
         /// <summary>
         /// Id của folder chứa nó
         /// Điều kiện: item của id này phải là folder
         /// </summary>
-        internal Guid? ParentId { get; set; } = null;
+        public Guid? ParentId { get; set; } = null;
 
         [Required]
-        internal string CreatedBy { get; set; }
+        public string CreatedBy { get; set; }
 
         [Required]
-        internal DateTime CreatedAt { get; set; }
+        public DateTime CreatedAt { get; set; }
 
         [Required]
-        internal string ModifiedBy { get; set; }
+        public string ModifiedBy { get; set; }
 
         [Required]
-        internal DateTime ModilfiedAt { get; set; }
+        public DateTime ModilfiedAt { get; set; }
         
-        internal FileContent FileContent { get; set; }
+        public FileContent FileContent { get; set; }
         #endregion
     }
 }
