@@ -30,9 +30,13 @@ namespace FileServer.Repositories
                 .HasForeignKey<FileContent>(fc => fc.FileId);
                 
             modelBuilder.Entity<FileContent>()
-                .ToTable("FileContent");
-            modelBuilder.Entity<Error>().ToTable("ExceptionLogs");
-            modelBuilder.Entity<UserData>().ToTable("UserData");
+                .ToTable("FileContent")
+                .HasIndex(e => new { e.FileId, e.Content });
+
+            modelBuilder.Entity<Error>()
+                .ToTable("ExceptionLogs");
+            modelBuilder.Entity<UserData>()
+                .ToTable("UserData");
         }
         #endregion
     }
