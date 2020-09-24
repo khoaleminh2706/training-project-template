@@ -8,7 +8,7 @@ namespace FileServer.Services.Mappings
     {
         public FileModelToFileViewModelProfile()
         {
-            CreateMap<FileModel, FileViewModel>();
+            CreateMap<FileModel, FileViewModel>().ReverseMap();
         }
     }
 }

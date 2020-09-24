@@ -1,4 +1,5 @@
 ﻿using System;
+using FileServer
 
 namespace FileServer.Shared.ViewModels
 {
@@ -9,6 +10,8 @@ namespace FileServer.Shared.ViewModels
         public string Name { get; set; }
         public string Type { get; set; }
         public string Extension { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public string CreatedBy { get; set; }
         public DateTime ModifiedAt { get; set; }
         public string ModifiedBy { get; set; }
     }

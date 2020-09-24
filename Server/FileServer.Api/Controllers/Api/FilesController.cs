@@ -1,13 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Http;
-using FileServer.Services;
+﻿using FileServer.Services;
 using FileServer.Shared.ViewModels;
 using FileServer.Shared.ViewModels.Exceptions;
-using System;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace FileServer.Controllers.Api
 {
@@ -17,10 +18,17 @@ namespace FileServer.Controllers.Api
     public class FilesController : ControllerBase
     {
         private readonly IFileService _fileService;
+        private readonly IFileContentService _fileContentService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public FilesController(IFileService fileService)
+        public FilesController(
+            IFileService fileService,
+            IFileContentService fileContentService,
+            IHttpContextAccessor httpContextAccessor)
         {
             _fileService = fileService;
+            _fileContentService = fileContentService;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         [HttpGet]
@@ -55,7 +63,7 @@ namespace FileServer.Controllers.Api
                 throw new Exception($"Không support file đuôi: {file.Extension}");
             }
 
-            MemoryStream ms = new MemoryStream(null); // FIXME: Use this new MemoryStream(file.Content);
+            MemoryStream ms = null; // FIXME: new MemoryStream(file.Content);
             return new FileStreamResult(ms, mediaHeaders[file.Extension])
             {
                 FileDownloadName = file.Name
@@ -77,15 +85,47 @@ namespace FileServer.Controllers.Api
                 throw new BadRequestException("Thiếu file");
             }
 
+            // get file extension
+            var fileExtension = Path.GetExtension(uploadFile.FileName);
+            var userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            FileViewModel newFile = new FileViewModel
+            {
+                Name = uploadFile.FileName,
+                Extension = fileExtension,
+                Type = "file",
+                CreatedBy = userId,
+                ModifiedBy = userId
+            };
+
             //create file
-            //return await _fileService.SaveFileAsync(uploadFile);
-            return null;
+            newFile = await _fileService.SaveFileAsync(newFile);
+
+            // save file content
+            if (newFile != null)
+            {
+                
+                var fileContent = await FileToBinaryCode(uploadFile);
+
+                FileContentViewModel fileContentViewModel = new FileContentViewModel
+                {
+                    FileId = newFile.Id,
+                    FileContent = fileContent
+                };
+                await _fileContentService.SaveFileContent(fileContentViewModel);
+            }
+            return newFile;
         }
 
-        [HttpGet("error")]
-        public Task<ActionResult> Error()
+        private async Task<byte[]> FileToBinaryCode(IFormFile formFile)
         {
-            throw new BadRequestException("You are wrong");
+            byte[] buffer = null;
+            using (MemoryStream ms = new MemoryStream())
+            {
+                await formFile.CopyToAsync(ms);
+                buffer = new byte[ms.Length];
+                buffer = ms.ToArray();
+            }
+            return buffer;
         }
     }
 }

@@ -7,8 +7,10 @@ namespace FileServer.Services
     {
         public static IServiceCollection Register(IServiceCollection services, IConfiguration configuration)
         {
-            services.AddScoped<IFileService, FileService>();
             Repositories.RegisterService.Register(services, configuration);
+            services.AddScoped<IFileService, FileService>();
+            services.AddScoped<IErrorService, ErrorService>();
+            services.AddScoped<IFileContentService, FileContentService>();
             return services;
         }
     }

@@ -18,6 +18,7 @@ namespace FileServer.Repositories
 
             services.AddScoped<IFileRepository, FileRepository>();
             services.AddScoped<IErrorRepository, ErrorRepository>();
+            services.AddScoped<IFileContentRepository, FileContentRepository>();
             return services;
         }
     }

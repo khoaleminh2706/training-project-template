@@ -1,14 +1,16 @@
 ﻿using FileServer.Repositories;
+using FileServer.Shared;
 using FileServer.Shared.Models;
 using System.Threading.Tasks;
 
 namespace FileServer.Services
 {
-    public class ErrorService : IErrorService
+
+    internal class ErrorService : IErrorService
     {
         private readonly IErrorRepository _errorRepository;
 
-        public ErrorService(IErrorRepository errorRepository)
+        public ErrorService(IErrorRepository errorRepository, IUserContext userContext)
         {
             _errorRepository = errorRepository;
         }

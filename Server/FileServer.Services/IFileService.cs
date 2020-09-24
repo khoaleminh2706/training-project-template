@@ -10,8 +10,7 @@ namespace FileServer.Services
         Task<List<FileViewModel>> GetAllAsync();
         Task<FileViewModel> FindAsync(Guid id);
         Task<FileViewModel> AddFolderAsync(string name);
-        // FIXME: only pass file input
-        //Task<FileViewModel> SaveFileAsync(IFormFile file);
+        Task<FileViewModel> SaveFileAsync(FileViewModel file);
         Task<FileViewModel> DeleteAsync(string id);
     }
 }

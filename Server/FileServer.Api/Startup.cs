@@ -1,5 +1,4 @@
 using FileServer.Extensions;
-using FileServer.Middlewares;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -38,7 +37,7 @@ namespace FileServer
 
             app.UseHttpsRedirection();
 
-            app.UseMiddleware(typeof(ErrorHandlingMiddleware));
+            //app.UseMiddleware(typeof(ErrorHandlingMiddleware));
 
             app.UseCookiePolicy();
 
