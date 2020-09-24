@@ -77,6 +77,7 @@ namespace FileServer
             app.UseDefaultFiles();
             app.UseStaticFiles();
 
+            app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
