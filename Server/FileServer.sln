@@ -5,11 +5,13 @@ VisualStudioVersion = 16.0.30517.126
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileServer", "FileServer.Api\FileServer.csproj", "{E2F03BAA-7D3B-45A7-BEBC-AD469BCCCB47}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileServer.Shared", "FileServer.Shared\FileServer.Shared.csproj", "{F326187C-97C3-4C1E-ACC3-7D41354756A5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileServer.Shared", "FileServer.Shared\FileServer.Shared.csproj", "{F326187C-97C3-4C1E-ACC3-7D41354756A5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileServer.Repositories", "FileServer.Repositories\FileServer.Repositories.csproj", "{18106908-D1AE-4A7F-A306-2A68AC735656}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileServer.Repositories", "FileServer.Repositories\FileServer.Repositories.csproj", "{18106908-D1AE-4A7F-A306-2A68AC735656}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileServer.Services", "FileServer.Services\FileServer.Services.csproj", "{830F2EF0-33BD-47E0-AFE9-ACF8C0853888}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileServer.Services", "FileServer.Services\FileServer.Services.csproj", "{830F2EF0-33BD-47E0-AFE9-ACF8C0853888}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimerJob", "TimerJob\TimerJob.csproj", "{E9E233B4-6FD0-45AC-B442-B8557A79D0B4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{830F2EF0-33BD-47E0-AFE9-ACF8C0853888}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{830F2EF0-33BD-47E0-AFE9-ACF8C0853888}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{830F2EF0-33BD-47E0-AFE9-ACF8C0853888}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E9E233B4-6FD0-45AC-B442-B8557A79D0B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E9E233B4-6FD0-45AC-B442-B8557A79D0B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E9E233B4-6FD0-45AC-B442-B8557A79D0B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E9E233B4-6FD0-45AC-B442-B8557A79D0B4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
