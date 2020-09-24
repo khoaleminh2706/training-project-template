@@ -19,4 +19,8 @@
     <ProjectReference Include="..\FileServer.Shared\FileServer.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Mappings\" />
+  </ItemGroup>
+
 </Project>

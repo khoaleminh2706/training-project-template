@@ -1,11 +1,11 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.AzureAD.UI;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Authorization;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -34,10 +34,9 @@ namespace FileServer.Extensions
 
             services.AddHttpContextAccessor();
 
-            //services.AddScoped<IFileRepository, FileRepository>();
-            //
             Services.RegisterService.Register(services);
 
+            services.AddAutoMapper(typeof(Startup));
             
             services.AddControllers(options =>
             {

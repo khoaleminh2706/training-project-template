@@ -25,12 +25,6 @@ namespace FileServer.Repositories.Entities
         internal string Extension { get; set; }
 
         /// <summary>
-        /// File Content
-        /// Nếu là file thì phải có 
-        /// </summary>
-        internal byte[] Content { get; set; }
-
-        /// <summary>
         /// Id của folder chứa nó
         /// Điều kiện: item của id này phải là folder
         /// </summary>
@@ -48,6 +42,7 @@ namespace FileServer.Repositories.Entities
         [Required]
         internal DateTime ModilfiedAt { get; set; }
         
+        internal FileContent FileContent { get; set; }
         #endregion
     }
 }

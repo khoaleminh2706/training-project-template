@@ -18,13 +18,21 @@ namespace FileServer.Repositories
         internal DbSet<File> Files { get; set; }
         internal DbSet<Error> Errors { get; set; }
         internal DbSet<UserData> UserDatas { get; set; }
+        internal DbSet<FileContent> FileContent { get; set; }
 
         #region Methods
-        protected override void OnModelCreating(ModelBuilder moduleBuilder)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            moduleBuilder.Entity<File>().ToTable("Files");
-            moduleBuilder.Entity<Error>().ToTable("ExceptionLogs");
-            moduleBuilder.Entity<UserData>().ToTable("UserData");
+            modelBuilder.Entity<File>()
+                .ToTable("Files")
+                .HasOne(f => f.FileContent)
+                .WithOne(f => f.File)
+                .HasForeignKey<FileContent>(fc => fc.FileId);
+                
+            modelBuilder.Entity<FileContent>()
+                .ToTable("FileContent");
+            modelBuilder.Entity<Error>().ToTable("ExceptionLogs");
+            modelBuilder.Entity<UserData>().ToTable("UserData");
         }
         #endregion
     }
