@@ -15,7 +15,9 @@ namespace FileServer.Extensions
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection FileServerService(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection FileServerService(
+            this IServiceCollection services, 
+            IConfiguration configuration)
         {
             services.Configure<CookiePolicyOptions>(options =>
             {
@@ -36,7 +38,7 @@ namespace FileServer.Extensions
 
             services.AddHttpContextAccessor();
 
-            Services.RegisterService.Register(services);
+            Services.RegisterService.Register(services, configuration);
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             

@@ -1,17 +1,17 @@
-﻿using FileServer.Repositories.Entities;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace FileServer.Repositories
 {
     public static class RegisterService
     {
-        public static IServiceCollection Register(IServiceCollection services)
+        public static IServiceCollection Register(IServiceCollection services, IConfiguration configuration)
         {
             services.AddDbContext<ApplicationDbContext>(options =>
             {
                 options.UseSqlServer(
-                    "Server=DESKTOP-NIPNEO2\\KHOA;Database=TrainingApp;User Id=sa;Password=Khoa276@;Integrated Security=False;MultipleActiveResultSets=True"
+                    configuration.GetConnectionString("DefaultConnection")
                 );
                 options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
             });

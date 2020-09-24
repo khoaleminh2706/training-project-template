@@ -34,13 +34,13 @@ namespace FileServer.Repositories.Entities
         public string CreatedBy { get; set; }
 
         [Required]
-        public DateTime CreatedAt { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow.AddHours(7);
 
         [Required]
         public string ModifiedBy { get; set; }
 
         [Required]
-        public DateTime ModilfiedAt { get; set; }
+        public DateTime ModilfiedAt { get; set; } = DateTime.UtcNow.AddHours(7);
         
         public FileContent FileContent { get; set; }
         #endregion

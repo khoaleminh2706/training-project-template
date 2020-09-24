@@ -23,18 +23,9 @@ namespace FileServer.Repositories
 
         public async Task<FileModel> FindAsync(Guid id)
         {
-            var result = await FindSingleAsync(id);
+            var fileItem = await FindSingleAsync(id);
 
-            return new FileModel
-            {
-                Id = result.Id,
-                Name = result.Name,
-                Type = result.Type,
-                Extension = result.Extension,
-                ParentId = result.ParentId,
-                CreatedBy = result.CreatedBy,
-                CreatedAt = result.CreatedAt
-            };
+            return _mapper.Map<FileModel>(fileItem);
         }
 
         private async Task<File> FindSingleAsync(Guid id)
@@ -46,19 +37,8 @@ namespace FileServer.Repositories
         {
             var files = await _context.Files.OrderBy(e => e.CreatedAt).ToListAsync();
 
-            var result = _mapper.Map<IEnumerable<File>, List<FileModel>>(files);
+            var result = _mapper.Map<List<FileModel>>(files);
             return result;
-
-            //return files.Select(f => new FileModel
-            //{
-            //    Id = f.Id,
-            //    Name = f.Name,
-            //    Type = f.Type,
-            //    Extension = f.Extension,
-            //    ParentId = f.ParentId,
-            //    CreatedBy = f.CreatedBy,
-            //    CreatedAt = f.CreatedAt
-            //}).ToList();
         }
 
         public async Task<FileModel> AddFileAsync(FileModel input)
@@ -67,18 +47,11 @@ namespace FileServer.Repositories
             //var userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
             //input.ModifiedBy = userId;
             //input.CreatedBy = userId;
-            File newFile = new File
-            {
-                Id = input.Id,
-                Name = input.Name,
-                Type = input.Type,
-                Extension = input.Extension,
-                ParentId = input.ParentId,
-                CreatedBy = input.CreatedBy,
-                CreatedAt = input.CreatedAt
-            };
+
+            File newFile = _mapper.Map<File>(input);
             _context.Files.Add(newFile);
             await _context.SaveChangesAsync();
+            input = _mapper.Map<FileModel>(newFile);
             return input;
         }
 
@@ -92,16 +65,7 @@ namespace FileServer.Repositories
             _context.Files.Remove(fileToDelete);
             await _context.SaveChangesAsync();
 
-            return new FileModel
-            {
-                Id = fileToDelete.Id,
-                Name = fileToDelete.Name,
-                Type = fileToDelete.Type,
-                Extension = fileToDelete.Extension,
-                ParentId = fileToDelete.ParentId,
-                CreatedBy = fileToDelete.CreatedBy,
-                CreatedAt = fileToDelete.CreatedAt
-            };
+            return _mapper.Map<FileModel>(fileToDelete);
         }
 
         public async Task<FileModel> AddFolderAsync(string name)
@@ -112,32 +76,12 @@ namespace FileServer.Repositories
                 throw new BadRequestException("Folder đã tồn tại");
             }
 
+            // FIXME: phải làm cho được.
             //var userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            // save
-            File newFolder = new File
-            {
-                Id = Guid.NewGuid(),
-                Name = name,
-                Type = "folder",
-                Extension = null,
-                //ModifiedBy = userId,
-                //CreatedBy = userId,
-                CreatedAt = DateTime.UtcNow.AddHours(7),
-                ModilfiedAt = DateTime.UtcNow.AddHours(7)
-            };
+            File newFolder = _mapper.Map<File>(file);
             _context.Files.Add(newFolder);
             await _context.SaveChangesAsync();
-            return new FileModel
-            {
-                Id = newFolder.Id,
-                Name = newFolder.Name,
-                Type = newFolder.Type,
-                Extension = newFolder.Extension,
-                ParentId = newFolder.ParentId,
-                CreatedBy = newFolder.CreatedBy,
-                CreatedAt = newFolder.CreatedAt
-            };
+            return _mapper.Map<FileModel>(newFolder);
         }
-
     }
 }
