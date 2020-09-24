@@ -5,7 +5,7 @@ namespace FileServer.Services
 {
     public static class RegisterService
     {
-        public static IServiceCollection Register(IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection Register(this IServiceCollection services, IConfiguration configuration)
         {
             Repositories.RegisterService.Register(services, configuration);
             services.AddScoped<IFileService, FileService>();

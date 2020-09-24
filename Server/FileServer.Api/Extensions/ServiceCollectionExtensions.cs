@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FileServer.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.AzureAD.UI;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
@@ -9,7 +10,6 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Reflection;
 
 namespace FileServer.Extensions
 {
@@ -38,7 +38,7 @@ namespace FileServer.Extensions
 
             services.AddHttpContextAccessor();
 
-            Services.RegisterService.Register(services, configuration);
+            services.Register(configuration);
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             
