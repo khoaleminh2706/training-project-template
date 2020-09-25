@@ -1,12 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using FileServer.Repositories;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 
-namespace FileServer.Repositories
+namespace Microsoft.Extensions.DependencyInjection
 {
     public static class RegisterService
     {
-        public static IServiceCollection Register(IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection RegisterRepositories(
+            this IServiceCollection services,
+            IConfiguration configuration)
         {
             services.AddDbContext<ApplicationDbContext>(options =>
             {

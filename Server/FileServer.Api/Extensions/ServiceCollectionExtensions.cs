@@ -38,7 +38,7 @@ namespace FileServer.Extensions
 
             services.AddHttpContextAccessor();
 
-            services.Register(configuration);
+            services.RegisterServices(configuration);
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             

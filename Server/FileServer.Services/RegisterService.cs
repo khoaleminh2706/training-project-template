@@ -1,13 +1,15 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+﻿using FileServer.Services;
+using Microsoft.Extensions.Configuration;
 
-namespace FileServer.Services
+namespace Microsoft.Extensions.DependencyInjection
 {
     public static class RegisterService
     {
-        public static IServiceCollection Register(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection RegisterServices(
+            this IServiceCollection services,
+            IConfiguration configuration)
         {
-            Repositories.RegisterService.Register(services, configuration);
+            services.RegisterRepositories(configuration);
             services.AddScoped<IFileService, FileService>();
             services.AddScoped<IErrorService, ErrorService>();
             services.AddScoped<IFileContentService, FileContentService>();
