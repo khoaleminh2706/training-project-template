@@ -12,7 +12,6 @@ namespace FileServer.Repositories
         private readonly IMapper _mapper;
         public ErrorRepository(
             ApplicationDbContext context,
-            IUserContext user,
             IMapper mapper)
         {
             _context = context;

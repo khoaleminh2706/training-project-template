@@ -1,5 +1,4 @@
 ﻿using System;
-using FileServer
 
 namespace FileServer.Shared.ViewModels
 {

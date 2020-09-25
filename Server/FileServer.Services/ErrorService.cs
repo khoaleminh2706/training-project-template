@@ -10,7 +10,7 @@ namespace FileServer.Services
     {
         private readonly IErrorRepository _errorRepository;
 
-        public ErrorService(IErrorRepository errorRepository, IUserContext userContext)
+        public ErrorService(IErrorRepository errorRepository)
         {
             _errorRepository = errorRepository;
         }

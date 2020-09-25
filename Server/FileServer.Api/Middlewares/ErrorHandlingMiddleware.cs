@@ -14,19 +14,19 @@ namespace FileServer.Middlewares
     {
         private readonly RequestDelegate _next;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly IErrorService _errorService;
 
         public ErrorHandlingMiddleware(
             RequestDelegate next, 
-            IHttpContextAccessor httpContextAccessor,
-            IErrorService errorService)
+            IHttpContextAccessor httpContextAccessor)
         {
             _next = next;
             _httpContextAccessor = httpContextAccessor;
-            _errorService = errorService;
         }
 
-        public async Task Invoke(HttpContext context, IWebHostEnvironment env)
+        public async Task Invoke(
+            HttpContext context, 
+            IWebHostEnvironment env,
+            IErrorService errorService)
         {
             try
             {
@@ -34,11 +34,15 @@ namespace FileServer.Middlewares
             }
             catch (Exception ex)
             {
-                await HandleExceptionAsync(context, ex, env);
+                await HandleExceptionAsync(context, ex, env, errorService);
             }
         }
 
-        private async Task HandleExceptionAsync(HttpContext context, Exception exception, IWebHostEnvironment env)
+        private async Task HandleExceptionAsync(
+            HttpContext context, 
+            Exception exception, 
+            IWebHostEnvironment env,
+            IErrorService errorService)
         {
             HttpStatusCode status;
             string message;
@@ -62,7 +66,7 @@ namespace FileServer.Middlewares
 
             var userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-            await _errorService.SaveError(message, exception.StackTrace, userId);
+            await errorService.SaveError(message, exception.StackTrace, userId);
 
             var result = JsonSerializer.Serialize(new { error = message });
             context.Response.ContentType = "application/json";
